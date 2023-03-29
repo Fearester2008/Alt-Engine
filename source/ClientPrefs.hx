@@ -1,0 +1,473 @@
+package;
+
+import flixel.FlxG;
+import flixel.util.FlxSave;
+import flixel.input.keyboard.FlxKey;
+import flixel.graphics.FlxGraphic;
+import Controls;
+
+class ClientPrefs {
+    public static var hitboxmode:String = 'New';  //starting new way to change between hitboxes yay
+    public static var hitboxalpha:Float = 0.2; //someone request this lol
+    public static var iconBop:String = 'Alt';
+    public static var lightStrums:Bool = true;
+    public static var oldInput:Bool = true;
+    public static var sysInfo:String = 'OG FPS';
+	public static var downScroll:Bool = false;
+	public static var middleScroll:Bool = false;
+	public static var opponentStrums:Bool = true;
+	public static var showFPS:Bool = true;
+	public static var flashing:Bool = true;
+	public static var globalAntialiasing:Bool = true;
+	public static var noteSplashes:Bool = true;
+	public static var lowQuality:Bool = false;
+	public static var shaders:Bool = true;
+	public static var framerate:Int = 60;
+	public static var cursing:Bool = true;
+	public static var violence:Bool = true;
+	public static var camZooms:Bool = true;
+	public static var hideHud:Bool = false;
+    public static var drainType:String = 'Note Hit';
+	public static var vocalVolume:Float = 1;
+	public static var instVolume:Float = 1;
+	public static var mainVolume:Float = 1;
+	public static var winIcon:Bool = false;
+	public static var beatMode:String = 'Both camera';
+	public static var beatType:String = '1/16';
+    public static var screenRes:String = '1280x720';
+    public static var judgementCounter:Bool = false;
+	public static var judgementCounterType:String = 'Default';
+	public static var camSpeed:Float = 1;
+	public static var healthDrain:Float = 0;
+	public static var noteOffset:Int = 0;
+    public static var controlsHSV:Array<Array<Int>> = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
+	public static var arrowHSV:Array<Array<Int>> = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
+	public static var vibration:Bool = false;
+	public static var ghostTapping:Bool = true;
+	public static var timeBarType:String = 'Time Left';
+	public static var scoreZoom:Bool = true;
+	public static var noReset:Bool = false;
+	public static var healthBarAlpha:Float = 1;
+	public static var controllerMode:Bool = #if android true #else false #end;
+	public static var hitsoundVolume:Float = 0;
+	public static var pauseMusic:String = 'Tea Time';
+	public static var checkForUpdates:Bool = true;
+	public static var comboStacking = true;
+	public static var gameplaySettings:Map<String, Dynamic> = [
+		'scrollspeed' => 1.0,
+		'scrolltype' => 'multiplicative', 
+		// anyone reading this, amod is multiplicative speed mod, cmod is constant speed mod, and xmod is bpm based speed mod.
+		// an amod example would be chartSpeed * multiplier
+		// cmod would just be constantSpeed = chartSpeed
+		// and xmod basically works by basing the speed on the bpm.
+		// iirc (beatsPerSecond * (conductorToNoteDifference / 1000)) * noteSize (110 or something like that depending on it, prolly just use note.height)
+		// bps is calculated by bpm / 60
+		// oh yeah and you'd have to actually convert the difference to seconds which I already do, because this is based on beats and stuff. but it should work
+		// just fine. but I wont implement it because I don't know how you handle sustains and other stuff like that.
+		// oh yeah when you calculate the bps divide it by the songSpeed or rate because it wont scroll correctly when speeds exist.
+		'songspeed' => 1.0,
+		'healthgain' => 1.0,
+		'healthloss' => 1.0,
+		'instakill' => false,
+		'practice' => false,
+		'botplay' => false,
+		'opponentplay' => false
+	];
+
+	public static var comboOffset:Array<Int> = [0, 0, 0, 0, 0, 0];
+	public static var ratingOffset:Int = 0;
+	public static var sickWindow:Int = 45;
+	public static var goodWindow:Int = 90;
+	public static var badWindow:Int = 135;
+	public static var safeFrames:Int = 10;
+
+	//Every key has two binds, add your key bind down here and then add your control on options/ControlsSubState.hx and Controls.hx
+	public static var keyBinds:Map<String, Array<FlxKey>> = [
+		//Key Bind, Name for ControlsSubState
+		'note_left'		=> [A, LEFT],
+		'note_down'		=> [S, DOWN],
+		'note_up'		=> [W, UP],
+		'note_right'	=> [D, RIGHT],
+		
+		'ui_left'		=> [A, LEFT],
+		'ui_down'		=> [S, DOWN],
+		'ui_up'			=> [W, UP],
+		'ui_right'		=> [D, RIGHT],
+		
+		'accept'		=> [SPACE, ENTER],
+		'back'			=> [BACKSPACE, ESCAPE],
+		'pause'			=> [ENTER, ESCAPE],
+		'reset'			=> [R, NONE],
+		
+		'volume_mute'	=> [ZERO, NONE],
+		'volume_up'		=> [NUMPADPLUS, PLUS],
+		'volume_down'	=> [NUMPADMINUS, MINUS],
+		
+		'debug_1'		=> [SEVEN, NONE],
+		'debug_2'		=> [EIGHT, NONE]
+	];
+	public static var defaultKeys:Map<String, Array<FlxKey>> = null;
+
+	public static function loadDefaultKeys() {
+		defaultKeys = keyBinds.copy();
+		//trace(defaultKeys);
+	}
+
+	public static function saveSettings() {
+        FlxG.save.data.hitboxmode = hitboxmode;
+	FlxG.save.data.hitboxalpha = hitboxalpha;
+	
+        FlxG.save.data.screenRes = screenRes;
+        FlxG.save.data.oldInput = oldInput;
+        FlxG.save.data.drainType = drainType;
+		FlxG.save.data.downScroll = downScroll;
+		FlxG.save.data.sysInfo = sysInfo;
+		FlxG.save.data.middleScroll = middleScroll;
+		FlxG.save.data.opponentStrums = opponentStrums;
+		FlxG.save.data.showFPS = showFPS;
+		FlxG.save.data.flashing = flashing;
+		FlxG.save.data.globalAntialiasing = globalAntialiasing;
+		FlxG.save.data.noteSplashes = noteSplashes;
+		FlxG.save.data.lowQuality = lowQuality;
+		FlxG.save.data.shaders = shaders;
+		FlxG.save.data.framerate = framerate;
+		//FlxG.save.data.cursing = cursing;
+		//FlxG.save.data.violence = violence;
+        FlxG.save.data.lightStrums = lightStrums;
+        FlxG.save.data.camSpeed = camSpeed;
+        FlxG.save.data.iconBop = iconBop;
+		FlxG.save.data.camZooms = camZooms;
+		FlxG.save.data.noteOffset = noteOffset;
+		FlxG.save.data.hideHud = hideHud;
+		FlxG.save.data.drainType = drainType;
+		FlxG.save.data.vocalVolume = vocalVolume;
+		FlxG.save.data.instVolume = instVolume;
+		FlxG.save.data.mainVolume = mainVolume;
+		FlxG.save.data.winIcon = winIcon;
+		FlxG.save.data.judgementCounter = judgementCounter;
+		FlxG.save.data.judgementCounterType = judgementCounterType;
+		FlxG.save.data.beatMode = beatMode;
+		FlxG.save.data.beatType = beatType;
+		FlxG.save.data.healthDrain = healthDrain;
+		FlxG.save.data.arrowHSV = arrowHSV;
+                FlxG.save.data.controlsHSV = controlsHSV;
+		FlxG.save.data.vibration = vibration;
+		FlxG.save.data.ghostTapping = ghostTapping;
+		FlxG.save.data.timeBarType = timeBarType;
+		FlxG.save.data.scoreZoom = scoreZoom;
+		FlxG.save.data.noReset = noReset;
+		FlxG.save.data.healthBarAlpha = healthBarAlpha;
+		FlxG.save.data.comboOffset = comboOffset;
+
+		FlxG.save.data.ratingOffset = ratingOffset;
+		FlxG.save.data.sickWindow = sickWindow;
+		FlxG.save.data.goodWindow = goodWindow;
+		FlxG.save.data.badWindow = badWindow;
+		FlxG.save.data.safeFrames = safeFrames;
+		FlxG.save.data.gameplaySettings = gameplaySettings;
+		FlxG.save.data.controllerMode = controllerMode;
+		FlxG.save.data.hitsoundVolume = hitsoundVolume;
+		FlxG.save.data.pauseMusic = pauseMusic;
+		FlxG.save.data.checkForUpdates = checkForUpdates;
+		FlxG.save.data.comboStacking = comboStacking;
+	
+		FlxG.save.flush();
+
+		var save:FlxSave = new FlxSave();
+		save.bind('controls_v2' , CoolUtil.getSavePath()); //Placing this in a separate save so that it can be manually deleted without removing your Score and stuff
+		save.data.customControls = keyBinds;
+		save.flush();
+		FlxG.log.add("Settings saved!");
+	}
+
+	public static function loadPrefs() {
+        if(FlxG.save.data.iconBop != null) {
+			iconBop = FlxG.save.data.iconBop;
+		}
+		if(FlxG.save.data.lightStrums != null) {
+			lightStrums = FlxG.save.data.lightStrums;
+		}
+		if(FlxG.save.data.camSpeed != null) {
+			camSpeed = FlxG.save.data.camSpeed;
+		}
+	    if(FlxG.save.data.drainType != null) {
+			drainType = FlxG.save.data.drainType;
+        }
+		if(FlxG.save.data.downScroll != null) {
+			downScroll = FlxG.save.data.downScroll;
+		}
+		if(FlxG.save.data.middleScroll != null) {
+			middleScroll = FlxG.save.data.middleScroll;
+		}
+		if(FlxG.save.data.opponentStrums != null) {
+			opponentStrums = FlxG.save.data.opponentStrums;
+		}
+		if(FlxG.save.data.screenRes != null) {
+			screenRes = FlxG.save.data.screenRes;
+		}
+		if(FlxG.save.data.sysInfo != null) {
+			sysInfo = FlxG.save.data.sysInfo;
+		}
+		if(FlxG.save.data.showFPS != null) {
+			showFPS = FlxG.save.data.showFPS;
+			if(Main.fpsVar != null) {
+				Main.fpsVar.visible = showFPS;
+			}
+		}
+		if(FlxG.save.data.flashing != null) {
+			flashing = FlxG.save.data.flashing;
+		}
+		if(FlxG.save.data.oldInput != null) {
+			oldInput = FlxG.save.data.oldInput;
+		}
+		if(FlxG.save.data.globalAntialiasing != null) {
+			globalAntialiasing = FlxG.save.data.globalAntialiasing;
+		}
+		if(FlxG.save.data.noteSplashes != null) {
+			noteSplashes = FlxG.save.data.noteSplashes;
+		}
+		if(FlxG.save.data.lowQuality != null) {
+			lowQuality = FlxG.save.data.lowQuality;
+		}
+		if(FlxG.save.data.shaders != null) {
+			shaders = FlxG.save.data.shaders;
+		}
+		if(FlxG.save.data.framerate != null) {
+			framerate = FlxG.save.data.framerate;
+			if(framerate > FlxG.drawFramerate) {
+				FlxG.updateFramerate = framerate;
+				FlxG.drawFramerate = framerate;
+			} else {
+				FlxG.drawFramerate = framerate;
+				FlxG.updateFramerate = framerate;
+			}
+		}
+		/*if(FlxG.save.data.cursing != null) {
+			cursing = FlxG.save.data.cursing;
+		}
+		if(FlxG.save.data.violence != null) {
+			violence = FlxG.save.data.violence;
+		}*/
+		if(FlxG.save.data.camZooms != null) {
+			camZooms = FlxG.save.data.camZooms;
+		}
+		if(FlxG.save.data.hideHud != null) {
+			hideHud = FlxG.save.data.hideHud;
+		}
+		if(FlxG.save.data.comboStacking != null) {
+			comboStacking = FlxG.save.data.comboStacking;
+		}
+		if(FlxG.save.data.drainType != null) {
+			drainType = FlxG.save.data.drainType;
+		}
+		if(FlxG.save.data.vocalVolume != null) {
+			vocalVolume = FlxG.save.data.vocalVolume;
+		}
+		if(FlxG.save.data.instVolume != null) {
+			instVolume = FlxG.save.data.instVolume;
+		}
+		if(FlxG.save.data.mainVolume != null) {
+			mainVolume = FlxG.save.data.mainVolume;
+		}
+		if(FlxG.save.data.winIcon != null) {
+			winIcon = FlxG.save.data.winIcon;
+		}
+        if(FlxG.save.data.judgementCounter != null) {
+			judgementCounter = FlxG.save.data.judgementCounter;
+		}
+		if(FlxG.save.data.judgementCounterType != null) {
+			judgementCounterType = FlxG.save.data.judgementCounterType;
+		}
+		if(FlxG.save.data.healthDrain != null) {
+			healthDrain = FlxG.save.data.healthDrain;
+		}
+		if(FlxG.save.data.beatMode != null) {
+			beatMode = FlxG.save.data.beatMode;
+		}
+		if(FlxG.save.data.beatType != null) {
+			beatType = FlxG.save.data.beatType;
+		}
+		if(FlxG.save.data.noteOffset != null) {
+			noteOffset = FlxG.save.data.noteOffset;
+		}
+		if(FlxG.save.data.arrowHSV != null) {
+			arrowHSV = FlxG.save.data.arrowHSV;
+		}
+                if(FlxG.save.data.controlsHSV != null) {
+			controlsHSV = FlxG.save.data.controlsHSV;
+		}
+		if(FlxG.save.data.vibration != null) {
+			vibration = FlxG.save.data.vibration;
+		}
+		if(FlxG.save.data.ghostTapping != null) {
+			ghostTapping = FlxG.save.data.ghostTapping;
+		}
+		if(FlxG.save.data.timeBarType != null) {
+			timeBarType = FlxG.save.data.timeBarType;
+		}
+		if(FlxG.save.data.scoreZoom != null) {
+			scoreZoom = FlxG.save.data.scoreZoom;
+		}
+		if(FlxG.save.data.noReset != null) {
+			noReset = FlxG.save.data.noReset;
+		}
+		if(FlxG.save.data.healthBarAlpha != null) {
+			healthBarAlpha = FlxG.save.data.healthBarAlpha;
+		}
+		if(FlxG.save.data.comboOffset != null) {
+			comboOffset = FlxG.save.data.comboOffset;
+		}
+		
+		if(FlxG.save.data.ratingOffset != null) {
+			ratingOffset = FlxG.save.data.ratingOffset;
+		}
+		if(FlxG.save.data.sickWindow != null) {
+			sickWindow = FlxG.save.data.sickWindow;
+		}
+		if(FlxG.save.data.goodWindow != null) {
+			goodWindow = FlxG.save.data.goodWindow;
+		}
+		if(FlxG.save.data.badWindow != null) {
+			badWindow = FlxG.save.data.badWindow;
+		}
+		if(FlxG.save.data.safeFrames != null) {
+			safeFrames = FlxG.save.data.safeFrames;
+		}
+		if(FlxG.save.data.controllerMode != null) {
+			controllerMode = FlxG.save.data.controllerMode;
+		}
+		if(FlxG.save.data.hitsoundVolume != null) {
+			hitsoundVolume = FlxG.save.data.hitsoundVolume;
+		}
+		if(FlxG.save.data.pauseMusic != null) {
+			pauseMusic = FlxG.save.data.pauseMusic;
+		}
+                if(FlxG.save.data.hitboxmode != null) {
+			hitboxmode = FlxG.save.data.hitboxmode;
+		}
+		if(FlxG.save.data.hitboxalpha != null) {
+			hitboxalpha = FlxG.save.data.hitboxalpha;
+		}
+		if(FlxG.save.data.gameplaySettings != null)
+		{
+			var savedMap:Map<String, Dynamic> = FlxG.save.data.gameplaySettings;
+			for (name => value in savedMap)
+			{
+				gameplaySettings.set(name, value);
+			}
+		}
+		
+		// flixel automatically saves your volume!
+		if(FlxG.save.data.volume != null)
+		{
+			FlxG.sound.volume = FlxG.save.data.volume;
+		}
+		if (FlxG.save.data.mute != null)
+		{
+			FlxG.sound.muted = FlxG.save.data.mute;
+		}
+		if (FlxG.save.data.checkForUpdates != null)
+		{
+			checkForUpdates = FlxG.save.data.checkForUpdates;
+		}
+		if (FlxG.save.data.comboStacking != null)
+			comboStacking = FlxG.save.data.comboStacking;
+
+		var save:FlxSave = new FlxSave();
+		save.bind('controls_v2' , CoolUtil.getSavePath());
+		if(save != null && save.data.customControls != null) {
+			var loadedControls:Map<String, Array<FlxKey>> = save.data.customControls;
+			for (control => keys in loadedControls) {
+				keyBinds.set(control, keys);
+			}
+			reloadControls();
+		}
+	}
+
+	inline public static function getGameplaySetting(name:String, defaultValue:Dynamic):Dynamic {
+		return /*PlayState.isStoryMode ? defaultValue : */ (gameplaySettings.exists(name) ? gameplaySettings.get(name) : defaultValue);
+	}
+
+	public static function reloadControls() {
+		PlayerSettings.player1.controls.setKeyboardScheme(KeyboardScheme.Solo);
+
+		TitleState.muteKeys = copyKey(keyBinds.get('volume_mute'));
+		TitleState.volumeDownKeys = copyKey(keyBinds.get('volume_down'));
+		TitleState.volumeUpKeys = copyKey(keyBinds.get('volume_up'));
+		FlxG.sound.muteKeys = TitleState.muteKeys;
+		FlxG.sound.volumeDownKeys = TitleState.volumeDownKeys;
+		FlxG.sound.volumeUpKeys = TitleState.volumeUpKeys;
+	}
+	public static function copyKey(arrayToCopy:Array<FlxKey>):Array<FlxKey> {
+		var copiedArray:Array<FlxKey> = arrayToCopy.copy();
+		var i:Int = 0;
+		var len:Int = copiedArray.length;
+
+		while (i < len) {
+			if(copiedArray[i] == NONE) {
+				copiedArray.remove(NONE);
+				--i;
+			}
+			i++;
+			len = copiedArray.length;
+		}
+		return copiedArray;
+	}
+      public static function reset() 
+      {
+      FlxG.save.data.hitboxmode = null;
+      FlxG.save.data.hitboxalpha = null;
+	
+        FlxG.save.data.screenRes = null;
+        FlxG.save.data.oldInput = null;
+        FlxG.save.data.drainType = null;
+		FlxG.save.data.downScroll = null;
+		FlxG.save.data.sysInfo = null;
+		FlxG.save.data.middleScroll = null;
+		FlxG.save.data.opponentStrums = null;
+		FlxG.save.data.showFPS = null;
+		FlxG.save.data.flashing = null;
+		FlxG.save.data.globalAntialiasing = null;
+		FlxG.save.data.noteSplashes = null;
+		FlxG.save.data.lowQuality = null;
+		FlxG.save.data.shaders = null;
+		FlxG.save.data.framerate = null;
+		//FlxG.save.data.cursing = null;
+		//FlxG.save.data.violence = null;
+                FlxG.save.data.iconBop = null;
+		FlxG.save.data.camZooms = null;
+		FlxG.save.data.noteOffset = null;
+		FlxG.save.data.hideHud = null;
+		FlxG.save.data.drainType = null;
+		FlxG.save.data.vocalVolume = null;
+		FlxG.save.data.instVolume = null;
+		FlxG.save.data.mainVolume = null;
+		FlxG.save.data.winIcon = null;
+		FlxG.save.data.judgementCounter = null;
+		FlxG.save.data.judgementCounterType = null;
+		FlxG.save.data.beatMode = null;
+		FlxG.save.data.beatType = null;
+		FlxG.save.data.healthDrain = null;
+		FlxG.save.data.arrowHSV = null;
+        FlxG.save.data.ControlsHSV = null;
+		FlxG.save.data.vibration = null;
+		FlxG.save.data.ghostTapping = null;
+		FlxG.save.data.timeBarType = null;
+		FlxG.save.data.scoreZoom = null;
+		FlxG.save.data.noReset = null;
+		FlxG.save.data.healthBarAlpha = null;
+		FlxG.save.data.comboOffset = null;
+
+		FlxG.save.data.ratingOffset = null;
+		FlxG.save.data.sickWindow = null;
+		FlxG.save.data.goodWindow = null;
+		FlxG.save.data.badWindow = null;
+		FlxG.save.data.safeFrames = null;
+		FlxG.save.data.gameplaySettings = null;
+		FlxG.save.data.controllerMode = null;
+		FlxG.save.data.hitsoundVolume = null;
+		FlxG.save.data.pauseMusic = null;
+		FlxG.save.data.checkForUpdates = null;
+		FlxG.save.data.comboStacking = null;
+       }
+}
