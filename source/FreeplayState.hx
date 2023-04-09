@@ -473,11 +473,11 @@ timeTxt = new FlxText(20, 19, 1280, "", 32);
 					vocals = new FlxSound();
 
 				FlxG.sound.list.add(vocals);
-				FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 0.7);
+				FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), ClientPrefs.instVolume || ClientPrefs.mainVolume);
 				vocals.play();
 				vocals.persist = true;
 				vocals.looped = true;
-				vocals.volume = 0.7;
+				vocals.volume = ClientPrefs.vocalVolume || ClientPrefs.mainVolume;
 				Conductor.changeBPM(PlayState.SONG.bpm);
 				instPlaying = curSelected;
 				#end
@@ -613,7 +613,7 @@ timeTxt = new FlxText(20, 19, 1280, "", 32);
 		#end
 
 		PlayState.storyDifficulty = curDifficulty;
-		diffText.text = CoolUtil.difficultyString();
+		diffText.text = CoolUtil.difficultyString() + 'MODE';
 		positionHighscore();
 	}
 
