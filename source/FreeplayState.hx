@@ -473,11 +473,11 @@ timeTxt = new FlxText(20, 19, 1280, "", 32);
 					vocals = new FlxSound();
 
 				FlxG.sound.list.add(vocals);
-				FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), ClientPrefs.instVolume || ClientPrefs.mainVolume);
+				FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), ClientPrefs.instVolume);
 				vocals.play();
 				vocals.persist = true;
 				vocals.looped = true;
-				vocals.volume = ClientPrefs.vocalVolume || ClientPrefs.mainVolume;
+				vocals.volume = ClientPrefs.vocalVolume;
 				Conductor.changeBPM(PlayState.SONG.bpm);
 				instPlaying = curSelected;
 				#end
