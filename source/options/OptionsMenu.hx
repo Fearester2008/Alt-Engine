@@ -333,22 +333,18 @@ class OptionsMenu extends MusicBeatSubstate
 		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
 
 		var accept = false;
-		var right = false;
-		var left = false;
+		var right = true;
+		var left = true;
 		var up = false;
 		var down = false;
-		var any = false;
 		var escape = false;
 
-		accept = FlxG.keys.justPressed.ENTER #if android || _virtualpad.buttonA.justPressed #end || (gamepad != null ? gamepad.justPressed.A : false);
-		right = FlxG.keys.justPressed.RIGHT #if android || _virtualpad.buttonRight.justPressed #end || (gamepad != null ? gamepad.justPressed.DPAD_RIGHT : false);
-		left = FlxG.keys.justPressed.LEFT #if android || _virtualpad.buttonLeft.justPressed #end || (gamepad != null ? gamepad.justPressed.DPAD_LEFT : false);
-		up = FlxG.keys.justPressed.UP #if android || _virtualpad.buttonUp.justPressed #end || (gamepad != null ? gamepad.justPressed.DPAD_UP : false);
-		down = FlxG.keys.justPressed.DOWN #if android || _virtualpad.buttonDown.justPressed #end || (gamepad != null ? gamepad.justPressed.DPAD_DOWN : false);
-
-		any = FlxG.keys.justPressed.ANY #if android || _virtualpad.buttonX.justPressed #end || (gamepad != null ? gamepad.justPressed.ANY : false);
-		escape = FlxG.keys.justPressed.ESCAPE #if android || _virtualpad.buttonB.justPressed #end || (gamepad != null ? gamepad.justPressed.B : false);
-
+		accept = controls.ACCEPT;
+		right = controls.UI_RIGHT_P;
+		left = controls.UI_LEFT_P;
+		up = controls.UI_UP_P;
+		down = controls.UI_DOWN_P;
+		escape = controls.BACK;
 		if (selectedCat != null && !isInCat)
 		{
 			for (i in selectedCat.optionObjects.members)
@@ -440,12 +436,6 @@ class OptionsMenu extends MusicBeatSubstate
 							var object = selectedCat.optionObjects.members[selectedOptionIndex];
 							object.text = "> " + selectedOption.getValue();
 							return;
-						}
-						else if (any)
-						{
-							var object = selectedCat.optionObjects.members[selectedOptionIndex];
-							selectedOption.onType(gamepad == null ? FlxG.keys.getIsDown()[0].ID.toString() : gamepad.firstJustPressedID());
-							object.text = "> " + selectedOption.getValue();
 						}
 					}
 				if (selectedOption.acceptType || !selectedOption.acceptType)
