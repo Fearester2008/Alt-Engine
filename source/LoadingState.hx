@@ -8,14 +8,14 @@ import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.util.FlxTimer;
 import flixel.math.FlxMath;
-import flixel.system.FlxSound;
+
 import openfl.utils.Assets;
 import lime.utils.Assets as LimeAssets;
 import lime.utils.AssetLibrary;
 import lime.utils.AssetManifest;
 
 import haxe.io.Path;
-#if NO_PRELOAD_ALL
+
 class LoadingState extends MusicBeatState
 {
 	inline static var MIN_TIME = 1.0;
@@ -30,7 +30,8 @@ class LoadingState extends MusicBeatState
 	var stopMusic = false;
 	var directory:String;
 	var callbacks:MultiCallback;
-	var targetShit:Float = 0;
+	var targetfreak:Float = 0;
+
 	function new(target:FlxState, stopMusic:Bool, directory:String)
 	{
 		super();
@@ -121,8 +122,8 @@ class LoadingState extends MusicBeatState
 		}
 
 		if(callbacks != null) {
-			targetShit = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
-			loadBar.scale.x += 0.8 * (targetShit - loadBar.scale.x);
+			targetfreak = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
+			loadBar.scale.x += 0.5 * (targetfreak - loadBar.scale.x);
 		}
 	}
 	
@@ -160,7 +161,7 @@ class LoadingState extends MusicBeatState
 		Paths.setCurrentLevel(directory);
 		trace('Setting asset folder to ' + directory);
 
-		#if PRELOAD_ALL
+		#if NO_PRELOAD_ALL
 		var loaded:Bool = false;
 		if (PlayState.SONG != null) {
 			loaded = isSoundLoaded(getSongPath()) && (!PlayState.SONG.needsVoices || isSoundLoaded(getVocalPath())) && isLibraryLoaded("shared") && isLibraryLoaded(directory);
@@ -175,7 +176,7 @@ class LoadingState extends MusicBeatState
 		return target;
 	}
 	
-	#if PRELOAD_ALL
+	#if NO_PRELOAD_ALL
 	static function isSoundLoaded(path:String):Bool
 	{
 		return Assets.cache.hasSound(path);
@@ -317,4 +318,3 @@ class MultiCallback
 	public function getFired() return fired.copy();
 	public function getUnfired() return [for (id in unfired.keys()) id];
 }
-#end
