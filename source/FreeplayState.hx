@@ -613,7 +613,7 @@ timeTxt = new FlxText(20, 19, 1280, "", 32);
 		#end
 
 		PlayState.storyDifficulty = curDifficulty;
-		diffText.text = CoolUtil.difficultyString() + 'MODE';
+		diffText.text = CoolUtil.difficultyString() + ' MODE';
 		positionHighscore();
 	}
 
