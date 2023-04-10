@@ -339,12 +339,13 @@ class OptionsMenu extends MusicBeatSubstate
 		var down = false;
 		var escape = false;
 
-		accept = controls.ACCEPT;
-		right = controls.UI_RIGHT_P;
-		left = controls.UI_LEFT_P;
-		up = controls.UI_UP_P;
-		down = controls.UI_DOWN_P;
-		escape = controls.BACK;
+		accept = FlxG.keys.justPressed.ENTER;
+		right = FlxG.keys.justPressed.RIGHT;
+		left = FlxG.keys.justPressed.LEFT;
+		up = FlxG.keys.justPressed.UP;
+		down = FlxG.keys.justPressed.DOWN;
+		escape = FlxG.keys.justPressed.ESCAPE;
+
 		if (selectedCat != null && !isInCat)
 		{
 			for (i in selectedCat.optionObjects.members)
