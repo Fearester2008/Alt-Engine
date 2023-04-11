@@ -230,7 +230,7 @@ class OptionsMenu extends MusicBeatSubstate
 				object.text = selectedOption.getValue();
 			}
 
-			if (selectedCatIndex > options.length - 3 && checkForOutOfBounds)
+			if (selectedCatIndex > options.length - 1 && checkForOutOfBounds)
 				selectedCatIndex = 0;
 
 			if (selectedCat.middle)
@@ -381,10 +381,10 @@ class OptionsMenu extends MusicBeatSubstate
 					selectedCat.optionObjects.members[selectedOptionIndex].text = selectedOption.getValue();
 					selectedCatIndex++;
 
-					if (selectedCatIndex > options.length - 3)
+					if (selectedCatIndex > options.length - 1)
 						selectedCatIndex = 0;
 					if (selectedCatIndex < 0)
-						selectedCatIndex = options.length - 3;
+						selectedCatIndex = options.length - 1;
 
 					switchCat(options[selectedCatIndex]);
 				}
@@ -394,10 +394,10 @@ class OptionsMenu extends MusicBeatSubstate
 					selectedCat.optionObjects.members[selectedOptionIndex].text = selectedOption.getValue();
 					selectedCatIndex--;
 
-					if (selectedCatIndex > options.length - 3)
+					if (selectedCatIndex > options.length - 1)
 						selectedCatIndex = 0;
 					if (selectedCatIndex < 0)
-						selectedCatIndex = options.length - 3;
+						selectedCatIndex = options.length - 1;
 
 					switchCat(options[selectedCatIndex]);
 				}
