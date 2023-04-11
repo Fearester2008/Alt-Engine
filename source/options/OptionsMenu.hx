@@ -188,7 +188,7 @@ class OptionsMenu extends MusicBeatSubstate
 
 		add(shownStuff);
 
-		for (i in 0...options.length - 1)
+		for (i in 0...options.length)
 		{
 			if (i >= 4)
 				continue;
@@ -230,7 +230,7 @@ class OptionsMenu extends MusicBeatSubstate
 				object.text = selectedOption.getValue();
 			}
 
-			if (selectedCatIndex > options.length - 1 && checkForOutOfBounds)
+			if (selectedCatIndex >= options.length && checkForOutOfBounds)
 				selectedCatIndex = 0;
 
 			if (selectedCat.middle)
@@ -261,7 +261,7 @@ class OptionsMenu extends MusicBeatSubstate
 
 			selectedOption = selectedCat.options[0];
 
-			if (selectedOptionIndex > options[selectedCatIndex].options.length - 1)
+			if (selectedOptionIndex >= options[selectedCatIndex].options.length)
 			{
 				for (i in 0...selectedCat.options.length)
 				{
@@ -381,7 +381,7 @@ class OptionsMenu extends MusicBeatSubstate
 					selectedCat.optionObjects.members[selectedOptionIndex].text = selectedOption.getValue();
 					selectedCatIndex++;
 
-					if (selectedCatIndex > options.length - 1)
+					if (selectedCatIndex >= options.length)
 						selectedCatIndex = 0;
 					if (selectedCatIndex < 0)
 						selectedCatIndex = options.length - 1;
@@ -394,7 +394,7 @@ class OptionsMenu extends MusicBeatSubstate
 					selectedCat.optionObjects.members[selectedOptionIndex].text = selectedOption.getValue();
 					selectedCatIndex--;
 
-					if (selectedCatIndex > options.length - 1)
+					if (selectedCatIndex >= options.length)
 						selectedCatIndex = 0;
 					if (selectedCatIndex < 0)
 						selectedCatIndex = options.length - 1;
@@ -465,7 +465,7 @@ class OptionsMenu extends MusicBeatSubstate
 
 						// just kinda ignore this math lol
 
-						if (selectedOptionIndex > options[selectedCatIndex].options.length - 1)
+						if (selectedOptionIndex >= options[selectedCatIndex].options.length)
 						{
 							for (i in 0...selectedCat.options.length)
 							{
