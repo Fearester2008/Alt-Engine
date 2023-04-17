@@ -126,7 +126,7 @@ class MainMenuState extends MusicBeatState
 			menuItem.animation.addByPrefix('selected', options[i] + " white", 24);
 			menuItem.animation.play('idle');
 			menuItem.ID = i;
-			menuItem.screenCenter(X);
+			//menuItem.screenCenter(X);
 			menuItems.add(menuItem);
 			var scr:Float = (options.length - 4) * 0.135;
 			if(options.length < 5) scr = 0;
@@ -225,6 +225,13 @@ class MainMenuState extends MusicBeatState
             {
                 selectedSomethin = true;
                 MusicBeatState.switchState(new ExitGame());
+            } 
+            #end
+            #if android
+            if (_virtualpad.buttonY.justPressed)
+            {
+                selectedSomethin = true;
+                MusicBeatState.switchState(new android.AndroidControlsMenu());
             }
 			#end
 		}
@@ -233,7 +240,7 @@ class MainMenuState extends MusicBeatState
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
-			spr.screenCenter(X);
+			//spr.screenCenter(X);
 		});
 	}
 
