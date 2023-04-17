@@ -2653,7 +2653,8 @@ class PlayState extends MusicBeatState
 		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
 		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
 		shownHealth = FlxMath.lerp(shownHealth, health, CoolUtil.boundTo(elapsed * 7, 0, 1));
-
+        if(ClientPrefs.iconBop == 'Psych')
+        {
 		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
 		iconP1.scale.set(mult, mult);
 		iconP1.updateHitbox();
@@ -2661,7 +2662,17 @@ class PlayState extends MusicBeatState
 		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
 		iconP2.scale.set(mult, mult);
 		iconP2.updateHitbox();
+        }
+        if(ClientPrefs.iconBop == 'Alt')
+        {
+		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, 0.4);
+		iconP1.scale.set(mult, mult);
+		iconP1.updateHitbox();
 
+		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, 0.4);
+		iconP2.scale.set(mult, mult);
+		iconP2.updateHitbox();
+        }
 		var iconOffset:Int = 26;
 
 		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) + (150 * iconP1.scale.x - 150) / 2 - iconOffset;
@@ -2672,15 +2683,11 @@ class PlayState extends MusicBeatState
 
 		if (healthBar.percent < 20)
 			iconP1.animation.curAnim.curFrame = 1;
-		else if (healthBar.percent > 80 && ClientPrefs.winIcon == true)
-			iconP1.animation.curAnim.curFrame = 2; 
 		else
 			iconP1.animation.curAnim.curFrame = 0;
 
 		if (healthBar.percent > 80)
 			iconP2.animation.curAnim.curFrame = 1;
-		else if (healthBar.percent < 20 && ClientPrefs.winIcon == true)
-			iconP2.animation.curAnim.curFrame = 2;
 		else
 			iconP2.animation.curAnim.curFrame = 0;
 
@@ -4634,7 +4641,14 @@ class PlayState extends MusicBeatState
 
 		for(i in [iconP1 , iconP2])
         {
+            if(ClientPrefs.iconBop == 'Psych')
+            {
 		    i.scale.set(1.2, 1.2);
+            }
+            if(ClientPrefs.iconBop == 'Alt')
+            {
+                i.scale.set(1.4,1.4);
+            }
         }
 
 		if (gf != null && curBeat % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0 && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing") && !gf.stunned)
