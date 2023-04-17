@@ -1005,3 +1005,93 @@ class ComboStacking extends Option
 		return "Combo Stacking: < " + (ClientPrefs.comboStacking ? "Enabled" : "Disabled") + " >";
 	}
 }
+class TimeBarTypeOption extends Option
+{
+    public function new(desc:String)
+    {
+        super();
+        if (OptionsMenu.isInPause)
+            description = "This option cannot be toggled in the pause menu.";
+        else
+            description = desc;
+    }
+
+    var values(default, null):Array<String> = ["Song Name", "Time Elapsed", "Time Left", "Disabled","Time Length","Song Percentage","Time Length Percent"];
+    function changeValue(value:Int)
+    {
+        value += values.indexOf(ClientPrefs.timeBarType);
+        if (value >= values.length) value = 0;
+        else if (value < 0) value = values.length - 1;
+        ClientPrefs.timeBarType = values[value];
+    }
+
+    public override function left():Bool
+    {
+        if (OptionsMenu.isInPause)
+            return false;
+
+        changeValue(-1);
+
+        return true;
+    }
+
+    public override function right():Bool
+    {
+        if (OptionsMenu.isInPause)
+            return false;
+
+        changeValue(1);
+
+        return true;
+    }
+
+    private override function updateDisplay():String
+    {
+        return "TimeBar Type: < " + ClientPrefs.timeBarType + " >";
+    }
+}
+class IconBop extends Option
+{
+    public function new(desc:String)
+    {
+        super();
+        if (OptionsMenu.isInPause)
+            description = "This option cannot be toggled in the pause menu.";
+        else
+            description = desc;
+    }
+
+    var values(default, null):Array<String> = ["Alt","Psych"];
+    function changeValue(value:Int)
+    {
+        value += values.indexOf(ClientPrefs.iconBop);
+        if (value >= values.length) value = 0;
+        else if (value < 0) value = values.length - 1;
+        ClientPrefs.iconBop = values[value];
+    }
+
+    public override function left():Bool
+    {
+        if (OptionsMenu.isInPause)
+            return false;
+
+        changeValue(-1);
+
+        return true;
+    }
+
+    public override function right():Bool
+    {
+        if (OptionsMenu.isInPause)
+            return false;
+
+        changeValue(1);
+
+        return true;
+    }
+
+    private override function updateDisplay():String
+    {
+        return "Icon Bop: < " + ClientPrefs.iconBop + " >";
+    }
+}
