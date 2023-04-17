@@ -121,6 +121,8 @@ class OptionsMenu extends MusicBeatSubstate
 			new OptionCata(50, 40, "Gameplay", [
 				//new OffsetThing("Change the note visual offset (how many milliseconds a note looks like it is offset in a chart)"),
 				new HitSoundOption("Adds 'hitsound' on note hits."),
+                                new TimeBarTypeOption("Change time bar design."), 
+                                new IconBop("Change Icon Bop."), 
 				new GhostTapOption("Toggle counting pressing a directional input when no arrow is there as a miss."),
 				new DownscrollOption("Toggle making the notes scroll down rather than up."),
 				new MiddleScrollOption("Put your lane in the center or on the right."), 
@@ -142,7 +144,7 @@ class OptionsMenu extends MusicBeatSubstate
 				//new ColorBlindOption("You can set colorblind filter (makes the game more playable for colorblind people)."),
 				new ShadersOption("Shaders used for some visual effects, and also CPU intensive for weaker PCs."),
 				new FPSOption("Toggle the FPS Counter."),
-				#if desktop new FPSCapOption("Change your FPS Cap."), #end
+			        new FPSCapOption("Change your FPS Cap."),
         		])
 		];
 
