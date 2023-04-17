@@ -689,7 +689,7 @@ class HideOppStrumsOption extends Option
 
 	private override function updateDisplay():String
 	{
-		return "Opponent Strums: < " + (!ClientPrefs.opponentStrums ? "Enabled" : "Disabled") + " >";
+		return "Opponent Strums: < " + (ClientPrefs.opponentStrums ? "Enabled" : "Disabled") + " >";
 	}
 }
 
