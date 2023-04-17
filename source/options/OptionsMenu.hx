@@ -119,9 +119,8 @@ class OptionsMenu extends MusicBeatSubstate
                 FlxG.mouse.visible = true;
 		options = [
 			new OptionCata(50, 40, "Gameplay", [
-				//new OffsetThing("Change the note visual offset (how many milliseconds a note looks like it is offset in a chart)"),
+				new OffsetThing("Change the note visual offset (how many milliseconds a note looks like it is offset in a chart)"),
 				new HitSoundOption("Adds 'hitsound' on note hits."),
-                                new TimeBarTypeOption("Change time bar design."), 
                                 new IconBop("Change Icon Bop."), 
 				new GhostTapOption("Toggle counting pressing a directional input when no arrow is there as a miss."),
 				new DownscrollOption("Toggle making the notes scroll down rather than up."),
@@ -135,9 +134,9 @@ class OptionsMenu extends MusicBeatSubstate
                // new HideHud("Shows to you hud."),
 				new ComboStacking("Ratings and Combo won't stack, saving on System Memory and making them easier to read."),
                 new ScoreZoom("Zoom score on 2'nd beat."),
-                //new HealthBarAlpha("Healthbar Transparceny."),
-                //new BlurNotes("Make notes lightning."), // TODO: rework later - Snake
-			    // new TimeBarType("Change the song's current position bar."),
+                new HealthBarAlpha("Healthbar Transparceny."),
+                new BlurNotes("Make notes lightning."), // TODO: rework later - Snake
+			    new TimeBarTypeOption("Change the song's current position bar."),
 			]),
 			new OptionCata(640, 40, "Misc", [
 				//new FlashingLightsOption("Toggle flashing lights that can cause epileptic seizures and strain."),
