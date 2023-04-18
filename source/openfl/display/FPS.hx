@@ -79,7 +79,7 @@ class FPS extends TextField
 		}
 
 		var currentCount = times.length;
- ,              var framerate:Int = ClientPrefs.framerate
+ ,              var framerate:Int = ClientPrefs.framerate;
 
 		currentFPS = Math.round((currentCount + cacheCount) / 2);
 		
@@ -92,7 +92,7 @@ class FPS extends TextField
 			var fpsPercent:Float = 0;
 		    
 			memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
-                        fpsPercent = Highscore.floorDecimal((currentFPS / framerate) * 100,1)
+                        fpsPercent = Highscore.floorDecimal((currentFPS / framerate) * 100,1);
 		
 			if(ClientPrefs.sysInfo == 'System' && ClientPrefs.showFPS)
 			{
