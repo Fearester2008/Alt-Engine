@@ -212,7 +212,7 @@ class OptionsMenu extends MusicBeatSubstate
 		selectedOption = selectedCat.options[0];
 
         #if android
-        addVirtualPad(FULL,A_B_C);
+        addVirtualPad(FULL,A_B);
         #end
 
 		super.create();
@@ -340,12 +340,12 @@ class OptionsMenu extends MusicBeatSubstate
 		var down = false;
 		var escape = false;
 
-		accept = FlxG.keys.justPressed.ENTER;
-		right = FlxG.keys.justPressed.RIGHT;
-		left = FlxG.keys.justPressed.LEFT;
-		up = FlxG.keys.justPressed.UP;
-		down = FlxG.keys.justPressed.DOWN;
-		escape = FlxG.keys.justPressed.ESCAPE;
+		accept = controls.ACCEPT;
+		right = controls.UI_RIGHT_P;
+		left = xontrols.UI_LEFT_P;
+		up = controls.UI_UP_P;
+		down = controls.UI_DOWN_P;
+		escape = controls.BACK;
 
 		if (selectedCat != null && !isInCat)
 		{
