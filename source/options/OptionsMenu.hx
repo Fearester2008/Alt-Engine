@@ -342,7 +342,7 @@ class OptionsMenu extends MusicBeatSubstate
 
 		accept = controls.ACCEPT;
 		right = controls.UI_RIGHT_P;
-		left = xontrols.UI_LEFT_P;
+		left = controls.UI_LEFT_P;
 		up = controls.UI_UP_P;
 		down = controls.UI_DOWN_P;
 		escape = controls.BACK;
