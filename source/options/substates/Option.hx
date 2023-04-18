@@ -1095,3 +1095,48 @@ class IconBop extends Option
         return "Icon Bop: < " + ClientPrefs.iconBop + " >";
     }
 }
+class FPSinfo extends Option
+{
+    public function new(desc:String)
+    {
+        super();
+        if (OptionsMenu.isInPause)
+            description = "This option cannot be toggled in the pause menu.";
+        else
+            description = desc;
+    }
+
+    var values(default, null):Array<String> = ["FPS ALT","PE FPS", "OG FPS", "System"];
+    function changeValue(value:Int)
+    {
+        value += values.indexOf(ClientPrefs.sysInfo);
+        if (value >= values.length) value = 0;
+        else if (value < 0) value = values.length - 1;
+        ClientPrefs.sysInfo = values[value];
+    }
+
+    public override function left():Bool
+    {
+        if (OptionsMenu.isInPause)
+            return false;
+
+        changeValue(-1);
+
+        return true;
+    }
+
+    public override function right():Bool
+    {
+        if (OptionsMenu.isInPause)
+            return false;
+
+        changeValue(1);
+
+        return true;
+    }
+
+    private override function updateDisplay():String
+    {
+        return "Fps Mode: < " + ClientPrefs.sysInfo + " >";
+    }
+}
