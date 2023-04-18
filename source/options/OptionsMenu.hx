@@ -144,6 +144,7 @@ class OptionsMenu extends MusicBeatSubstate
 				new ShadersOption("Shaders used for some visual effects, and also CPU intensive for weaker PCs."),
 				new FPSOption("Toggle the FPS Counter."),
 			        new FPSCapOption("Change your FPS Cap."),
+                                new FPSinfo("How should be display FPS text?"), 
         		])
 		];
 
