@@ -9,6 +9,7 @@ import flixel.math.FlxMath;
 import openfl.display._internal.stats.Context3DStats;
 import openfl.display._internal.stats.DrawCallContext;
 #end
+import Highscore;
 #if flash
 import openfl.Lib;
 #end
@@ -78,17 +79,24 @@ class FPS extends TextField
 		}
 
 		var currentCount = times.length;
+ ,              var framerate:Int = ClientPrefs.framerate
+
 		currentFPS = Math.round((currentCount + cacheCount) / 2);
-		if (currentFPS > ClientPrefs.framerate) currentFPS = ClientPrefs.framerate;
+		
+		if (currentFPS > framerate) currentFPS = framerate;
 
 		if (currentCount != cacheCount /*&& visible*/)
 		{
 			var memoryMegas:Float = 0;
+			
+			var fpsPercent:Float = 0;
+		    
 			memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
-
+                        fpsPercent = Highscore.floorDecimal((currentFPS / framerate) * 100,1)
+		
 			if(ClientPrefs.sysInfo == 'System' && ClientPrefs.showFPS)
 			{
-			text = "FPS: " + currentFPS;
+			text = "FPS: " + currentFPS + " / " + framerate + " [ " + fpsPercent + " % ]";
 			text += "\nMemory: " + memoryMegas + " MB";
 			text += "\nOperating system: " + '${lime.system.System.platformLabel}';
             }
@@ -105,7 +113,7 @@ class FPS extends TextField
 			}
 			if(ClientPrefs.sysInfo == 'FPS ALT' && ClientPrefs.showFPS)
 			{
-			text = "FPS: " + '[' + currentFPS + ']';
+			text = "FPS: " + '[' + currentFPS + '] ';
 			text += "\nMemory: " + memoryMegas + " MB";
 			text += "\nAlt Engine version: " + MainMenuState.altEngineVersion;
 			text += "\nOperating system: " + '${lime.system.System.platformLabel}';
