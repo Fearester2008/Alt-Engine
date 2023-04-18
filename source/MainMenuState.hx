@@ -150,7 +150,7 @@ class MainMenuState extends MusicBeatState
 		changeItem();
 
 		#if android
-		addVirtualPad(UP_DOWN, A_B_X_Y);
+		addVirtualPad(UP_DOWN, A_B_C_X_Y);
 		#end
 
 		super.create();
@@ -228,7 +228,7 @@ class MainMenuState extends MusicBeatState
             } 
             #end
             #if android
-            if (_virtualpad.buttonY.justPressed)
+            if (_virtualpad.buttonC.justPressed)
             {
                 selectedSomethin = true;
                 MusicBeatState.switchState(new android.AndroidControlsMenu());
