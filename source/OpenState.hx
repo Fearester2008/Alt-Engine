@@ -1,137 +1,162 @@
 package;
-
-//Stealing this from dusttale lmao
-
-import haxe.Exception;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
-import sys.FileSystem;
-import sys.io.File;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.transition.TransitionData;
 import flixel.graphics.FlxGraphic;
+import flixel.util.FlxGradient;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxPoint;
-import flixel.math.FlxRect;
-import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import flixel.text.FlxText;
+import flixel.system.FlxSound;
+import lime.app.Application;
+#if windows
+import Discord.DiscordClient;
+#end
+import openfl.display.BitmapData;
+import openfl.utils.Assets;
+import haxe.Exception;
+import flixel.tweens.FlxEase;
+import flixel.util.FlxColor;
+import flixel.tweens.FlxTween;
+import flixel.FlxState;
+import flixel.math.FlxRect;
+import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
+import flixel.util.FlxColor;
+import lime.system.ThreadPool;
+#if cpp
+import sys.FileSystem;
+import sys.io.File;
+#end
+
 using StringTools;
 
-class OpenState extends MusicBeatState
+class OpenState extends FlxState
 {
-    var toBeDone = 0;
-    var done = 0;
 
-    var text:FlxText;
-    var kadeLogo:FlxSprite;
-    var progBar:FlxBar;
-    
+	var gradientBar:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, 1, 0xFFAB6F00);
+	var splash:FlxSprite;
+	var loadingSpeen:FlxSprite;
+	var shitz:FlxText;
+	var randomTxt:FlxText;
+	
+	var isTweening:Bool = false;
+	var lastString:String = '';
+
 	override function create()
 	{
-        FlxG.mouse.visible = false;
+	
+		FlxG.mouse.visible = true;
 
-        FlxG.worldBounds.set(0,0);
+		FlxG.worldBounds.set(0,0);
 
-        text = new FlxText(FlxG.width / 2, FlxG.height / 2 + 300,0,"Loading...");
-        text.size = 34;
-        text.alignment = FlxTextAlign.CENTER;
-        text.alpha = 0;
-
-        kadeLogo = new FlxSprite(FlxG.width / 2, FlxG.height / 2).loadGraphic(Paths.image('logoBumpin'));
-        kadeLogo.x -= kadeLogo.width / 2;
-        kadeLogo.y -= kadeLogo.height / 2 + 100;
-        text.y -= kadeLogo.height / 2 - 125;
-        text.x -= 170;
-        kadeLogo.setGraphicSize(Std.int(kadeLogo.width * 0.6));
-
-        kadeLogo.alpha = 0;
-
-        add(kadeLogo);
-        add(text);
-        progBar = new FlxBar(0, kadeLogo.y + 20, LEFT_TO_RIGHT, 1020, 30, this,
-			'loadPercent', 0, 1);
-		progBar.scrollFactor.set();
-		progBar.screenCenter(X);
-		progBar.createGradientFilledBar([0xFFFF0000, 0xFFFFFF00, 0xFF0FFF00],1,0,false,FlxColor.WHITE);
-		add(progBar);
+		super.create();
 		
-        trace('starting caching..');
-        
-        sys.thread.Thread.create(() -> {
-            cache();
+
+		splash = new FlxSprite().loadGraphic(Paths.image("logo"));
+		splash.screenCenter();
+		splash.y -= 60;
+		splash.antialiasing = true;
+		add(splash);
+		
+		gradientBar = FlxGradient.createGradientFlxSprite(Math.round(FlxG.width), 512, [0x0000FFB0, 0x001100FF, 0xFFFFFF00], 1, 90, true);
+		gradientBar.y = FlxG.height - gradientBar.height;
+		add(gradientBar);
+		gradientBar.scrollFactor.set(0, 0);
+		
+		var bottomPanel:FlxSprite = new FlxSprite(0, FlxG.height - 100).makeGraphic(FlxG.width, 100, 0xFF000000);
+		bottomPanel.alpha = 0.5;
+		add(bottomPanel);	
+		
+		randomTxt = new FlxText(20, FlxG.height - 80, 1000, "", 26);
+		randomTxt.scrollFactor.set();
+		randomTxt.setFormat("VCR OSD Mono", 26, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(randomTxt);
+		
+		loadingSpeen = new FlxSprite().loadGraphic(Paths.image("load_image"));
+		loadingSpeen.screenCenter(X);
+                loadingSpeen.setGraphicSize(Std.int(loadingSpeen.width * 0.89));
+                loadingSpeen.x = FlxG.width - 91;
+		loadingSpeen.y = FlxG.height - 91;
+		loadingSpeen.angularVelocity = 180;
+		loadingSpeen.antialiasing = true;
+		add(loadingSpeen);
+		
+		shitz = new FlxText(540, 630, 300, "Loading...", 12);
+		shitz.scrollFactor.set();
+		shitz.setFormat("VCR OSD Mono", 50, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(shitz);
+
+        new FlxTimer().start(10, function(tmr:FlxTimer)
+		{
+            goToState();
         });
 
-        super.create();
-    }
+		super.create();
+	}
+	
+	var selectedSomethin:Bool = false;
+	var timer:Float = 0;
+	
+	override function update(elapsed:Float) 
+	{
+		if (!selectedSomethin){
+			if (isTweening){
+				randomTxt.screenCenter(X);
+				timer = 0;
+			}else{
+				randomTxt.screenCenter(X);
+				timer += elapsed;
+				if (timer >= 3)
+				{
+					changeText();
+				}
+			}
+		}
+		super.update(elapsed);
+	}
 
-    var calledDone = false;
+	function goToState()
+	{
+		FlxG.switchState(new TitleState());
+	}
+	
+	function changeText()
+	{
+		var selectedText:String = '';
+		var textArray:Array<String> = CoolUtil.coolTextFile(Paths.txt('tipText'));
 
-    override function update(elapsed) 
-    {
-        var loadPercent = Highscore.floorDecimal((done / toBeDone) * 100,2);
+		randomTxt.alpha = 1;
+		isTweening = true;
+		selectedText = textArray[FlxG.random.int(0, (textArray.length - 1))].replace('--', '\n');
+		FlxTween.tween(randomTxt, {alpha: 0}, 1, {
+			ease: FlxEase.linear,
+			onComplete: function(freak:FlxTween)
+			{
+				if (selectedText != lastString)
+				{
+					randomTxt.text = selectedText;
+					lastString = selectedText;
+				}
+				else
+				{
+					selectedText = textArray[FlxG.random.int(0, (textArray.length - 1))].replace('--', '\n');
+					randomTxt.text = selectedText;
+				}
 
-        if (toBeDone != 0 && done != toBeDone)
-        {
-            var alpha = Highscore.floorDecimal((done / toBeDone) * 100,2);
-            kadeLogo.alpha = alpha;
-            text.alpha = alpha;
-            text.text = "Loading... (" + done + "/" + toBeDone + ")";
-        }
+				randomTxt.alpha = 0;
 
-        super.update(elapsed);
-    }
-
-
-    function cache()
-    {
-
-        var images = [];
-        var music = [];
-
-        trace("caching images...");
-
-        for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/characters")))
-        {
-            if (!i.endsWith(".png"))
-                continue;
-            images.push(i);
-        }
-
-        trace("caching music...");
-
-        for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/songs")))
-        {
-            music.push(i);
-        }
-
-        toBeDone = Lambda.count(images) + Lambda.count(music);
-
-        trace("LOADING: " + toBeDone + " OBJECTS.");
-
-        for (i in images)
-        {
-            var replaced = i.replace(".png","");
-            Paths.image("characters/" + replaced,"shared");
-            trace("cached " + replaced);
-            done++;
-        }
-
-        for (i in music)
-        {
-            Paths.inst(i);
-            Paths.voices(i);
-            trace("cached " + i);
-            done++;
-        }
-
-        trace("Finished caching...");
-
-        FlxG.switchState(new TitleState());
-    }
-
+				FlxTween.tween(randomTxt, {alpha: 1}, 1, {
+					ease: FlxEase.linear,
+					onComplete: function(freak:FlxTween)
+					{
+						isTweening = false;
+					}
+				});
+			}
+		});
+	}
 }
