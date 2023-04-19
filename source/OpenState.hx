@@ -43,6 +43,12 @@ class OpenState extends FlxState
 	var shitz:FlxText;
 	var randomTxt:FlxText;
 	
+	var toBeDone = 0;
+    var done = 0;
+    
+    var images = [];
+    var music = [];
+    
 	var isTweening:Bool = false;
 	var lastString:String = '';
 
@@ -55,7 +61,6 @@ class OpenState extends FlxState
 
 		super.create();
 		
-
 		splash = new FlxSprite().loadGraphic(Paths.image("logo"));
 		splash.screenCenter();
 		splash.y -= 60;
@@ -90,10 +95,9 @@ class OpenState extends FlxState
 		shitz.setFormat("VCR OSD Mono", 50, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(shitz);
 
-        new FlxTimer().start(10, function(tmr:FlxTimer)
-		{
-            goToState();
-        });
+        sys.thread.Thread.create(() -> {
+			goToState();
+		});
 
 		super.create();
 	}
@@ -103,6 +107,12 @@ class OpenState extends FlxState
 	
 	override function update(elapsed:Float) 
 	{
+		if (toBeDone != 0 && done != toBeDone)
+        {
+            var alpha = Highscore.floorDecimal((done / toBeDone) * 100,2);
+            shitz.text = "Loading... (" + done + "/" + toBeDone + ")";
+        }
+        
 		if (!selectedSomethin){
 			if (isTweening){
 				randomTxt.screenCenter(X);
@@ -120,9 +130,51 @@ class OpenState extends FlxState
 	}
 
 	function goToState()
-	{
-		FlxG.switchState(new TitleState());
-	}
+    {
+
+        var images = [];
+        var music = [];
+
+        trace("caching images...");
+
+        for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/characters")))
+        {
+            if (!i.endsWith(".png"))
+                continue;
+            images.push(i);
+        }
+
+        trace("caching music...");
+
+        for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/songs")))
+        {
+            music.push(i);
+        }
+
+        toBeDone = Lambda.count(images) + Lambda.count(music);
+
+        trace("LOADING: " + toBeDone + " OBJECTS.");
+
+        for (i in images)
+        {
+            var replaced = i.replace(".png","");
+            Paths.image("characters/" + replaced,"shared");
+            trace("cached " + replaced);
+            done++;
+        }
+
+        for (i in music)
+        {
+            Paths.inst(i);
+            Paths.voices(i);
+            trace("cached " + i);
+            done++;
+        }
+
+        trace("Finished caching...");
+
+        FlxG.switchState(new TitleState());
+    }
 	
 	function changeText()
 	{
