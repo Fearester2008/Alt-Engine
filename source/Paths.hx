@@ -188,7 +188,7 @@ class Paths
 	{
 		return getPath('$key.lua', TEXT, library);
 	}
-	inline static public function hx(key:String, ?library:String)
+	inline static public function hscript(key:String, ?library:String)
 	{
 		return getPath('data/$key.hx', TEXT, library);
 	}
@@ -428,8 +428,8 @@ class Paths
 		return modFolders('images/' + key + '.txt');
 	}
 
-	inline static public function modsHx(key:String) {
-		return modFolders('data/' + key + '.hx');
+	inline static public function modsHscript(key:String) {
+		return modFolders('scripts/' + key + '.hx');
 	}
 
 	/* Goes unused for now
