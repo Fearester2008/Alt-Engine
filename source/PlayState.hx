@@ -892,7 +892,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if(doPush) 
-			scriptArray.push(new ScriptCore(luaFile));
+			scriptArray.push(new ScriptCore(haxeFile));
 		#end
 
 		var gfVersion:String = SONG.gfVersion;
