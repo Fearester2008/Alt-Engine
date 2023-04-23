@@ -856,7 +856,6 @@ class PlayState extends MusicBeatState
 		for(mod in Paths.getGlobalMods())
 			foldersToCheck.insert(0, Paths.mods(mod + '/scripts/'));
 		#end
-		#end
 
 		for (folder in foldersToCheck)
 		{
