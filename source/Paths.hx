@@ -188,9 +188,9 @@ class Paths
 	{
 		return getPath('$key.lua', TEXT, library);
 	}
-	inline static public function hscript(key:String, ?library:String)
+	inline static public function hx(key:String, ?library:String)
 	{
-		return getPath('data/$key.hx', TEXT, library);
+		return getPath('$key.hx', TEXT, library);
 	}
 
 	static public function video(key:String)
