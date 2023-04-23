@@ -3679,7 +3679,7 @@ class PlayState extends MusicBeatState
 		seenCutscene = false;
 
 		#if HSCRIPT_SYSTEM
-		var ret:Dynamic = callOnScripts('endSong', [], false);
+		var ret:Dynamic = callOnScripts('endSong', []);
 		#else
 		var ret:Dynamic = callOnLuas('onEndSong', [], false);
 		#end
