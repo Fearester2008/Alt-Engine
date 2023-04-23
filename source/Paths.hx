@@ -190,9 +190,12 @@ class Paths
 	}
 	inline static public function hx(key:String, ?library:String)
 	{
-		return getPath('$key.hx', TEXT, library);
+		return getPath('data/$key.hx', TEXT, library);
 	}
-
+        inline static public function globalScript(key:String, ?library:String)
+	{
+		return getPath('scripts/$key.hx', TEXT, library);
+	}
 	static public function video(key:String)
 	{
 		#if MODS_ALLOWED
