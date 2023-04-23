@@ -40,8 +40,8 @@ class FreeplayState extends MusicBeatState
 	
 	var selector:FlxText;
 	private static var curSelected:Int = 0;
-	var difficultySelectors:FlxTypedGroup<FlxSprite>;
-	var sprDifficulty:FlxText;
+	var curDifficulty:Int = -1;
+	private static var lastDifficultyName:String = '';
     private var updateTime:Bool = true;
 
 	var timeTxt:FlxText;
@@ -198,53 +198,18 @@ timeTxt = new FlxText(20, 19, 1280, "", 32);
 		add(timeTxt);
 		timeBarBG.sprTracker = timeBar;
 		
-		scoreText = new FlxText(50, bottomPanel.y + 18, FlxG.width, "", 28);
-		// scoreText.autoSize = false;
-		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, LEFT, OUTLINE, FlxColor.BLACK);
-		// scoreText.screenCenter(X);
-		// scoreText.alignment = RIGHT;
-		scoreText.borderSize = 2;
-		add(scoreText);
+		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
+		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
 
-		var scoreBG:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, 66, 0xFF000000);
-		scoreBG.alpha = 0.8;
+		scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(1, 66, 0xFF000000);
+		scoreBG.alpha = 0.6;
 		add(scoreBG);
 
-        var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
-		difficultySelectors = new FlxTypedGroup<FlxSprite>();
-		add(difficultySelectors);
+		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
+		diffText.font = scoreText.font;
+		add(diffText);
 
-        leftArrow = new FlxSprite(800, 0);
-		leftArrow.frames = ui_tex;
-		leftArrow.animation.addByPrefix('idle', "arrow left");
-		leftArrow.animation.addByPrefix('press', "arrow push left");
-		leftArrow.animation.play('idle');
-		leftArrow.scale.set(0.9, 0.9);
-		difficultySelectors.add(leftArrow);
-
-		leftArrow.y = FlxG.height - leftArrow.height - 30;
-
-		sprDifficulty = new FlxText(leftArrow.x + 70, leftArrow.y + 20, (308 * 0.8), "DIFF", 44);
-		sprDifficulty.setFormat("VCR OSD Mono", 44, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
-
-		// sprDifficulty = new FlxSprite(leftArrow.x + 130, leftArrow.y);
-		// sprDifficulty.frames = ui_tex;
-		// sprDifficulty.animation.addByPrefix('easy', 'EASY');
-		// sprDifficulty.animation.addByPrefix('normal', 'NORMAL');
-		// sprDifficulty.animation.addByPrefix('hard', 'HARD');
-		// sprDifficulty.animation.play('easy');
-		// sprDifficulty.scale.set(0.9,0.9);
-		// changeDifficulty();
-
-		difficultySelectors.add(sprDifficulty);
-
-		rightArrow = new FlxSprite(sprDifficulty.x + sprDifficulty.width, leftArrow.y);
-		rightArrow.frames = ui_tex;
-		rightArrow.animation.addByPrefix('idle', 'arrow right');
-		rightArrow.animation.addByPrefix('press', "arrow push right", 24, false);
-		rightArrow.animation.play('idle');
-		rightArrow.scale.set(0.9, 0.9);
-		difficultySelectors.add(rightArrow);
+		add(scoreText);
 
 		if(curSelected >= songs.length) curSelected = 0;
 		bg.color = songs[curSelected].color;
@@ -263,9 +228,26 @@ timeTxt = new FlxText(20, 19, 1280, "", 32);
 
 		var swag:Alphabet = new Alphabet(1, 0, "swag");
 
-	    var bottomPanl:FlxSprite = new FlxSprite(0, FlxG.height - 120).makeGraphic(FlxG.width, 20, 0xFF000000);
-		bottomPanl.alpha = 0.8;
-		add(bottomPanl);
+		// JUST DOIN THIS SHIT FOR TESTING!!!
+		/* 
+			var md:String = Markdown.markdownToHtml(Assets.getText('CHANGELOG.md'));
+
+			var texFel:TextField = new TextField();
+			texFel.width = FlxG.width;
+			texFel.height = FlxG.height;
+			// texFel.
+			texFel.htmlText = md;
+
+			FlxG.stage.addChild(texFel);
+
+			// scoreText.textField.htmlText = md;
+
+			trace(md);
+		 */
+
+		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
+		textBG.alpha = 0.6;
+		add(textBG);
 
 		#if PRELOAD_ALL
 		#if android
@@ -279,7 +261,7 @@ timeTxt = new FlxText(20, 19, 1280, "", 32);
 		var leText:String = "Press C to open the Gameplay Changers Menu / Press Y to Reset your Score and Accuracy.";
 		var size:Int = 18;
 		#end
-		var text:FlxText = new FlxText(50, bottomPanel.y - 16, FlxG.width, 28);
+		var text:FlxText = new FlxText(textBG.x, textBG.y + 4, FlxG.width, leText, size);
 		text.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, RIGHT);
 		text.scrollFactor.set();
 		add(text);
