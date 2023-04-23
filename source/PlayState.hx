@@ -57,7 +57,6 @@ import flixel.animation.FlxAnimationController;
 import animateatlas.AtlasFrameMaker;
 import StageData;
 import FunkinLua;
-import core.ScriptCore;
 import DialogueBoxPsych;
 import Conductor.Rating;
 import flixel.system.FlxAssets.FlxShader;
@@ -74,10 +73,6 @@ import sys.io.File;
 
 #if VIDEOS_ALLOWED
 import vlc.MP4Handler;
-#end
-
-#if HSCRIPT_SYSTEM
-import hscript.*;
 #end
 
 using StringTools;
@@ -315,8 +310,6 @@ class PlayState extends MusicBeatState
 	public var luaArray:Array<FunkinLua> = [];
 	private var luaDebugGroup:FlxTypedGroup<DebugLuaText>;
 	public var introSoundsSuffix:String = '';
-
-	private var scriptArray:Array<ScriptCore> = [];
 
 	// Debug buttons
 	private var debugKeysChart:Array<FlxKey>;
@@ -844,55 +837,9 @@ class PlayState extends MusicBeatState
 		}
 		#end
 
-		#if HSCRIPT_SYSTEM
-		var filesPushed:Array<String> = [];
-		var foldersToCheck:Array<String> = [SUtil.getPath() + Paths.getPreloadPath('scripts/')];
-
-		#if MODS_ALLOWED
-		foldersToCheck.insert(0, Paths.mods('scripts/'));
-		if(Paths.currentModDirectory != null && Paths.currentModDirectory.length > 0)
-			foldersToCheck.insert(0, Paths.mods(Paths.currentModDirectory + '/scripts/'));
-
-		for(mod in Paths.getGlobalMods())
-			foldersToCheck.insert(0, Paths.mods(mod + '/scripts/'));
-		#end
-
-		for (folder in foldersToCheck)
-		{
-			if(FileSystem.exists(folder))
-			{
-				for (file in FileSystem.readDirectory(folder))
-				{
-					if(file.endsWith('.hx') && !filesPushed.contains(file))
-					{
-						scriptArray.push(new ScriptCore(folder + file));
-						filesPushed.push(file);
-					}
-				}
-			}
-		}
-		#end
-
 		// STAGE SCRIPTS
 		#if (MODS_ALLOWED && LUA_ALLOWED)
 		startLuasOnFolder('stages/' + curStage + '.lua');
-		#end
-
-		#if (MODS_ALLOWED && HSCRIPT_SYSTEM)
-		var doPush:Bool = false;
-		var haxeFile:String = 'stages/' + curStage + '.hx';
-		if(FileSystem.exists(Paths.modFolders(haxeFile))) {
-			haxeFile = Paths.modFolders(haxeFile);
-			doPush = true;
-		} else {
-			haxeFile = Paths.getPreloadPath(haxeFile);
-			if(FileSystem.exists(haxeFile)) {
-				doPush = true;
-			}
-		}
-
-		if(doPush) 
-			scriptArray.push(new ScriptCore(haxeFile));
 		#end
 
 		var gfVersion:String = SONG.gfVersion;
@@ -1256,35 +1203,6 @@ class PlayState extends MusicBeatState
 		}
 		#end
 
-		#if HSCRIPT_SYSTEM
-		var filesPushed:Array<String> = [];
-		var foldersToCheck:Array<String> = [SUtil.getPath() + Paths.getPreloadPath('data/' + Paths.formatToSongPath(SONG.song) + '/')];
-
-		#if MODS_ALLOWED
-		foldersToCheck.insert(0, Paths.mods('data/' + Paths.formatToSongPath(SONG.song) + '/'));
-		if(Paths.currentModDirectory != null && Paths.currentModDirectory.length > 0)
-			foldersToCheck.insert(0, Paths.mods(Paths.currentModDirectory + '/data/' + Paths.formatToSongPath(SONG.song) + '/'));
-
-		for(mod in Paths.getGlobalMods())
-			foldersToCheck.insert(0, Paths.mods(mod + '/data/' + Paths.formatToSongPath(SONG.song) + '/' ));// using push instead of insert because these should run after everything else
-		#end
-
-		for (folder in foldersToCheck)
-		{
-			if(FileSystem.exists(folder))
-			{
-				for (file in FileSystem.readDirectory(folder))
-				{
-					if(file.endsWith('.hx') && !filesPushed.contains(file))
-					{
-						scriptArray.push(new ScriptCore(folder + file));
-						filesPushed.push(file);
-					}
-				}
-			}
-		}
-		#end
-
 		var daSong:String = Paths.formatToSongPath(curSong);
 		if (isStoryMode && !seenCutscene)
 		{
@@ -1551,29 +1469,6 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	#if HSCRIPT_SYSTEM
-	// scriptcore crap
-	inline function executeScript(name:String, ?execCreate:Bool = false){
-		ScriptCore.instance.execute(name, execCreate);
-	}
-
-	inline function setVar(name:String, val:Dynamic){
-		ScriptCore.instance.setVariable(name, val);
-	}
-
-	inline function getVar(name:String){
-		return (ScriptCore.instance.existsVariable(name)) ? ScriptCore.instance.getVariable(name) : null;
-	}
-
-	inline function existsVar(name:String){
-		return ScriptCore.instance.existsVariable(name);
-	}
-
-	inline function executeFunc(name:String){
-		return ScriptCore.instance.executeFunc(name);
-	}
-	#end
-
 	function startCharacterLua(name:String)
 	{
 		#if LUA_ALLOWED
@@ -1818,16 +1713,12 @@ class PlayState extends MusicBeatState
 	public function startCountdown():Void
 	{
 		if(startedCountdown) {
-			#if HSCRIPT_SYSTEM
-			callOnScripts('startCountdown', []);
-			#else
 			callOnLuas('onStartCountdown', []);
-			#end
 			return;
 		}
 		inCutscene = false;
-		var ret:Dynamic = #if HSCRIPT_SYSTEM callOnScripts('startCountdown', []) #else callOnLuas('onStartCountdown', []) #end;
-		if(ret != #if HSCRIPT_SYSTEM ScriptCore #else FunkinLua #end.Function_Stop) {
+		var ret:Dynamic = callOnLuas('onStartCountdown', []);
+		if(ret != FunkinLua.Function_Stop) {
 			if (skipCountdown || startOnTime > 0) skipArrowStartTween = true;
 			#if android
 			androidc.visible = true;
@@ -2557,10 +2448,6 @@ class PlayState extends MusicBeatState
 		}
 		#end
 
-		#if HSCRIPT_SYSTEM
-		callOnScripts('onFocus', []);
-		#end
-
 		super.onFocus();
 	}
 
@@ -2571,10 +2458,6 @@ class PlayState extends MusicBeatState
 		{
 			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
 		}
-		#end
-
-		#if HSCRIPT_SYSTEM
-		callOnScripts('onFocusLost', []);
 		#end
 
 		super.onFocusLost();
@@ -2603,11 +2486,7 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
-		#if HSCRIPT_SYSTEM
-		callOnScripts('onUpdate', [elapsed]);
-		#else
 		callOnLuas('onUpdate', [elapsed]);
-		#end
 
 		switch (curStage)
 		{
@@ -2754,8 +2633,8 @@ class PlayState extends MusicBeatState
 
 		if (controls.PAUSE #if android || FlxG.android.justReleased.BACK #end && startedCountdown && canPause)
 		{
-			var ret:Dynamic = #if HSCRIPT_SYSTEM callOnScripts('onPause', []) #else callOnLuas('onPause', []) #end;
-			if(ret != #if HSCRIPT_SYSTEM ScriptCore #else FunkinLua #end.Function_Stop) {
+			var ret:Dynamic = callOnLuas('onPause', []);
+			if(ret != FunkinLua.Function_Stop) {
 				openPauseMenu();
 			}
 		}
@@ -3678,12 +3557,8 @@ class PlayState extends MusicBeatState
 		deathCounter = 0;
 		seenCutscene = false;
 
-		#if HSCRIPT_SYSTEM
-		var ret:Dynamic = callOnScripts('endSong', []);
-		#else
 		var ret:Dynamic = callOnLuas('onEndSong', [], false);
-		#end
-		if(ret != #if HSCRIPT_SYSTEM ScriptCore #else FunkinLua #end.Function_Stop && !transitioning) {
+		if(ret != FunkinLua.Function_Stop && !transitioning) {
 				#if !switch
 				var percent:Float = ratingPercent;
 				if(Math.isNaN(percent)) percent = 0;
@@ -4659,8 +4534,7 @@ class PlayState extends MusicBeatState
 			lua.stop();
 		}
 		luaArray = [];
-		scriptArray = [];
-
+		
 		#if hscript
 		if(FunkinLua.hscript != null) FunkinLua.hscript = null;
 		#end
@@ -4670,10 +4544,6 @@ class PlayState extends MusicBeatState
 			FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 			FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
 		}
-
-		#if HSCRIPT_SYSTEM
-		callOnScripts('destroy', []);
-		#end
 
 		super.destroy();
 	}
@@ -4701,11 +4571,7 @@ class PlayState extends MusicBeatState
 
 		lastStepHit = curStep;
 		setOnLuas('curStep', curStep);
-		#if HSCRIPT_SYSTEM
-		callOnScripts('onStepHit', [curStep]);
-		#else
 		callOnLuas('onStepHit', []);
-		#end
 	}
 
 	var lightningStrikeBeat:Int = 0;
@@ -4842,29 +4708,9 @@ class PlayState extends MusicBeatState
 		lastBeatHit = curBeat;
 
 		setOnLuas('curBeat', curBeat); //DAWGG?????
-		#if HSCRIPT_SYSTEM
-		callOnScripts('onBeatHit', [curBeat]);
-		#else
 		callOnLuas('onBeatHit', []);
-		#end
 	}
 
-	#if HSCRIPT_SYSTEM
-	private function callOnScripts(funcName:String, args:Array<Dynamic>):Dynamic
-	{
-		var value:Dynamic = ScriptCore.Function_Continue;
-
-		for (i in 0...scriptArray.length)
-		{
-			final call:Dynamic = scriptArray[i].executeFunc(funcName, args);
-			final bool:Bool = call == ScriptCore.Function_Continue;
-			if (!bool && call != null)
-				value = call;
-		}
-
-		return value;
-	}
-	#end
 
 	override function sectionHit()
 	{
