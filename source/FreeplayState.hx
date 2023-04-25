@@ -57,7 +57,7 @@ class FreeplayState extends MusicBeatState
 	var intendedScore:Int = 0;
 	var intendedRating:Float = 0;
 
-	private var grpSongs:FlxTypedGroup<Alphabet>;
+	private var grpSongs:FlxTypedGroup<FlixText>;
 	private var curPlaying:Bool = false;
 
 	private var iconOpponentArray:Array<HealthIcon> = [];
@@ -138,23 +138,16 @@ class FreeplayState extends MusicBeatState
 		add(bg);
 		bg.screenCenter();
 
-		grpSongs = new FlxTypedGroup<Alphabet>();
+		grpSongs = new FlxTypedGroup<FlixText>();
 		add(grpSongs);
 
 		for (i in 0...songs.length)
 		{
-			var songText:Alphabet = new Alphabet(90, 320, songs[i].songName, true);
-			songText.isMenuItem = true;
-			songText.itemType = 'D-Shape';
+			var songText:FlixText = new FlixText(90, 320, songs[i].songName,32,WHITE,LEFT);
+			songText.isMenu = true;
+			//songText.itemType = 'D-Shape';
 			songText.targetY = i - curSelected;
 			grpSongs.add(songText);
-
-			var maxWidth = 980;
-			if (songText.width > maxWidth)
-			{
-				songText.scaleX = maxWidth / songText.width;
-			}
-			songText.snapToPosition();
 
 			Paths.currentModDirectory = songs[i].folder;
 		        var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
@@ -169,40 +162,11 @@ class FreeplayState extends MusicBeatState
 		}
 		WeekData.setDirectoryFromWeek();
 		
-timeTxt = new FlxText(20, 19, 1280, "", 32);
-		timeTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		timeTxt.scrollFactor.set();
-		timeTxt.alpha = 0;
-		timeTxt.borderSize = 2;
-		timeTxt.visible = true;
-		
-		timeBarBG = new AttachedSprite('timeBar');
-		timeBarBG.x = 20;
-		timeBarBG.y = timeTxt.y + (timeTxt.height / 4);
-		timeBarBG.scrollFactor.set();
-		timeBarBG.alpha = 0;
-		timeBarBG.visible = true;
-		timeBarBG.color = FlxColor.BLACK;
-		timeBarBG.xAdd = -4;
-		timeBarBG.yAdd = -4;
-		add(timeBarBG);
-
-		timeBar = new FlxBar(timeBarBG.x + 4, timeBarBG.y + 4, LEFT_TO_RIGHT, Std.int(timeBarBG.width - 8), Std.int(timeBarBG.height - 8), this,
-			'songPercent', 0, 1);
-		timeBar.scrollFactor.set();
-		timeBar.createFilledBar(0xFF000000, 0xFFFFFFFF);
-		timeBar.numDivisions = 800; //How much lag this causes?? Should i tone it down to idk, 400 or 200?
-		timeBar.alpha = 0;
-		timeBar.visible = true;
-		add(timeBar);
-		add(timeTxt);
-		timeBarBG.sprTracker = timeBar;
-		
-		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
+		scoreText = new FlxText(0, 0, 0, "", 32);
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
 
-		scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(1, 66, 0xFF000000);
-		scoreBG.alpha = 0.6;
+		scoreBG = new FlxSprite(0, 0).makeGraphic(FlxG.width, 166, 0xFF000000);
+		scoreBG.alpha = 0.8;
 		add(scoreBG);
 
 		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
@@ -245,8 +209,8 @@ timeTxt = new FlxText(20, 19, 1280, "", 32);
 			trace(md);
 		 */
 
-		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
-		textBG.alpha = 0.6;
+		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 106).makeGraphic(FlxG.width, 106, 0xFF000000);
+		textBG.alpha = 0.8;
 		add(textBG);
 
 		#if PRELOAD_ALL
@@ -261,15 +225,43 @@ timeTxt = new FlxText(20, 19, 1280, "", 32);
 		var leText:String = "Press C to open the Gameplay Changers Menu / Press Y to Reset your Score and Accuracy.";
 		var size:Int = 18;
 		#end
-		var text:FlxText = new FlxText(textBG.x, textBG.y + 4, FlxG.width, leText, size);
+		var text:FlxText = new FlxText(0, textBG.y + 4, FlxG.width, leText, size);
 		text.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, RIGHT);
 		text.scrollFactor.set();
 		add(text);
 
+                timeTxt = new FlxText(20, 19, 1280, "", 32);
+		timeTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		timeTxt.scrollFactor.set();
+		timeTxt.alpha = 0;
+		timeTxt.borderSize = 2;
+		timeTxt.visible = true;
+		
+		timeBarBG = new AttachedSprite('timeBar');
+		timeBarBG.x = 700;
+		timeBarBG.y = FlxG.height - 50;
+		timeBarBG.scrollFactor.set();
+		timeBarBG.alpha = 0;
+		timeBarBG.visible = true;
+		timeBarBG.xAdd = -4;
+		timeBarBG.yAdd = -4;
+		add(timeBarBG);
+
+		timeBar = new FlxBar(timeBarBG.x + 4, timeBarBG.y + 4, LEFT_TO_RIGHT, Std.int(timeBarBG.width - 8), Std.int(timeBarBG.height - 8), this,
+			'songPercent', 0, 1);
+		timeBar.scrollFactor.set();
+		timeBar.createFilledBar(0xFF000000, 0xFFFFFFFF);
+		timeBar.numDivisions = 800; //How much lag this causes?? Should i tone it down to idk, 400 or 200?
+		timeBar.alpha = 0;
+		timeBar.visible = true;
+		add(timeBar);
+		add(timeTxt);
+		timeBarBG.sprTracker = timeBar;
+		
 		timeBar.cameras = [camINTERFACE];
 		timeBarBG.cameras = [camINTERFACE];
 		timeTxt.cameras = [camINTERFACE];
-        scoreText.cameras = [camINTERFACE];
+                scoreText.cameras = [camINTERFACE];
 		scoreBG.cameras = [camINTERFACE];
 		diffText.cameras = [camINTERFACE];
 		textBG.cameras = [camINTERFACE];
@@ -389,7 +381,6 @@ timeTxt = new FlxText(20, 19, 1280, "", 32);
 		}
 
 		scoreText.text = 'PERSONAL BEST: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
-		positionHighscore();
 
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
@@ -614,8 +605,7 @@ timeTxt = new FlxText(20, 19, 1280, "", 32);
 		#end
 
 		PlayState.storyDifficulty = curDifficulty;
-		diffText.text = CoolUtil.difficultyString() + ' MODE';
-		positionHighscore();
+		diffText.text = CoolUtil.difficultyString() + ' MODE <';
 	}
 
 	function changeSelection(change:Int = 0, playSound:Bool = true)
@@ -717,14 +707,6 @@ timeTxt = new FlxText(20, 19, 1280, "", 32);
 		}
 	}
 
-	private function positionHighscore() {
-		scoreText.x = FlxG.width - scoreText.width - 6;
-
-		scoreBG.scale.x = FlxG.width - scoreText.x + 6;
-		scoreBG.x = FlxG.width - (scoreBG.scale.x / 2);
-		diffText.x = Std.int(scoreBG.x + (scoreBG.width / 2));
-		diffText.x -= diffText.width / 2;
-	}
 }
 
 class SongMetadata
