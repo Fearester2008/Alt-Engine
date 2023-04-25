@@ -151,7 +151,8 @@ class FreeplayState extends MusicBeatState
 
 			Paths.currentModDirectory = songs[i].folder;
 		        var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
-			icon.sprTracker = songText;
+			icon.x = scoreText.x + scoreText.width + 70;
+			icon.y = diffText.y
 			// using a FlxGroup is too much fuss!
 			iconOpponentArray.push(icon);
 			add(icon);
@@ -210,28 +211,28 @@ class FreeplayState extends MusicBeatState
 		 */
 
 		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 106).makeGraphic(FlxG.width, 106, 0xFF000000);
-		textBG.alpha = 0.8;
+		textBG.alpha = 1;
 		add(textBG);
 
 		#if PRELOAD_ALL
 		#if android
-		var leText:String = "Press X to make your phone fullscreen. / Press C to open the Gameplay Changers Menu / Press Y to Reset your Score and Accuracy.";
+		var leText:String = "Press X to make your phone fullscreen.\n Press C to open the Gameplay Changers Menu. \nPress Y to Reset your Score and Accuracy.";
 		var size:Int = 16;
 		#else
-		var leText:String = "Press SPACE to make your device fullscreen. / Press CTRL to open the Gameplay Changers Menu / Press RESET to Reset your Score and Accuracy.";
+		var leText:String = "Press SPACE to make your device fullscreen.\n Press CTRL to open the Gameplay Changers Menu.\n Press RESET to Reset your Score and Accuracy.";
 		var size:Int = 16;
 		#end
 		#else
-		var leText:String = "Press C to open the Gameplay Changers Menu / Press Y to Reset your Score and Accuracy.";
+		var leText:String = "Press C to open the Gameplay Changers Menu. \n Press Y to Reset your Score and Accuracy.";
 		var size:Int = 18;
 		#end
-		var text:FlxText = new FlxText(0, FlxG.height - 9, FlxG.width, leText, size);
+		var text:FlxText = new FlxText(0, FlxG.height - 60, FlxG.width, leText, size);
 		text.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, LEFT);
 		text.scrollFactor.set();
 		add(text);
 
-                timeTxt = new FlxText(FlxG.width - 200, 0, 1280, "", 32);
-		timeTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+                timeTxt = new FlxText(FlxG.width - 300, 30, 1280, "", 25);
+		timeTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		timeTxt.scrollFactor.set();
 		timeTxt.alpha = 0;
 		timeTxt.borderSize = 2;
@@ -239,7 +240,7 @@ class FreeplayState extends MusicBeatState
 		
 		timeBarBG = new AttachedSprite('timeBar');
 		timeBarBG.x = 800;
-		timeBarBG.y = 50;
+		timeBarBG.y = 30;
 		timeBarBG.scrollFactor.set();
 		timeBarBG.alpha = 0;
 		timeBarBG.visible = true;
@@ -380,7 +381,7 @@ class FreeplayState extends MusicBeatState
 			ratingSplit[1] += '0';
 		}
 
-		scoreText.text = 'PERSONAL BEST: ' + lerpScore + '\nRating: ' + ratingSplit.join('.') + ' %';
+		scoreText.text = 'PERSONAL BEST: ' + lerpScore + '\n' + 'Rating: ' + ratingSplit.join('.') + ' %';
 
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
