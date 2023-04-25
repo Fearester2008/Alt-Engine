@@ -87,7 +87,6 @@ class CreditsState extends MusicBeatState
             ['Rom4chek' , 'rom4chek' , ' Coder and helper of Alt Engine' , 'https://youtube.com/@Rom4chek', '00FF00'],
             ['Joalor64' , 'joalor' , 'Coder of Alt Engine' , 'https://github.com/Joalor64GH' , '8EFF8E'],
             ['Daniel', 'daniel' , 'Musican in Main Menu of Alt Engine' , 'https://youtube.com/@0_Daniel_0' , 'FFFF00'],
-            [''],
 			['Psych Engine Android Team'],
 			['MaysLastPlay',		'MaysLastPlay',		'Android Porter',							'https://www.youtube.com/channel/UCx0LxtFR8ROd9sFAq-UxDfw',	'5DE7FF'],
 			['Nuno Filipe Studios',	'nuno',				'Android Porter',							'https://www.youtube.com/channel/UCq7G3p4msVN5SX2CpJ86tTw',	'989c99'],
