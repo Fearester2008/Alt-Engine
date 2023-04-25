@@ -143,7 +143,7 @@ class FreeplayState extends MusicBeatState
 
 		for (i in 0...songs.length)
 		{
-			var songText:FlixText = new FlixText(160, 320, songs[i].songName,32,FlxColor.WHITE,LEFT);
+			var songText:FlixText = new FlixText(160, 320, songs[i].songName,42,FlxColor.WHITE,LEFT);
 			songText.isMenu = true;
 			//songText.itemType = 'D-Shape';
 			songText.targetY = i - curSelected;
@@ -151,8 +151,8 @@ class FreeplayState extends MusicBeatState
 
 			Paths.currentModDirectory = songs[i].folder;
 		        var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
-			icon.x = scoreText.x + scoreText.width + 70;
-			icon.y = diffText.y;
+			icon.x = 500;
+			icon.y = 100;
 			// using a FlxGroup is too much fuss!
 			iconOpponentArray.push(icon);
 			add(icon);
