@@ -88,8 +88,7 @@ class FreeplayState extends MusicBeatState
 		// FlxCamera.defaultCameras = [camBackground];
 		FlxG.cameras.setDefaultDrawTarget(camBackground, true);
 
-        camINTERFACE.alpha = 0;
-		FlxTween.tween(camINTERFACE, {alpha: 1}, 0.3, {ease: FlxEase.linear, startDelay: 0.8});
+                camINTERFACE.alpha = 1;
 
 		#if desktop
 		// Updating Discord Rich Presence
@@ -144,7 +143,7 @@ class FreeplayState extends MusicBeatState
 
 		for (i in 0...songs.length)
 		{
-			var songText:FlixText = new FlixText(90, 320, songs[i].songName,32,FlxColor.WHITE,LEFT);
+			var songText:FlixText = new FlixText(160, 320, songs[i].songName,32,FlxColor.WHITE,LEFT);
 			songText.isMenu = true;
 			//songText.itemType = 'D-Shape';
 			songText.targetY = i - curSelected;
@@ -166,11 +165,11 @@ class FreeplayState extends MusicBeatState
 		scoreText = new FlxText(0, 0, 0, "", 32);
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
 
-		scoreBG = new FlxSprite(0, 0).makeGraphic(FlxG.width, 166, 0xFF000000);
-		scoreBG.alpha = 0.8;
+		scoreBG = new FlxSprite(0, 0).makeGraphic(FlxG.width, 116, 0xFF000000);
+		scoreBG.alpha = 1;
 		add(scoreBG);
 
-		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
+		diffText = new FlxText(scoreText.x, scoreText.y + 66, 0, "", 24);
 		diffText.font = scoreText.font;
 		add(diffText);
 
@@ -226,12 +225,12 @@ class FreeplayState extends MusicBeatState
 		var leText:String = "Press C to open the Gameplay Changers Menu / Press Y to Reset your Score and Accuracy.";
 		var size:Int = 18;
 		#end
-		var text:FlxText = new FlxText(0, textBG.y + 4, FlxG.width, leText, size);
-		text.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, RIGHT);
+		var text:FlxText = new FlxText(0, FlxG.height - 9, FlxG.width, leText, size);
+		text.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, LEFT);
 		text.scrollFactor.set();
 		add(text);
 
-                timeTxt = new FlxText(20, 19, 1280, "", 32);
+                timeTxt = new FlxText(FlxG.width - 200, 0, 1280, "", 32);
 		timeTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		timeTxt.scrollFactor.set();
 		timeTxt.alpha = 0;
@@ -239,8 +238,8 @@ class FreeplayState extends MusicBeatState
 		timeTxt.visible = true;
 		
 		timeBarBG = new AttachedSprite('timeBar');
-		timeBarBG.x = 700;
-		timeBarBG.y = FlxG.height - 50;
+		timeBarBG.x = 800;
+		timeBarBG.y = 50;
 		timeBarBG.scrollFactor.set();
 		timeBarBG.alpha = 0;
 		timeBarBG.visible = true;
@@ -381,7 +380,7 @@ class FreeplayState extends MusicBeatState
 			ratingSplit[1] += '0';
 		}
 
-		scoreText.text = 'PERSONAL BEST: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
+		scoreText.text = 'PERSONAL BEST: ' + lerpScore + '\nRating: ' + ratingSplit.join('.') + ' %';
 
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
@@ -452,7 +451,7 @@ class FreeplayState extends MusicBeatState
 			if(instPlaying != curSelected)
 			{
 			    FlxTween.tween(timeBar, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
-	        	FlxTween.tween(timeTxt, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
+	        	    FlxTween.tween(timeTxt, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
 
 				#if PRELOAD_ALL
 				destroyFreeplayVocals();
@@ -506,37 +505,7 @@ class FreeplayState extends MusicBeatState
 			FlxFlicker.flicker(item, 1.05, 0.06, false, false);
 			FlxFlicker.flicker(iconOpponentArray[curSelected], 1.05, 0.06, false, false);
 			}
-			else if (item.targetY == -1)
-			{
-			    FlxTween.tween(item, {y: -900}, 0.7, {ease: FlxEase.backIn});
-			}
-			else if (item.targetY == -2)
-			{
-			    FlxTween.tween(item, {y: -900}, 0.7, {ease: FlxEase.backIn});
-			}
-			else if (item.targetY == -3)
-			{
-			    FlxTween.tween(item, {y: -900}, 0.7, {ease: FlxEase.backIn});
-			}
-			else if (item.targetY == 0)
-			{
-			    FlxTween.tween(item, {x: 400, y: 500}, 0.7, {ease: FlxEase.backIn});
-			}
-			else if (item.targetY == 1)
-			{
-		    FlxTween.tween(item, {y: 900}, 0.7, {ease: FlxEase.backIn});
-			}
-			else if (item.targetY == 2)
-			{
-		    FlxTween.tween(item, {y: 900}, 0.7, {ease: FlxEase.backIn});
-			}
-			else if (item.targetY == 3)
-			{
-		    FlxTween.tween(item, {y: 900}, 0.7, {ease: FlxEase.backIn});
-			}
 		}
-		    FlxTween.tween(camINTERFACE, {alpha: 0}, 0.3, {ease: FlxEase.linear});
-
 			        FlxG.sound.music.stop();
                     vocals.stop();
             
