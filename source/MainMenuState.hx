@@ -24,7 +24,7 @@ using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
-	public static var altEngineVersion:String = '2.5.1'; //This is also used for Discord RPC
+	public static var altEngineVersion:String = '2.5.2h'; //This is also used for Discord RPC
 	public static var psychEngineVersion:String = '0.6.3'; //This is also used for Discord RPC
         public static var curSelected:Int = 0;
 
@@ -150,7 +150,7 @@ class MainMenuState extends MusicBeatState
 		changeItem();
 
 		#if android
-		addVirtualPad(UP_DOWN, A_B_C_X_Y);
+		addVirtualPad(UP_DOWN, A_B_C_X_Y_Z);
 		#end
 
 		super.create();
@@ -232,6 +232,13 @@ class MainMenuState extends MusicBeatState
             {
                 selectedSomethin = true;
                 MusicBeatState.switchState(new android.AndroidControlsMenu());
+            }
+			#end
+            #if android
+            if (_virtualpad.buttonZ.justPressed)
+            {
+                selectedSomethin = true;
+                MusicBeatState.switchState(new ModsMenuState());
             }
 			#end
 		}
