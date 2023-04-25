@@ -144,7 +144,7 @@ class FreeplayState extends MusicBeatState
 
 		for (i in 0...songs.length)
 		{
-			var songText:FlixText = new FlixText(90, 320, songs[i].songName,32,WHITE,LEFT);
+			var songText:FlixText = new FlixText(90, 320, songs[i].songName,32,FlxColor.WHITE,LEFT);
 			songText.isMenu = true;
 			//songText.itemType = 'D-Shape';
 			songText.targetY = i - curSelected;
