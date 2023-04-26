@@ -255,7 +255,6 @@ class FreeplayState extends MusicBeatState
 		
                 for (char in 0...songs.length)
 		{
-			Paths.currentModDirectory = songs[char].folder;
 		        var icon:HealthIcon = new HealthIcon(songs[char].songCharacter);
 			icon.x = 100;
 			icon.y = 70;
