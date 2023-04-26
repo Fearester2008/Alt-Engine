@@ -150,12 +150,6 @@ class FreeplayState extends MusicBeatState
 			grpSongs.add(songText);
 
 			Paths.currentModDirectory = songs[i].folder;
-		        var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
-			icon.x = 500;
-			icon.y = 100;
-			// using a FlxGroup is too much fuss!
-			iconOpponentArray.push(icon);
-			add(icon);
 
 			// songText.x += 40;
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
@@ -259,6 +253,21 @@ class FreeplayState extends MusicBeatState
 		add(timeTxt);
 		timeBarBG.sprTracker = timeBar;
 		
+                for (char in 0...songs.length)
+		{
+			Paths.currentModDirectory = songs[char].folder;
+		        var icon:HealthIcon = new HealthIcon(songs[char].songCharacter);
+			icon.x = 100;
+			icon.y = 70;
+			// using a FlxGroup is too much fuss!
+			iconOpponentArray.push(icon);
+			add(icon);
+
+			// songText.x += 40;
+			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
+			// songText.screenCenter(X);
+                        icon.cameras = [camINTERFACE];
+		}
 		timeBar.cameras = [camINTERFACE];
 		timeBarBG.cameras = [camINTERFACE];
 		timeTxt.cameras = [camINTERFACE];
