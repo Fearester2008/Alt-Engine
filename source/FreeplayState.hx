@@ -46,13 +46,13 @@ class FreeplayState extends MusicBeatState
     private var updateTime:Bool = true;
 
 	var timeTxt:FlxText;
-    private var timeBarBG:AttachedSprite;
-	public var timeBar:FlxBar;
-    var songPercent:Float = 0;
     var songLength:Float = 0;
 	var scoreBG:FlxSprite;
+	var iconBG:FlxSprite;
 	var scoreText:FlxText;
 	var diffText:FlxText;
+	var rateTxt:FlxText;
+
 	var lerpScore:Int = 0;
 	var lerpRating:Float = 0;
 	var intendedScore:Int = 0;
@@ -88,7 +88,7 @@ class FreeplayState extends MusicBeatState
 		// FlxCamera.defaultCameras = [camBackground];
 		FlxG.cameras.setDefaultDrawTarget(camBackground, true);
 
-                camINTERFACE.alpha = 1;
+        camINTERFACE.alpha = 1;
 
 		#if desktop
 		// Updating Discord Rich Presence
@@ -141,15 +141,27 @@ class FreeplayState extends MusicBeatState
 		grpSongs = new FlxTypedGroup<FlixText>();
 		add(grpSongs);
 
+        iconBG = new FlxSprite(FlxG.width, 0).makeGraphic(350,350, 0xFF000000);
+        iconBG.screenCenter(Y);
+		iconBG.alpha = 1;
+		add(iconBG);
+		
 		for (i in 0...songs.length)
 		{
-			var songText:FlixText = new FlixText(160, 320, songs[i].songName,42,FlxColor.WHITE,LEFT);
+			var songText:FlixText = new FlixText(90, 320, songs[i].songName,45,FlxColor.WHITE,LEFT);
 			songText.isMenu = true;
 			//songText.itemType = 'D-Shape';
 			songText.targetY = i - curSelected;
 			grpSongs.add(songText);
 
 			Paths.currentModDirectory = songs[i].folder;
+
+		    var icon:HealthIcon = new HealthIcon(songs[char].songCharacter);
+			icon.x = FlxG.width;
+			icon.screenCenter(Y);
+			// using a FlxGroup is too much fuss!
+			iconOpponentArray.push(icon);
+			add(icon);
 
 			// songText.x += 40;
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
@@ -164,7 +176,7 @@ class FreeplayState extends MusicBeatState
 		scoreBG.alpha = 1;
 		add(scoreBG);
 
-		diffText = new FlxText(scoreText.x, scoreText.y + 66, 0, "", 24);
+		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
 		diffText.font = scoreText.font;
 		add(diffText);
 
@@ -225,56 +237,26 @@ class FreeplayState extends MusicBeatState
 		text.scrollFactor.set();
 		add(text);
 
-                timeTxt = new FlxText(FlxG.width - 300, 30, 1280, "", 25);
-		timeTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+        timeTxt = new FlxText(scoreText.x, scoreText.y + 66, 400, "", 24);
 		timeTxt.scrollFactor.set();
 		timeTxt.alpha = 0;
 		timeTxt.borderSize = 2;
 		timeTxt.visible = true;
-		
-		timeBarBG = new AttachedSprite('timeBar');
-		timeBarBG.x = 800;
-		timeBarBG.y = 30;
-		timeBarBG.scrollFactor.set();
-		timeBarBG.alpha = 0;
-		timeBarBG.visible = true;
-		timeBarBG.xAdd = -4;
-		timeBarBG.yAdd = -4;
-		add(timeBarBG);
 
-		timeBar = new FlxBar(timeBarBG.x + 4, timeBarBG.y + 4, LEFT_TO_RIGHT, Std.int(timeBarBG.width - 8), Std.int(timeBarBG.height - 8), this,
-			'songPercent', 0, 1);
-		timeBar.scrollFactor.set();
-		timeBar.createFilledBar(0xFF000000, 0xFFFFFFFF);
-		timeBar.numDivisions = 800; //How much lag this causes?? Should i tone it down to idk, 400 or 200?
-		timeBar.alpha = 0;
-		timeBar.visible = true;
-		add(timeBar);
-		add(timeTxt);
-		timeBarBG.sprTracker = timeBar;
+        rateTxt = new FlxText(FlxG.width, text.y + 34, 0, "", 24);
+        rateTxt.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, RIGHT);
+		rateTxt.scrollFactor.set();
+		add(rateTxt);
 		
-                for (char in 0...songs.length)
-		{
-		        var icon:HealthIcon = new HealthIcon(songs[char].songCharacter);
-			icon.x = 100;
-			icon.y = 70;
-			// using a FlxGroup is too much fuss!
-			iconOpponentArray.push(icon);
-			add(icon);
-
-			// songText.x += 40;
-			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
-			// songText.screenCenter(X);
-                        icon.cameras = [camINTERFACE];
-		}
-		timeBar.cameras = [camINTERFACE];
-		timeBarBG.cameras = [camINTERFACE];
 		timeTxt.cameras = [camINTERFACE];
-                scoreText.cameras = [camINTERFACE];
+        scoreText.cameras = [camINTERFACE];
 		scoreBG.cameras = [camINTERFACE];
 		diffText.cameras = [camINTERFACE];
 		textBG.cameras = [camINTERFACE];
 		text.cameras = [camINTERFACE];
+		icon.cameras = [camINTERFACE];
+		rateTxt.cameras = [camINTERFACE];
+		iconBG.cameras = [camINTERFACE];
 
                 #if android
                 addVirtualPad(FULL, A_B_C_X_Y_Z);
@@ -330,7 +312,6 @@ class FreeplayState extends MusicBeatState
 	   		if(updateTime) {
 			var curTime:Float = Conductor.songPosition - ClientPrefs.noteOffset;
 			if(curTime < 0) curTime = 0;
-			songPercent = (curTime / songLength);
 
 			var songCalc:Float = (songLength - curTime);
 			if(ClientPrefs.timeBarType == 'Time Elapsed' || ClientPrefs.timeBarType == 'Time Length' || ClientPrefs.timeBarType == 'Time Length Percent') songCalc = curTime;
@@ -389,8 +370,9 @@ class FreeplayState extends MusicBeatState
 			ratingSplit[1] += '0';
 		}
 
-		scoreText.text = 'PERSONAL BEST: ' + lerpScore + '\n' + 'Rating: ' + ratingSplit.join('.') + ' %';
-
+		scoreText.text = 'Best Score: ' + lerpScore;
+		rateTxt.text = 'Rating: ' + ratingSplit.join(',') + ' %';
+		
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
 		var accepted = controls.ACCEPT;
