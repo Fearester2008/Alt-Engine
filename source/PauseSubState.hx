@@ -303,13 +303,13 @@ class PauseSubState extends MusicBeatSubstate
 			bullShit++;
 
 			item.alpha = 0.6;
-			item.x -= 60;
+			
 			// item.setGraphicSize(Std.int(item.width * 0.8));
 
 			if (item.targetY == 0)
 			{
 				item.alpha = 1;
-				item.x += 90;
+				
 				// item.setGraphicSize(Std.int(item.width));
 
 				if(item == skipTimeTracker)
@@ -408,7 +408,7 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.instance.botplayTxt.visible = PlayState.instance.cpuControlled;
 					PlayState.instance.botplayTxt.alpha = 1;
 					PlayState.instance.botplaySine = 0;
-				case 'Chart Editor':
+				case 'Debug Mode':
 					MusicBeatState.switchState(new editors.ChartingState());
 					PlayState.chartingMode = true;
 		        case "Options":
