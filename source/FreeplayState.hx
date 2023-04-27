@@ -156,12 +156,13 @@ class FreeplayState extends MusicBeatState
 
 			Paths.currentModDirectory = songs[i].folder;
 
-		    var icon:HealthIcon = new HealthIcon(songs[char].songCharacter);
+		    var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
 			icon.x = FlxG.width;
-			icon.screenCenter(Y);
+			icon.y = iconBG.y - 10;
 			// using a FlxGroup is too much fuss!
 			iconOpponentArray.push(icon);
 			add(icon);
+	    	icon.cameras = [camINTERFACE];
 
 			// songText.x += 40;
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
@@ -254,7 +255,6 @@ class FreeplayState extends MusicBeatState
 		diffText.cameras = [camINTERFACE];
 		textBG.cameras = [camINTERFACE];
 		text.cameras = [camINTERFACE];
-		icon.cameras = [camINTERFACE];
 		rateTxt.cameras = [camINTERFACE];
 		iconBG.cameras = [camINTERFACE];
 
@@ -324,15 +324,9 @@ class FreeplayState extends MusicBeatState
 			if(ClientPrefs.timeBarType != 'Song Name') {
 				timeTxt.text = FlxStringUtil.formatTime(secondsTotal, false);
 			}
-			if(ClientPrefs.timeBarType == 'Song Percentage') {
-				timeTxt.text = '(${Highscore.floorDecimal(songPercent * 100, 1)}%)';
-			}
 			if(ClientPrefs.timeBarType == 'Time Length') {
 				timeTxt.text = '${FlxStringUtil.formatTime(secondsTotal, false)} - ${FlxStringUtil.formatTime(Math.floor(songLength / 1000), false)}';
 			}
-			if(ClientPrefs.timeBarType == 'Time Length Percent') {
-			timeTxt.text = '(${Highscore.floorDecimal(songPercent * 100, 1)}%) - (${FlxStringUtil.formatTime(secondsTotal, false)} / ${FlxStringUtil.formatTime(Math.floor(songLength / 1000), false)})';
-	    	}
 	    	if (ClientPrefs.timeBarType == 'Song Name'){
 	    	    timeTxt.alpha = 0;
 	    	}
@@ -441,7 +435,6 @@ class FreeplayState extends MusicBeatState
 		}
 			if(instPlaying != curSelected)
 			{
-			    FlxTween.tween(timeBar, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
 	        	    FlxTween.tween(timeTxt, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
 
 				#if PRELOAD_ALL
