@@ -52,7 +52,7 @@ jobs:
           haxelib --quiet install lime 7.9.0
           haxelib --quiet install openfl 9.1.0
           haxelib --quiet install flixel 4.11.0
-          haxelib run lime setup flixel 4.11.0
+          haxelib run lime setup flixel
           haxelib --quiet install flixel-tools
           haxelib --quiet install flixel-ui
           haxelib --quiet install flixel-addons 2.11.0
