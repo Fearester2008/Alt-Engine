@@ -141,8 +141,8 @@ class FreeplayState extends MusicBeatState
 		grpSongs = new FlxTypedGroup<FlixText>();
 		add(grpSongs);
 
-        iconBG = new FlxSprite(FlxG.width, 0).makeGraphic(350,350, 0xFF000000);
-        iconBG.screenCenter(Y);
+                iconBG = new FlxSprite(FlxG.width - 370, 0).makeGraphic(350,350, 0xFF000000);
+                iconBG.screenCenter(Y);
 		iconBG.alpha = 1;
 		add(iconBG);
 		
@@ -157,7 +157,8 @@ class FreeplayState extends MusicBeatState
 			Paths.currentModDirectory = songs[i].folder;
 
 		    var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
-			icon.x = FlxG.width;
+			icon.x = FlxG.width - 350;
+			
 			icon.y = iconBG.y - 10;
 			// using a FlxGroup is too much fuss!
 			iconOpponentArray.push(icon);
@@ -238,14 +239,14 @@ class FreeplayState extends MusicBeatState
 		text.scrollFactor.set();
 		add(text);
 
-        timeTxt = new FlxText(scoreText.x, scoreText.y + 66, 400, "", 24);
+        timeTxt = new FlxText(scoreText.x, scoreText.y + 66, 0, "", 24);
 		timeTxt.scrollFactor.set();
 		timeTxt.alpha = 0;
 		timeTxt.borderSize = 2;
 		timeTxt.visible = true;
 
         rateTxt = new FlxText(FlxG.width, text.y + 34, 0, "", 24);
-        rateTxt.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, RIGHT);
+        rateTxt.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, LEFT);
 		rateTxt.scrollFactor.set();
 		add(rateTxt);
 		
@@ -360,12 +361,12 @@ class FreeplayState extends MusicBeatState
 			ratingSplit.push('');
 		}
 		
-		while(ratingSplit[1].length < 2) { //Less than 2 decimals in it, add decimals then
+		while(ratingSplit[1].length < 1) { //Less than 2 decimals in it, add decimals then
 			ratingSplit[1] += '0';
 		}
 
 		scoreText.text = 'Best Score: ' + lerpScore;
-		rateTxt.text = 'Rating: ' + ratingSplit.join(',') + ' %';
+		rateTxt.text = 'Rating: ' + ratingSplit.join('.') + ' %';
 		
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
@@ -531,7 +532,6 @@ class FreeplayState extends MusicBeatState
            for (i in 0...iconOpponentArray.length)
 		    {
 				iconOpponentArray[i].scale.set(1.2,1.2);
-				iconOpponentArray[i].updateHitbox();
 		    }
 		}
 	public static function destroyFreeplayVocals() {
@@ -597,7 +597,7 @@ class FreeplayState extends MusicBeatState
 
 		for (i in 0...iconOpponentArray.length)
 		{
-		    iconOpponentArray[i].alpha = 0.6;
+		    iconOpponentArray[i].alpha = 0;
 		}
 
 		iconOpponentArray[curSelected].alpha = 1;
