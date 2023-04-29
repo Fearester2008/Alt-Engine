@@ -186,12 +186,12 @@ class FreeplayState extends MusicBeatState
 
         timeTxt = new FlxText(scoreText.x, scoreText.y + 66, 0, "", 24);
 		timeTxt.scrollFactor.set();
-		timeTxt.alpha = 0;
+		timeTxt.alpha = 1;
 		timeTxt.borderSize = 2;
 		timeTxt.visible = true;
         add(timeTxt);
-        rateTxt = new FlxText(FlxG.width, text.y + 34, 0, "", 24);
-        rateTxt.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, LEFT);
+        rateTxt = new FlxText(FlxG.width, timeTxt.y, 0, "", 24);
+        rateTxt.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, RIGHT);
 		rateTxt.scrollFactor.set();
 		add(rateTxt);
 		
