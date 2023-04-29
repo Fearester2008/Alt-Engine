@@ -141,8 +141,8 @@ class FreeplayState extends MusicBeatState
 		grpSongs = new FlxTypedGroup<FlixText>();
 		add(grpSongs);
 
-                iconBG = new FlxSprite(FlxG.width - 370, 0).makeGraphic(350,350, 0xFF000000);
-                iconBG.screenCenter(Y);
+        iconBG = new FlxSprite(FlxG.width - 130, 0).makeGraphic(350,350, 0xFF000000);
+        iconBG.screenCenter(Y);
 		iconBG.alpha = 1;
 		add(iconBG);
 		
@@ -157,7 +157,7 @@ class FreeplayState extends MusicBeatState
 			Paths.currentModDirectory = songs[i].folder;
 
 		    var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
-			icon.x = FlxG.width - 350;
+			icon.x = FlxG.width - 120;
 			
 			icon.y = iconBG.y - 10;
 			// using a FlxGroup is too much fuss!
@@ -184,6 +184,17 @@ class FreeplayState extends MusicBeatState
 
 		add(scoreText);
 
+        timeTxt = new FlxText(scoreText.x, scoreText.y + 66, 0, "", 24);
+		timeTxt.scrollFactor.set();
+		timeTxt.alpha = 0;
+		timeTxt.borderSize = 2;
+		timeTxt.visible = true;
+        add(timeTxt);
+        rateTxt = new FlxText(FlxG.width, text.y + 34, 0, "", 24);
+        rateTxt.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, LEFT);
+		rateTxt.scrollFactor.set();
+		add(rateTxt);
+		
 		if(curSelected >= songs.length) curSelected = 0;
 		bg.color = songs[curSelected].color;
 		intendedColor = bg.color;
@@ -238,17 +249,6 @@ class FreeplayState extends MusicBeatState
 		text.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, LEFT);
 		text.scrollFactor.set();
 		add(text);
-
-        timeTxt = new FlxText(scoreText.x, scoreText.y + 66, 0, "", 24);
-		timeTxt.scrollFactor.set();
-		timeTxt.alpha = 0;
-		timeTxt.borderSize = 2;
-		timeTxt.visible = true;
-
-        rateTxt = new FlxText(FlxG.width, text.y + 34, 0, "", 24);
-        rateTxt.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, LEFT);
-		rateTxt.scrollFactor.set();
-		add(rateTxt);
 		
 		timeTxt.cameras = [camINTERFACE];
         scoreText.cameras = [camINTERFACE];
@@ -436,8 +436,6 @@ class FreeplayState extends MusicBeatState
 		}
 			if(instPlaying != curSelected)
 			{
-	        	    FlxTween.tween(timeTxt, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
-
 				#if PRELOAD_ALL
 				destroyFreeplayVocals();
 				FlxG.sound.music.volume = 0;
