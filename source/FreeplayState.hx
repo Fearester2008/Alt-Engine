@@ -141,9 +141,9 @@ class FreeplayState extends MusicBeatState
 		grpSongs = new FlxTypedGroup<FlixText>();
 		add(grpSongs);
 
-        iconBG = new FlxSprite(FlxG.width - 130, 0).makeGraphic(350,350, 0xFF000000);
+        iconBG = new FlxSprite(FlxG.width - 130, 0).makeGraphic(350,60, 0xFF000000);
         iconBG.screenCenter(Y);
-		iconBG.alpha = 1;
+		iconBG.alpha = 0.7;
 		add(iconBG);
 		
 		for (i in 0...songs.length)
@@ -191,7 +191,8 @@ class FreeplayState extends MusicBeatState
 		timeTxt.visible = true;
         add(timeTxt);
         rateTxt = new FlxText(FlxG.width, timeTxt.y, 0, "", 24);
-        rateTxt.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, RIGHT);
+        rateTxt.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER);
+		rateTxt.screenCenter(X);
 		rateTxt.scrollFactor.set();
 		add(rateTxt);
 		
@@ -208,8 +209,6 @@ class FreeplayState extends MusicBeatState
 		changeSelection();
 		changeDiff();
 		
-		camZoom = FlxTween.tween(this, {}, 0);
-
 		var swag:Alphabet = new Alphabet(1, 0, "swag");
 
 		// JUST DOIN THIS SHIT FOR TESTING!!!
@@ -238,7 +237,7 @@ class FreeplayState extends MusicBeatState
 		var leText:String = "Press X to make your phone fullscreen.\n Press C to open the Gameplay Changers Menu. \nPress Y to Reset your Score and Accuracy.";
 		var size:Int = 16;
 		#else
-		var leText:String = "Press SPACE to make your device fullscreen.\n Press CTRL to open the Gameplay Changers Menu.\n Press RESET to Reset your Score and Accuracy.";
+		var leText:String = "Press SPACE to make your device fullscreen.\n Press CTRL to open the Gameplay Changers Menu.\nPress RESET to Reset your Score and Accuracy.";
 		var size:Int = 16;
 		#end
 		#else
@@ -251,7 +250,7 @@ class FreeplayState extends MusicBeatState
 		add(text);
 		
 		timeTxt.cameras = [camINTERFACE];
-        scoreText.cameras = [camINTERFACE];
+                scoreText.cameras = [camINTERFACE];
 		scoreBG.cameras = [camINTERFACE];
 		diffText.cameras = [camINTERFACE];
 		textBG.cameras = [camINTERFACE];
@@ -328,17 +327,12 @@ class FreeplayState extends MusicBeatState
 			if(ClientPrefs.timeBarType == 'Time Length') {
 				timeTxt.text = '${FlxStringUtil.formatTime(secondsTotal, false)} - ${FlxStringUtil.formatTime(Math.floor(songLength / 1000), false)}';
 			}
-	    	if (ClientPrefs.timeBarType == 'Song Name'){
-	    	    timeTxt.alpha = 0;
-	    	}
 		}
 	    for (icon in iconOpponentArray)
 	    {
 		    var mult:Float = FlxMath.lerp(1, icon.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
 		    icon.scale.set(mult, mult);
 	    }
-	    if(FlxG.keys.justPressed.SPACE #if android || _virtualpad.buttonX.justPressed #end)
-        	FlxG.fullscreen = !FlxG.fullscreen;
 
 	    if (FlxG.sound.music != null)
 	    Conductor.songPosition = FlxG.sound.music.time;
@@ -523,10 +517,6 @@ class FreeplayState extends MusicBeatState
 
 	override function beatHit()
 	{
-           if (camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms)
-		{
-			camBackground.zoom += 0.015;
-		}
            for (i in 0...iconOpponentArray.length)
 		    {
 				iconOpponentArray[i].scale.set(1.2,1.2);
