@@ -137,6 +137,10 @@ class MusicBeatState extends FlxUIState
 		{
 			if(curStep > 0)
 				stepHit();
+				
+				
+				if (FlxG.keys.justPressed.F11)
+			FlxG.fullscreen = !FlxG.fullscreen;
 
 			if(PlayState.SONG != null)
 			{
