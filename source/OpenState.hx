@@ -1,3 +1,4 @@
+#if sys
 package;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -27,7 +28,8 @@ import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
 import lime.system.ThreadPool;
-#if cpp
+import openfl.utils.Assets as OpenFLAssets;
+#if (cpp && !android)
 import sys.FileSystem;
 import sys.io.File;
 #end
@@ -35,16 +37,32 @@ import sys.io.File;
 using StringTools;
 
 class OpenState extends FlxState
-{
+{	
 
-	var gradientBar:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, 1, 0xFFAB6F00);
+	var doneFiles = 0;
+	var shouldBeDone = 0;
+
+	var loaded:Bool = false;
+
+	#if !android
+	public static var bitmapData:Map<String,FlxGraphic>;
+	public static var bitmapData2:Map<String,FlxGraphic>;
+    #end
+	var gradientBar:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, 1, 0xFFAA00AA);
+
 	var splash:FlxSprite;
 	var loadingSpeen:FlxSprite;
-	var shitz:FlxText;
+	var text:FlxText;
 	var randomTxt:FlxText;
 	
 	var isTweening:Bool = false;
 	var lastString:String = '';
+
+	#if !android
+	var images = [];
+	var music = [];
+	var sounds = [];
+	#end
 
 	override function create()
 	{
@@ -52,17 +70,22 @@ class OpenState extends FlxState
 		FlxG.mouse.visible = true;
 
 		FlxG.worldBounds.set(0,0);
+        
+		#if !android
+		bitmapData = new Map<String,FlxGraphic>();
+		bitmapData2 = new Map<String,FlxGraphic>();
+		#end
 
 		super.create();
 		
 
 		splash = new FlxSprite().loadGraphic(Paths.image("logo"));
 		splash.screenCenter();
-		splash.y -= 60;
+		splash.y -= 30;
 		splash.antialiasing = true;
 		add(splash);
 		
-		gradientBar = FlxGradient.createGradientFlxSprite(Math.round(FlxG.width), 512, [0x0000FFB0, 0x001100FF, 0xFFFFFF00], 1, 90, true);
+		gradientBar = FlxGradient.createGradientFlxSprite(Math.round(FlxG.width), 512, [0x00ff0000, 0x553D0468, 0xAABF1943], 1, 90, true);
 		gradientBar.y = FlxG.height - gradientBar.height;
 		add(gradientBar);
 		gradientBar.scrollFactor.set(0, 0);
@@ -71,30 +94,91 @@ class OpenState extends FlxState
 		bottomPanel.alpha = 0.5;
 		add(bottomPanel);	
 		
+		#if !android
 		randomTxt = new FlxText(20, FlxG.height - 80, 1000, "", 26);
 		randomTxt.scrollFactor.set();
 		randomTxt.setFormat("VCR OSD Mono", 26, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(randomTxt);
-		
+		#end 
+
 		loadingSpeen = new FlxSprite().loadGraphic(Paths.image("load_image"));
 		loadingSpeen.screenCenter(X);
-                loadingSpeen.setGraphicSize(Std.int(loadingSpeen.width * 0.89));
-                loadingSpeen.x = FlxG.width - 91;
-		loadingSpeen.y = FlxG.height - 91;
+		loadingSpeen.y = Math.ffloor(splash.y + splash.height + 45);
 		loadingSpeen.angularVelocity = 180;
 		loadingSpeen.antialiasing = true;
 		add(loadingSpeen);
 		
-		shitz = new FlxText(540, 630, 300, "Loading...", 12);
-		shitz.scrollFactor.set();
-		shitz.setFormat("VCR OSD Mono", 50, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(shitz);
 
-        new FlxTimer().start(10, function(tmr:FlxTimer)
+		#if (cpp && !android)
+		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/characters/")))
 		{
-            goToState();
-        });
+			if (!i.endsWith(".png"))
+				continue;
+			images.push(i);
+		}
+		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/images/")))
+			{
+				if (!i.endsWith(".png"))
+					continue;
+				images.push(i);
+			}
+		#if MODS_ALLOWED
+		for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images/characters")))
+			{
+				if (!i.endsWith(".png"))
+					continue;
+				images.push(i);
+			}
+		for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images/")))
+			{
+				if (!i.endsWith(".png"))
+					continue;
+				images.push(i);
+			}
+		#end
+		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/songs/")))
+		{
+			music.push(i);
+		}
+		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/music/")))
+			{
+				music.push(i);
+			}
+		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/sounds/")))
+			{
+				music.push(i);
+			}
+		#if MODS_ALLOWED
+		for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/songs/")))
+		{
+			music.push(i);
+		}
+		for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/music/")))
+			{
+				music.push(i);
+			}
+		for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/sounds/")))
+			{
+				music.push(i);
+			}
 
+		#end
+		#end
+
+		sys.thread.Thread.create(() -> {
+			cache();
+		});
+
+		sys.thread.Thread.create(() -> {
+		while (!loaded)
+		{
+			if (shouldBeDone != 0 && doneFiles != shouldBeDone)
+			{
+				var loadPercent = Highscore.floorDecimal((doneFiles / shouldBeDone) * 100,2);
+                text.text = "Loading...";
+			}
+		}
+	    });
 		super.create();
 	}
 	
@@ -118,9 +202,48 @@ class OpenState extends FlxState
 		}
 		super.update(elapsed);
 	}
-
-	function goToState()
+	
+	function cache()
 	{
+		#if (!linux && !android)
+
+		for (i in images)
+		{
+			var replaced = i.replace(".png","");
+			var data:BitmapData = BitmapData.fromFile("assets/shared/images/characters" + i);
+			#if MODS_ALLOWED
+			var data:BitmapData = BitmapData.fromFile("mods/images/characters" + i);
+			#end
+			var graph = FlxGraphic.fromBitmapData(data);
+			graph.persist = true;
+			graph.destroyOnNoUse = false;
+			bitmapData.set(replaced,graph);
+			doneFiles++;
+		}
+        for (i in images)
+			{
+				var replaced = i.replace(".png","");
+				var data:BitmapData = BitmapData.fromFile("assets/shared/images/" + i);
+				#if MODS_ALLOWED
+				var data:BitmapData = BitmapData.fromFile("mods/images/" + i);
+				#end
+				var graph = FlxGraphic.fromBitmapData(data);
+				graph.persist = true;
+				graph.destroyOnNoUse = false;
+				bitmapData.set(replaced,graph);
+				doneFiles++;
+			}
+		for (i in music)
+		{
+			doneFiles++;
+			
+			loaded = true;
+
+		}
+		#end
+
+		
+
 		FlxG.switchState(new TitleState());
 	}
 	
@@ -134,7 +257,7 @@ class OpenState extends FlxState
 		selectedText = textArray[FlxG.random.int(0, (textArray.length - 1))].replace('--', '\n');
 		FlxTween.tween(randomTxt, {alpha: 0}, 1, {
 			ease: FlxEase.linear,
-			onComplete: function(freak:FlxTween)
+			onComplete: function(shit:FlxTween)
 			{
 				if (selectedText != lastString)
 				{
@@ -151,7 +274,7 @@ class OpenState extends FlxState
 
 				FlxTween.tween(randomTxt, {alpha: 1}, 1, {
 					ease: FlxEase.linear,
-					onComplete: function(freak:FlxTween)
+					onComplete: function(shit:FlxTween)
 					{
 						isTweening = false;
 					}
@@ -160,3 +283,4 @@ class OpenState extends FlxState
 		});
 	}
 }
+#end

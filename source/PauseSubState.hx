@@ -16,13 +16,12 @@ import flixel.FlxCamera;
 import flixel.util.FlxStringUtil;
 import flixel.effects.FlxFlicker;
 import flixel.util.FlxTimer;
-
 class PauseSubState extends MusicBeatSubstate
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [];
-	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty','Debug Mode', 'Options','Exit to menu'];
+	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty','Debug Mode', /*'Options',*/ 'Exit to menu'];
 	var difficultyChoices = [];
 	var curSelected:Int = 0;
 
@@ -71,7 +70,7 @@ class PauseSubState extends MusicBeatSubstate
 			pauseMusic.loadEmbedded(Paths.music(Paths.formatToSongPath(ClientPrefs.pauseMusic)), true, true);
 		}
 		pauseMusic.volume = 0;
-		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
+		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 3)));
 
 		FlxG.sound.list.add(pauseMusic);
 
@@ -411,9 +410,9 @@ class PauseSubState extends MusicBeatSubstate
 				case 'Debug Mode':
 					MusicBeatState.switchState(new editors.ChartingState());
 					PlayState.chartingMode = true;
-		        case "Options":
-					goToOptions = true;
-					close();
+				/*case "Options":
+						goToOptions = true;
+						close(); */
 				case "Exit to menu":
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;

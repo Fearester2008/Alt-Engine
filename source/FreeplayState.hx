@@ -35,8 +35,11 @@ class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
     var camZooming:Bool = ClientPrefs.camZooms;
-    private var camBackground:FlxCamera;
+	var load:Bool = false;
+	var loaded:Bool = false;
 
+    private var camBackground:FlxCamera;
+	
 	public var camINTERFACE:FlxCamera;
 	
 	var selector:FlxText;
@@ -52,16 +55,21 @@ class FreeplayState extends MusicBeatState
 	var scoreText:FlxText;
 	var diffText:FlxText;
 	var rateTxt:FlxText;
+	var loadTxt:FlxText;
 
 	var lerpScore:Int = 0;
 	var lerpRating:Float = 0;
 	var intendedScore:Int = 0;
 	var intendedRating:Float = 0;
 
+	var selectedThing:Bool = false;
+
 	private var grpSongs:FlxTypedGroup<FlixText>;
 	private var curPlaying:Bool = false;
 
 	private var iconOpponentArray:Array<HealthIcon> = [];
+
+	var barValue:Float = 0;
 
 	var bg:FlxSprite;
 	var intendedColor:Int;
@@ -141,14 +149,14 @@ class FreeplayState extends MusicBeatState
 		grpSongs = new FlxTypedGroup<FlixText>();
 		add(grpSongs);
 
-        iconBG = new FlxSprite(FlxG.width - 130, 0).makeGraphic(350,60, 0xFF000000);
+        iconBG = new FlxSprite(FlxG.width - 130, 0).makeGraphic(350,150, 0xFF000000);
         iconBG.screenCenter(Y);
-		iconBG.alpha = 0.7;
+		iconBG.alpha = 0.8;
 		add(iconBG);
 		
 		for (i in 0...songs.length)
 		{
-			var songText:FlixText = new FlixText(90, 320, songs[i].songName,45,FlxColor.WHITE,LEFT);
+			var songText:FlixText = new FlixText(90, 320, songs[i].songName,45,FlxColor.WHITE,CENTER);
 			songText.isMenu = true;
 			//songText.itemType = 'D-Shape';
 			songText.targetY = i - curSelected;
@@ -157,9 +165,9 @@ class FreeplayState extends MusicBeatState
 			Paths.currentModDirectory = songs[i].folder;
 
 		    var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
-			icon.x = FlxG.width - 120;
+			icon.x = FlxG.width - 140;
 			
-			icon.y = iconBG.y - 10;
+			icon.y = iconBG.y;
 			// using a FlxGroup is too much fuss!
 			iconOpponentArray.push(icon);
 			add(icon);
@@ -175,7 +183,7 @@ class FreeplayState extends MusicBeatState
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
 
 		scoreBG = new FlxSprite(0, 0).makeGraphic(FlxG.width, 116, 0xFF000000);
-		scoreBG.alpha = 1;
+		scoreBG.alpha = 0.8;
 		add(scoreBG);
 
 		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
@@ -190,12 +198,17 @@ class FreeplayState extends MusicBeatState
 		timeTxt.borderSize = 2;
 		timeTxt.visible = true;
         add(timeTxt);
-        rateTxt = new FlxText(FlxG.width, timeTxt.y, 0, "", 24);
-        rateTxt.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER);
-		rateTxt.screenCenter(X);
+
+        rateTxt = new FlxText(FlxG.width - 320, scoreText.y, 0, "", 32);
+        rateTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
 		rateTxt.scrollFactor.set();
 		add(rateTxt);
-		
+
+		loadTxt = new FlxText(0, FlxG.height - 148, 800, "", 32);
+		loadTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, LEFT);
+		loadTxt.alpha = 0;
+		add(loadTxt);
+
 		if(curSelected >= songs.length) curSelected = 0;
 		bg.color = songs[curSelected].color;
 		intendedColor = bg.color;
@@ -209,6 +222,8 @@ class FreeplayState extends MusicBeatState
 		changeSelection();
 		changeDiff();
 		
+		camZoom = FlxTween.tween(this, {}, 0);
+
 		var swag:Alphabet = new Alphabet(1, 0, "swag");
 
 		// JUST DOIN THIS SHIT FOR TESTING!!!
@@ -229,19 +244,19 @@ class FreeplayState extends MusicBeatState
 		 */
 
 		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 106).makeGraphic(FlxG.width, 106, 0xFF000000);
-		textBG.alpha = 1;
+		textBG.alpha = 0.8;
 		add(textBG);
 
 		#if PRELOAD_ALL
 		#if android
-		var leText:String = "Press X to make your phone fullscreen.\n Press C to open the Gameplay Changers Menu. \nPress Y to Reset your Score and Accuracy.";
+		var leText:String = "Press C to open the Gameplay Changers Menu. \nPress Y to Reset your Score and Accuracy.";
 		var size:Int = 16;
 		#else
-		var leText:String = "Press SPACE to make your device fullscreen.\n Press CTRL to open the Gameplay Changers Menu.\nPress RESET to Reset your Score and Accuracy.";
+		var leText:String = "Press F11 to make your device fullscreen.\nPress CTRL to open the Gameplay Changers Menu.\nPress RESET to Reset your Score and Accuracy.";
 		var size:Int = 16;
 		#end
 		#else
-		var leText:String = "Press C to open the Gameplay Changers Menu. \n Press Y to Reset your Score and Accuracy.";
+		var leText:String = "Press C to open the Gameplay Changers Menu. \nPress Y to Reset your Score and Accuracy.";
 		var size:Int = 18;
 		#end
 		var text:FlxText = new FlxText(0, FlxG.height - 60, FlxG.width, leText, size);
@@ -250,13 +265,14 @@ class FreeplayState extends MusicBeatState
 		add(text);
 		
 		timeTxt.cameras = [camINTERFACE];
-                scoreText.cameras = [camINTERFACE];
+        scoreText.cameras = [camINTERFACE];
 		scoreBG.cameras = [camINTERFACE];
 		diffText.cameras = [camINTERFACE];
 		textBG.cameras = [camINTERFACE];
 		text.cameras = [camINTERFACE];
 		rateTxt.cameras = [camINTERFACE];
 		iconBG.cameras = [camINTERFACE];
+		loadTxt.cameras = [camINTERFACE];
 
                 #if android
                 addVirtualPad(FULL, A_B_C_X_Y_Z);
@@ -303,6 +319,15 @@ class FreeplayState extends MusicBeatState
 	var holdTime:Float = 0;
 	override function update(elapsed:Float)
 	{
+		if(barValue >= 1)
+		{
+		barValue = 1;
+		loaded = true;
+		}
+
+        if(loaded)
+		loadTxt.text = 'Done.';
+
 	   	if (camZooming)
 		{
 			camBackground.zoom = FlxMath.lerp(1.05, camBackground.zoom, CoolUtil.boundTo(1 - (elapsed * 3.125), 0, 1));
@@ -327,13 +352,16 @@ class FreeplayState extends MusicBeatState
 			if(ClientPrefs.timeBarType == 'Time Length') {
 				timeTxt.text = '${FlxStringUtil.formatTime(secondsTotal, false)} - ${FlxStringUtil.formatTime(Math.floor(songLength / 1000), false)}';
 			}
+	    	if (ClientPrefs.timeBarType == 'Song Name'){
+	    	    timeTxt.alpha = 0;
+	    	}
 		}
 	    for (icon in iconOpponentArray)
 	    {
 		    var mult:Float = FlxMath.lerp(1, icon.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
 		    icon.scale.set(mult, mult);
 	    }
-
+	   
 	    if (FlxG.sound.music != null)
 	    Conductor.songPosition = FlxG.sound.music.time;
 
@@ -454,6 +482,7 @@ class FreeplayState extends MusicBeatState
 
 		else if (accepted)
 		{
+			load = true;
 			persistentUpdate = false;
 			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
 			var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
@@ -476,6 +505,7 @@ class FreeplayState extends MusicBeatState
 			if(colorTween != null) {
 				colorTween.cancel();
 			}
+
 			for (item in grpSongs.members){
 			if (item.targetY == 0)
 			{
@@ -485,8 +515,8 @@ class FreeplayState extends MusicBeatState
 		}
 			        FlxG.sound.music.stop();
                     vocals.stop();
-            
-		            new FlxTimer().start(1.1, function(tmr:FlxTimer)
+                    
+		            new FlxTimer().start(1.3, function(tmr:FlxTimer)
 		            {	
 			        if (FlxG.keys.pressed.SHIFT #if android || _virtualpad.buttonZ.pressed #end){
 	                    	LoadingState.loadAndSwitchState(new ChartingState());
@@ -505,6 +535,13 @@ class FreeplayState extends MusicBeatState
 			openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
+		if(load)
+		{
+		barValue += (elapsed);
+		loadTxt.text = 'Loading... ${Highscore.floorDecimal(barValue * 100, 2)}%';
+		loadTxt.alpha = 1;
+		loaded = false;
+		}
 		super.update(elapsed);
 	}
 	override function sectionHit()
@@ -517,6 +554,10 @@ class FreeplayState extends MusicBeatState
 
 	override function beatHit()
 	{
+           if (camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms)
+		{
+			camBackground.zoom += 0.015;
+		}
            for (i in 0...iconOpponentArray.length)
 		    {
 				iconOpponentArray[i].scale.set(1.2,1.2);

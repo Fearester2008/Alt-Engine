@@ -7,6 +7,7 @@ import flixel.addons.effects.FlxTrail;
 import flixel.animation.FlxBaseAnimation;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.tweens.FlxTween;
+import flixel.math.FlxMath;
 import flixel.util.FlxSort;
 import Section.SwagSection;
 #if MODS_ALLOWED
@@ -48,8 +49,8 @@ class Character extends FlxSprite
 {
 	public var animOffsets:Map<String, Array<Dynamic>>;
 	public var debugMode:Bool = false;
-
 	public var isPlayer:Bool = false;
+
 	public var curCharacter:String = DEFAULT_CHARACTER;
 
 	public var colorTween:FlxTween;
