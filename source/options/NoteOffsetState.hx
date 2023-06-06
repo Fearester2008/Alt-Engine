@@ -28,7 +28,6 @@ class NoteOffsetState extends MusicBeatState
 	var coolText:FlxText;
 	var rating:FlxSprite;
 	var comboNums:FlxSpriteGroup;
-	var dumbTexts:FlxTypedGroup<FlxText>;
 
 	var barPercent:Float = 0;
 	var delayMin:Int = 0;
@@ -133,11 +132,6 @@ class NoteOffsetState extends MusicBeatState
 			daLoop++;
 		}
 
-		dumbTexts = new FlxTypedGroup<FlxText>();
-		dumbTexts.cameras = [camHUD];
-		add(dumbTexts);
-		createTexts();
-
 		repositionCombo();
 
 		// Note delay stuff
@@ -152,7 +146,7 @@ class NoteOffsetState extends MusicBeatState
 		add(beatText);
 		
 		timeTxt = new FlxText(0, 600, FlxG.width, "", 32);
-		timeTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		timeTxt.setFormat(Paths.font("vcr-rus.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		timeTxt.scrollFactor.set();
 		timeTxt.borderSize = 2;
 		timeTxt.visible = false;
@@ -189,7 +183,7 @@ class NoteOffsetState extends MusicBeatState
 		add(blackBox);
 
 		changeModeText = new FlxText(0, 4, FlxG.width, "", 32);
-		changeModeText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
+		changeModeText.setFormat(Paths.font("vcr-rus.ttf"), 32, FlxColor.WHITE, CENTER);
 		changeModeText.scrollFactor.set();
 		changeModeText.cameras = [camHUD];
 		add(changeModeText);
@@ -415,63 +409,46 @@ class NoteOffsetState extends MusicBeatState
 		comboNums.screenCenter();
 		comboNums.x = coolText.x - 90 + ClientPrefs.comboOffset[2];
 		comboNums.y += 80 - ClientPrefs.comboOffset[3];
-		reloadTexts();
-	}
-
-	function createTexts()
-	{
-		for (i in 0...4)
-		{
-			var text:FlxText = new FlxText(10, 48 + (i * 30), 0, '', 24);
-			text.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-			text.scrollFactor.set();
-			text.borderSize = 2;
-			dumbTexts.add(text);
-			text.cameras = [camHUD];
-
-			if(i > 1)
-			{
-				text.y += 24;
-			}
-		}
-	}
-
-	function reloadTexts()
-	{
-		for (i in 0...dumbTexts.length)
-		{
-			switch(i)
-			{
-				case 0: dumbTexts.members[i].text = 'Rating Offset:';
-				case 1: dumbTexts.members[i].text = '[' + ClientPrefs.comboOffset[0] + ', ' + ClientPrefs.comboOffset[1] + ']';
-				case 2: dumbTexts.members[i].text = 'Numbers Offset:';
-				case 3: dumbTexts.members[i].text = '[' + ClientPrefs.comboOffset[2] + ', ' + ClientPrefs.comboOffset[3] + ']';
-			}
-		}
 	}
 
 	function updateNoteDelay()
 	{
 		ClientPrefs.noteOffset = Math.round(barPercent);
+		if(ClientPrefs.language == 'English')
+		{
 		timeTxt.text = 'Current offset: ' + Math.floor(barPercent) + ' ms';
+		}
+		else
+		{
+		timeTxt.text = 'Данный оффсет: ' + Math.floor(barPercent) + ' мс';
+		}
 	}
 
 	function updateMode()
 	{
 		rating.visible = onComboMenu;
 		comboNums.visible = onComboMenu;
-		dumbTexts.visible = onComboMenu;
 		
 		timeBarBG.visible = !onComboMenu;
 		timeBar.visible = !onComboMenu;
 		timeTxt.visible = !onComboMenu;
 		beatText.visible = !onComboMenu;
 
+		if(ClientPrefs.language == 'English')
+	    {
 		if(onComboMenu)
+			
 			changeModeText.text = '< Combo Offset (Press Accept to Switch) >';
 		else
 			changeModeText.text = '< Note/Beat Delay (Press Accept to Switch) >';
-
+	    }
+		if(ClientPrefs.language == 'Russian')
+		{
+		if(onComboMenu)
+			changeModeText.text = '< Оффсеты Комбо (Нажмите принять чтобы переключиться) >';
+		else
+			changeModeText.text = '< Задержка Нот/Бита (Нажмите принять чтобы переключиться) >';
+		}
 		changeModeText.text = changeModeText.text.toUpperCase();
 		FlxG.mouse.visible = onComboMenu;
 	}

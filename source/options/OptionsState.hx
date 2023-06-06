@@ -34,6 +34,7 @@ class OptionsState extends MusicBeatState
 	private var grpOptions:FlxTypedGroup<FlixText>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
+	public static var fromPlayState:Bool = false;
 
 	function openSelectedSubstate(label:String) {
 		switch(label) {
@@ -77,7 +78,7 @@ class OptionsState extends MusicBeatState
 		{
 			var optionText:FlixText = new FlixText(0, 0, options[i], 45, FlxColor.WHITE, LEFT);
 			optionText.screenCenter();
-			optionText.y += (100 * (i - (options.length / 2))) + 50;
+			optionText.y += (50 * (i - (options.length / 2))) + 50;
 			grpOptions.add(optionText);
 		}
 
@@ -109,7 +110,16 @@ class OptionsState extends MusicBeatState
 
 		if (controls.BACK) {
 			FlxG.sound.play(Paths.sound('cancelMenu'));
-			MusicBeatState.switchState(new MainMenuState());
+			if(PlayState.instance != null && OptionsState.fromPlayState)
+			{
+				FlxG.sound.music.volume = 0;
+				MusicBeatState.switchState(new PlayState());
+				OptionsState.fromPlayState = false;
+			}
+			else
+			{
+				MusicBeatState.switchState(new MainMenuState());
+			}
 		}
 
 		if (controls.ACCEPT) {

@@ -66,7 +66,7 @@ class MasterEditorMenu extends MusicBeatState
 		add(textBG);
 
 		directoryTxt = new FlxText(textBG.x, textBG.y + 4, FlxG.width, '', 32);
-		directoryTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
+		directoryTxt.setFormat(Paths.font("vcr-rus.ttf"), 32, FlxColor.WHITE, CENTER);
 		directoryTxt.scrollFactor.set();
 		add(directoryTxt);
 		
@@ -182,11 +182,21 @@ class MasterEditorMenu extends MusicBeatState
 	
 		WeekData.setDirectoryFromWeek();
 		if(directories[curDirectory] == null || directories[curDirectory].length < 1)
+
+			if(ClientPrefs.language == 'English')
 			directoryTxt.text = '< No Mod Directory Loaded >';
+			else
+			directoryTxt.text = '< Папки модов не загружены >';
+
 		else
 		{
 			Paths.currentModDirectory = directories[curDirectory];
+
+			if(ClientPrefs.language == 'English')
 			directoryTxt.text = '< Loaded Mod Directory: ' + Paths.currentModDirectory + ' >';
+			else
+			directoryTxt.text = '< Загруженная Папка Мода: ' + Paths.currentModDirectory + ' >';
+
 		}
 		directoryTxt.text = directoryTxt.text.toUpperCase();
 	}

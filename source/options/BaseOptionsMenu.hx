@@ -82,7 +82,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		add(titleText);
 
 		descText = new FlxText(50, 600, 1180, "", 32);
-		descText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		descText.setFormat(Paths.font("vcr-rus.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		descText.scrollFactor.set();
 		descText.borderSize = 2.4;
 		add(descText);
@@ -259,10 +259,6 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			}
 		}
 
-		if(boyfriend != null && boyfriend.animation.curAnim.finished) {
-			boyfriend.dance();
-		}
-
 		if(nextAccept > 0) {
 			nextAccept -= 1;
 		}
@@ -293,7 +289,14 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		if (curSelected >= optionsArray.length)
 			curSelected = 0;
 
+		if(ClientPrefs.language == 'English')
+		{
 		descText.text = optionsArray[curSelected].description;
+		}
+		else
+		{
+		descText.text = optionsArray[curSelected].rusDescription;
+		}
 		descText.screenCenter(Y);
 		descText.y += 270;
 

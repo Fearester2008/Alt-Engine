@@ -28,15 +28,17 @@ import Controls;
 using StringTools;
 class VolumeSubState extends BaseOptionsMenu
 {
-    public function new()
+   
+     public function new()
         {
             title = 'Volume Settings';
             rpcTitle = 'Volume Settings Menu'; //for Discord Rich Presence
-    
-         var option:Option = new Option('Vocal Volume',
+
+         var option:Option = new Option('Vocal Volume: ',
 			'Change Vocal Volume',
+            'Выберите громкость вокала',
 			'vocalVolume',
-			'percent',
+			'float',
 			1);
 		addOption(option);
 		option.scrollSpeed = 1.6;
@@ -45,10 +47,11 @@ class VolumeSubState extends BaseOptionsMenu
 		option.changeValue = 0.1;
 		option.decimals = 1;
 
-        var option:Option = new Option('Instrumental Volume',
-        'Change Instrumental Volume',
+        var option:Option = new Option('Inst Volume: ',
+        'Change Inst Volume',
+        'Выберите громкость инструментала.',
         'instVolume',
-        'percent',
+        'float',
         1);
     addOption(option);
     option.scrollSpeed = 1.6;
@@ -56,6 +59,8 @@ class VolumeSubState extends BaseOptionsMenu
     option.maxValue = 1;
     option.changeValue = 0.1;
     option.decimals = 1;
+
     super();
+    
         }
 }

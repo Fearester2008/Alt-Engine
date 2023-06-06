@@ -32,7 +32,13 @@ class FPS extends TextField
 	/**
 		The current frame rate, expressed using frames-per-second
 	**/
+
+	function checkMemory():Dynamic
+	{
+		return System.totalMemory;
+	}
 	public var currentFPS(default, null):Int;
+	public var maxMemory:Float;
 
 	@:noCompletion private var cacheCount:Int;
 	@:noCompletion private var currentTime:Float;
@@ -91,13 +97,16 @@ class FPS extends TextField
 			
 			var fpsPercent:Float = 0;
 		    
-			memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
-                        fpsPercent = Highscore.floorDecimal((currentFPS / framerate) * 100,1);
-		
+			memoryMegas = checkMemory();
+            fpsPercent = HelperFunctions.truncateFloat((currentFPS / framerate) * 100,2);
+		    if(memoryMegas >= maxMemory)
+				maxMemory = memoryMegas;
+
 			if(ClientPrefs.sysInfo == 'System' && ClientPrefs.showFPS)
 			{
 			text = "FPS: " + currentFPS + " / " + framerate + " [ " + fpsPercent + " % ]";
-			text += "\nMemory: " + memoryMegas + " MB";
+			text += "\nMemory: " + ${CoolUtil.getInterval(memoryMegas)};
+			text += "\nMemory Peak: " + ${CoolUtil.getInterval(maxMemory)};
 			text += "\nOperating system: " + '${lime.system.System.platformLabel}';
             }
 			if(ClientPrefs.sysInfo == 'OG FPS' && ClientPrefs.showFPS)
@@ -108,21 +117,34 @@ class FPS extends TextField
 			{
 			  text = "FPS: " + currentFPS;
 			  #if openfl
-			  text += "\nMemory: " + memoryMegas + "MB";
+			  text += "\nMemory: " +  ${CoolUtil.getInterval(memoryMegas)};
 			  #end
 			}
 			if(ClientPrefs.sysInfo == 'FPS ALT' && ClientPrefs.showFPS)
 			{
 			text = "FPS: " + '[' + currentFPS + '] ';
-			text += "\nMemory: " + memoryMegas + " MB";
+			text += "\nMemory: " + ${CoolUtil.getInterval(memoryMegas)};
+			text += "\nMemory Peak: " + ${CoolUtil.getInterval(memoryMegas)};
 			text += "\nAlt Engine version: " + MainMenuState.altEngineVersion;
 			text += "\nOperating system: " + '${lime.system.System.platformLabel}';
             }
-			textColor = 0xFFFFFFFF;
-			if (memoryMegas > 3000 || currentFPS <= ClientPrefs.framerate / 2)
+			textColor = 0xFF02FF74;
+			if (memoryMegas > 3000 || currentFPS <= ClientPrefs.framerate / 4)
 			{
 				textColor = 0xFFFF0000;
 			}
+			if (memoryMegas > 2000 || currentFPS <= ClientPrefs.framerate / 3)
+				{
+				textColor = 0xFFFF7B00;
+				}
+			if (memoryMegas > 1000 || currentFPS <= ClientPrefs.framerate / 2)
+				{
+				textColor = 0xFFE5FF00;
+				}
+			if (memoryMegas > 500 || currentFPS <= ClientPrefs.framerate)
+				{
+				textColor = 0xFF2BFF00;
+				}
 
 			#if (gl_stats && !disable_cffi && (!html5 || !canvas))
 			text += "\ntotalDC: " + Context3DStats.totalDrawCalls();
