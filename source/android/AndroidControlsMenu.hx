@@ -67,7 +67,7 @@ class AndroidControlsMenu extends MusicBeatState
 		inputvari.screenCenter(X);
 		add(inputvari);
 
-		var ui_tex = FlxAtlasFrames.fromSparrow(Assets.getBitmapData('assets/androidcontrols/menu/arrows.png');
+		var ui_tex = FlxAtlasFrames.fromSparrow(Assets.getBitmapData('assets/androidcontrols/menu/arrows.png'));
 
 		leftArrow = new FlxSprite(inputvari.x - 60, inputvari.y + 50);
 		leftArrow.frames = ui_tex;
