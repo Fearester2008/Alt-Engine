@@ -83,7 +83,7 @@ class CreditsState extends MusicBeatState
 		var pisspoop:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
 		    ['Alt Engine Devs'],
             ['Fearester',           'fearester' ,                    'Main Coder of Alt Engine.', 'Главный Кодер в Alt Engine.',                  'https://youtube.com/@fearester1282',  '00BFFF'],
-            ['StefanBETA2008' , 'stefan' , 'Coder of Alt Engine\n and Cool Man', 'Кодер в Alt Engine\nКлевый человек' , 'https://github.com/StefanBETA2008' , 'FFA500'],
+            ['Stefan2008' , 'stefan' , 'Coder of Alt Engine\n and Cool Man', 'Кодер в Alt Engine\nКлевый человек' , 'https://www.youtube.com/channel/UC9Nwf21GbaEm_h0Ka9gxZjQ' , '800080'],
             ['Rom4chek' , 'rom4chek' , ' Coder and helper of Alt Engine', 'Кодер и помощник в Alt Engine', 'https://youtube.com/@Rom4chek', '00FF00'],
             ['Joalor64' , 'joalor64' , 'Coder of Alt Engine' , 'Кодер в Alt Engine' , 'https://github.com/Joalor64GH' , '8EFF8E'],
             ['Daniel', 'daniel' , 'Musican in Main Menu of Alt Engine', 'Музыкант в главном меню в Alt Engine' , 'https://youtube.com/@0_Daniel_0' , 'FFFF00'],
