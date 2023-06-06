@@ -16,6 +16,7 @@ class DiscordClient
 	public static var isInitialized:Bool = false;
 	public function new()
 	{
+		#if desktop
 		trace("Discord Client starting...");
 		DiscordRpc.start({
 			clientID: "1104335650603417670",
@@ -33,6 +34,7 @@ class DiscordClient
 		}
 
 		DiscordRpc.shutdown();
+		#end
 	}
 	
 	public static function shutdown()
