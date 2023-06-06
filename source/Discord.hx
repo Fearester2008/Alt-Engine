@@ -1,8 +1,9 @@
 package;
 
 import Sys.sleep;
+#if desktop 
 import discord_rpc.DiscordRpc;
-
+#end
 #if LUA_ALLOWED
 import llua.Lua;
 import llua.State;
