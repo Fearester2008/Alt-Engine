@@ -138,18 +138,15 @@ class FreeplayState extends MusicBeatState
 		
 		for (i in 0...songs.length)
 		{
-			var songText:FlixText = new FlixText(90, 320, i + ". " + songs[i].songName,true);
-			songText.isMenuItem = true;
-			songText.changeX = false;
+			var songText:FlixText = new FlixText(90, 320, i + ". " + songs[i].songName,95,FlxColor.WHITE, LEFT);
+			songText.isMenu = true;
+			songText.changedX = false;
 			//songText.itemType = 'D-Shape';
 			songText.targetY = i - curSelected;
 			grpSongs.add(songText);
 			
-			var maxWidth = 980;
-			if(songText.width > maxWidth)
-		    {
-				songText.scaleX = maxWidth;
-			}
+	
+			
 			
 
 			Paths.currentModDirectory = songs[i].folder;
@@ -213,7 +210,7 @@ class FreeplayState extends MusicBeatState
 		changeSelection();
 		changeDiff();
 		
-		var swag:FlixText = new FlixText(1, 0, "swag");
+		var swag:Alphabet = new Alphabet(1, 0, "swag");
 
 		// JUST DOIN THIS SHIT FOR TESTING!!!
 		/* 
