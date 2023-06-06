@@ -24,7 +24,7 @@ using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
-	public static var altEngineVersion:String = '2.5.2h'; //This is also used for Discord RPC
+	public static var altEngineVersion:String = '3.0'; //This is also used for Discord RPC
 	public static var psychEngineVersion:String = '0.6.3'; //This is also used for Discord RPC
         public static var curSelected:Int = 0;
 
@@ -110,7 +110,7 @@ class MainMenuState extends MusicBeatState
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
-		var scale:Float = 1;
+		var scale:Float = 0.8;
 		/*if(options.length > 6) {
 			scale = 6 / options.length;
 		}*/
@@ -118,7 +118,7 @@ class MainMenuState extends MusicBeatState
 		for (i in 0...options.length)
 		{
 			var offset:Float = 108 - (Math.max(options.length, 4) - 4) * 80;
-			var menuItem:FlxSprite = new FlxSprite(0, (i * 140)  + offset);
+			var menuItem:FlxSprite = new FlxSprite(90, (i * 140)  + offset);
 			menuItem.scale.x = scale;
 			menuItem.scale.y = scale;
 			menuItem.frames = Paths.getSparrowAtlas('mainmenu/menu_' + options[i]);
@@ -198,7 +198,7 @@ class MainMenuState extends MusicBeatState
 					{
 						if (curSelected != spr.ID)
 						{
-							FlxTween.tween(spr, {alpha: 0}, 0.4, {
+							FlxTween.tween(spr, {x: -900 , alpha: 0}, 0.4, {
 								ease: FlxEase.quadOut,
 								onComplete: function(twn:FlxTween)
 								{
@@ -221,11 +221,6 @@ class MainMenuState extends MusicBeatState
 				selectedSomethin = true;
 				MusicBeatState.switchState(new MasterEditorMenu());
 			}
-			else if (FlxG.keys.anyJustPressed(debugKeys) #if android || _virtualpad.buttonY.justPressed #end)
-            {
-                selectedSomethin = true;
-                MusicBeatState.switchState(new ExitGame());
-            } 
             #end
             #if android
             if (_virtualpad.buttonC.justPressed)
@@ -234,13 +229,13 @@ class MainMenuState extends MusicBeatState
                 MusicBeatState.switchState(new android.AndroidControlsMenu());
             }
 			#end
-            #if android
-            if (_virtualpad.buttonZ.justPressed)
+            
+            if (FlxG.keys.justPressed.CONTROL #if android || _virtualpad.buttonX.justPressed #end)
             {
                 selectedSomethin = true;
                 MusicBeatState.switchState(new ModsMenuState());
             }
-			#end
+			
 		}
 
 		super.update(elapsed);
@@ -268,6 +263,7 @@ class MainMenuState extends MusicBeatState
 			if (spr.ID == curSelected)
 			{
 				spr.animation.play('selected');
+				
 				var add:Float = 0;
 				if(menuItems.length > 4) {
 					add = menuItems.length * 8;

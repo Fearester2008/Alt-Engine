@@ -21,7 +21,7 @@ class PauseSubState extends MusicBeatSubstate
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [];
-	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty','Debug Mode', /*'Options',*/ 'Exit to menu'];
+	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty','Debug Mode', 'Options', 'Exit to menu'];
 	var difficultyChoices = [];
 	var curSelected:Int = 0;
 
@@ -62,15 +62,13 @@ class PauseSubState extends MusicBeatSubstate
 		}
 		difficultyChoices.push('BACK');
 
-
+        songName = PlayState.SONG.song;
 		pauseMusic = new FlxSound();
 		if(songName != null) {
-			pauseMusic.loadEmbedded(Paths.music(songName), true, true);
-		} else if (songName != 'None') {
-			pauseMusic.loadEmbedded(Paths.music(Paths.formatToSongPath(ClientPrefs.pauseMusic)), true, true);
+			pauseMusic.loadEmbedded(Paths.inst(songName), true, true);
 		}
 		pauseMusic.volume = 0;
-		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 3)));
+		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
 
 		FlxG.sound.list.add(pauseMusic);
 
@@ -87,30 +85,46 @@ class PauseSubState extends MusicBeatSubstate
 		add(levelInfo);
 
 		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, "", 32);
-		levelDifficulty.text += CoolUtil.difficultyString();
+		levelDifficulty.text = 'Difficulty: ' + CoolUtil.difficultyString();
+		if(ClientPrefs.language == 'Russian')
+		{
+			levelDifficulty.text = 'Сложность: ' + CoolUtil.difficultyString();
+		}
 		levelDifficulty.scrollFactor.set();
-		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 32);
+		levelDifficulty.setFormat(Paths.font('vcr-rus.ttf'), 32);
 		levelDifficulty.updateHitbox();
 		add(levelDifficulty);
 
 		var blueballedTxt:FlxText = new FlxText(20, 15 + 64, 0, "", 32);
 		blueballedTxt.text = "Deaths: " + PlayState.deathCounter;
+		if(ClientPrefs.language == 'Russian')
+		{
+			blueballedTxt.text = "Смерти: " + PlayState.deathCounter;
+		}
 		blueballedTxt.scrollFactor.set();
-		blueballedTxt.setFormat(Paths.font('vcr.ttf'), 32);
+		blueballedTxt.setFormat(Paths.font('vcr-rus.ttf'), 32);
 		blueballedTxt.updateHitbox();
 		add(blueballedTxt);
 
 		practiceText = new FlxText(20, 15 + 101, 0, "PRACTICE MODE", 32);
+		if(ClientPrefs.language == 'Russian')
+		{
+			practiceText = new FlxText(20, 15 + 101, 0, "РЕЖИМ ПРАКТИКИ", 32);
+		}
 		practiceText.scrollFactor.set();
-		practiceText.setFormat(Paths.font('vcr.ttf'), 32);
+		practiceText.setFormat(Paths.font('vcr-rus.ttf'), 32);
 		practiceText.x = FlxG.width - (practiceText.width + 20);
 		practiceText.updateHitbox();
 		practiceText.visible = PlayState.instance.practiceMode;
 		add(practiceText);
 
-		var chartingText:FlxText = new FlxText(20, 15 + 101, 0, "CHARTING MODE", 32);
+		var chartingText:FlxText = new FlxText(20, 15 + 101, 0, "EDITOR MODE", 32);
+		if(ClientPrefs.language == 'Russian')
+		{
+		chartingText.text = 'РЕЖИМ РЕДАКТОРА';
+		}
 		chartingText.scrollFactor.set();
-		chartingText.setFormat(Paths.font('vcr.ttf'), 32);
+		chartingText.setFormat(Paths.font('vcr-rus.ttf'), 32);
 		chartingText.x = FlxG.width - (chartingText.width + 20);
 		chartingText.y = FlxG.height - (chartingText.height + 20);
 		chartingText.updateHitbox();
@@ -154,7 +168,7 @@ class PauseSubState extends MusicBeatSubstate
 	override function update(elapsed:Float)
 	{
 		cantUnpause -= elapsed;
-		if (pauseMusic.volume < 0.5)
+		if (pauseMusic.volume < 0.7)
 			pauseMusic.volume += 0.01 * elapsed;
 
 		super.update(elapsed);
@@ -239,7 +253,7 @@ class PauseSubState extends MusicBeatSubstate
 				menuItems = menuItemsOG;
 				regenMenu();
 			}
-			new FlxTimer().start(1.05, function(tmr:FlxTimer)
+			new FlxTimer().start(1, function(tmr:FlxTimer)
 		    {
 		        optionOpen(menuItems[curSelected]);
 		    });
@@ -410,9 +424,12 @@ class PauseSubState extends MusicBeatSubstate
 				case 'Debug Mode':
 					MusicBeatState.switchState(new editors.ChartingState());
 					PlayState.chartingMode = true;
-				/*case "Options":
-						goToOptions = true;
-						close(); */
+				case "Options":
+						PlayState.seenCutscene = true;
+						options.OptionsState.fromPlayState = true;
+						MusicBeatState.switchState(new options.OptionsState());
+						FlxG.sound.playMusic(Paths.music('freakyMenu'));
+						FlxG.sound.music.fadeIn(2, 0, 1);
 				case "Exit to menu":
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;

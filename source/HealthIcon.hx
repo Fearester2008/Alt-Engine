@@ -13,7 +13,7 @@ class HealthIcon extends FlxSprite
 	public var targetY:Int = 0;
         public var isMenuItem:Bool = false;
 	private var isOldIcon:Bool = false;
-	private var isPlayer:Bool = false;
+	public var isPlayer:Bool = false;
 	private var char:String = '';
 
 	public var distancePerItem:FlxPoint = new FlxPoint(20, 120);
@@ -56,12 +56,16 @@ class HealthIcon extends FlxSprite
 
 			loadGraphic(file); //Load stupidly first for getting the file size
 			loadGraphic(file, true, Math.floor(width / 2), Math.floor(height)); //Then load it fr
+			if(isPlayer)
+			{	
 			iconOffsets[0] = (width - 150) / 2;
 			iconOffsets[1] = (width - 150) / 2;
-                        if(ClientPrefs.iconBop == "Psych") 
-                        {
-			updateHitbox();
-                        }
+            }
+			else
+			{
+			iconOffsets[0] = (width - 200) * 2;
+			iconOffsets[1] = (width - 200) * 2;
+			}
 			animation.add(char, [0, 1], 0, false, isPlayer);
 			animation.play(char);
 			this.char = char;
@@ -70,13 +74,6 @@ class HealthIcon extends FlxSprite
 				antialiasing = false;
 			}
 		}
-	}
-    
-	override function updateHitbox()
-	{
-		super.updateHitbox();
-		offset.x = iconOffsets[0];
-		offset.y = iconOffsets[1];
 	}
 
 	public function getCharacter():String {

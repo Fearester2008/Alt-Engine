@@ -82,38 +82,39 @@ class CreditsState extends MusicBeatState
 
 		var pisspoop:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
 		    ['Alt Engine Devs'],
-            ['Fearester',           'fearester' ,                    'Main Coder of Alt Engine',                   'https://youtube.com/@fearester1282',  '00BFFF'],
-            ['StefanBETA2008' , 'stefan' , 'Coder of Alt Engine\n and Cool Man' , 'https://github.com/StefanBETA2008' , 'FFA500'],
-            ['Rom4chek' , 'rom4chek' , ' Coder and helper of Alt Engine' , 'https://youtube.com/@Rom4chek', '00FF00'],
-            ['Joalor64' , 'joalor' , 'Coder of Alt Engine' , 'https://github.com/Joalor64GH' , '8EFF8E'],
-            ['Daniel', 'daniel' , 'Musican in Main Menu of Alt Engine' , 'https://youtube.com/@0_Daniel_0' , 'FFFF00'],
+            ['Fearester',           'fearester' ,                    'Main Coder of Alt Engine.', 'Главный Кодер в Alt Engine.',                  'https://youtube.com/@fearester1282',  '00BFFF'],
+            ['StefanBETA2008' , 'stefan' , 'Coder of Alt Engine\n and Cool Man', 'Кодер в Alt Engine\nКлевый человек' , 'https://github.com/StefanBETA2008' , 'FFA500'],
+            ['Rom4chek' , 'rom4chek' , ' Coder and helper of Alt Engine', 'Кодер и помощник в Alt Engine', 'https://youtube.com/@Rom4chek', '00FF00'],
+            ['Joalor64' , 'joalor64' , 'Coder of Alt Engine' , 'Кодер в Alt Engine' , 'https://github.com/Joalor64GH' , '8EFF8E'],
+            ['Daniel', 'daniel' , 'Musican in Main Menu of Alt Engine', 'Музыкант в главном меню в Alt Engine' , 'https://youtube.com/@0_Daniel_0' , 'FFFF00'],
+			['TheLeerName', 'leer' , 'Helper and collaborator of Alt Engine', 'Помощник и коллаборатор в Alt Engine' , 'https://github.com/TheLeerName' , '8EFF91'],
 			['Psych Engine Android Team'],
-			['MaysLastPlay',		'MaysLastPlay',		'Android Porter',							'https://www.youtube.com/channel/UCx0LxtFR8ROd9sFAq-UxDfw',	'5DE7FF'],
-			['Nuno Filipe Studios',	'nuno',				'Android Porter',							'https://www.youtube.com/channel/UCq7G3p4msVN5SX2CpJ86tTw',	'989c99'],
-			['M.A. Jigsaw', 		'saw',				'AndroidTools Creator/Vpad Designer',		'https://www.youtube.com/channel/UC2Sk7vtPzOvbVzdVTWrribQ', '444444'],
+			['MaysLastPlay',		'MaysLastPlay',		'Android Porter', 'Андроид портер',							'https://www.youtube.com/channel/UCx0LxtFR8ROd9sFAq-UxDfw',	'5DE7FF'],
+			['Nuno Filipe Studios',	'nuno',				'Android Porter', 'Андроид портер',					'https://www.youtube.com/channel/UCq7G3p4msVN5SX2CpJ86tTw',	'989c99'],
+			['M.A. Jigsaw', 		'saw',				'AndroidTools Creator/Vpad Designer', 'Создатель вещей для андроид в haxe / Дизайнер контроллеров',		'https://www.youtube.com/channel/UC2Sk7vtPzOvbVzdVTWrribQ', '444444'],
 			['Psych Engine Team'],
-			['Shadow Mario',		'shadowmario',		'Main Programmer of Psych Engine',								'https://twitter.com/Shadow_Mario_',	'444444'],
-			['RiverOaken',			'river',			'Main Artist/Animator of Psych Engine',							'https://twitter.com/RiverOaken',		'B42F71'],
-			['shubs',				'shubs',			'Additional Programmer of Psych Engine',						'https://twitter.com/yoshubs',			'5E99DF'],
+			['Shadow Mario',		'shadowmario',		'Main Programmer of Psych Engine','Главный программист в Psych Engine',								'https://twitter.com/Shadow_Mario_',	'444444'],
+			['RiverOaken',			'river',			'Main Artist/Animator of Psych Engine',	'Главный артист и аниматор в Psych Engine',						'https://twitter.com/RiverOaken',		'B42F71'],
+			['shubs',				'shubs',			'Additional Programmer of Psych Engine','Дополнительный программист в Psych Engine',						'https://twitter.com/yoshubs',			'5E99DF'],
 			[''],
 			['Former Engine Members'],
-			['bb-panzu',			'bb',				'Ex-Programmer of Psych Engine',								'https://twitter.com/bbsub3',			'3E813A'],
+			['bb-panzu',			'bb',				'Ex-Programmer of Psych Engine','Бывший программист в Psych Engine',								'https://twitter.com/bbsub3',			'3E813A'],
 			[''],
 			['Engine Contributors'],
-			['iFlicky',				'flicky',			'Composer of Psync and Tea Time\nMade the Dialogue Sounds',		'https://twitter.com/flicky_i',			'9E29CF'],
-			['SqirraRNG',			'sqirra',			'Crash Handler and Base code for\nChart Editor\'s Waveform',	'https://twitter.com/gedehari',			'E1843A'],
-			['EliteMasterEric',		'mastereric',		'Runtime Shaders support',										'https://twitter.com/EliteMasterEric',	'FFBD40'],
-			['PolybiusProxy',		'proxy',			'.MP4 Video Loader Library (hxCodec)',							'https://twitter.com/polybiusproxy',	'DCD294'],
-			['KadeDev',				'kade',				'Fixed some cool stuff on Chart Editor\nand other PRs',			'https://twitter.com/kade0912',			'64A250'],
-			['Keoiki',				'keoiki',			'Note Splash Animations',										'https://twitter.com/Keoiki_',			'D2D2D2'],
-			['Nebula the Zorua',	'nebula',			'LUA JIT Fork and some Lua reworks',							'https://twitter.com/Nebula_Zorua',		'7D40B2'],
-			['Smokey',				'smokey',			'Sprite Atlas Support',											'https://twitter.com/Smokey_5_',		'483D92'],
+			['iFlicky',				'flicky',			'Composer of Psync and Tea Time\nMade the Dialogue Sounds',	'Композитор Psync и Tea Time\nСделал звуки диалогов',	'https://twitter.com/flicky_i',			'9E29CF'],
+			['SqirraRNG',			'sqirra',			'Crash Handler and Base code for\nChart Editor\'s Waveform','Управление вылетов и базовый код для редактора диаграмм',	'https://twitter.com/gedehari',			'E1843A'],
+			['EliteMasterEric',		'mastereric',		'Runtime Shaders support','Поддержка шейдеров',										'https://twitter.com/EliteMasterEric',	'FFBD40'],
+			['PolybiusProxy',		'proxy',			'.MP4 Video Loader Library (hxCodec)','Библиотека Загрузчика .МР4 Видео (hxCodec)',						'https://twitter.com/polybiusproxy',	'DCD294'],
+			['KadeDev',				'kade',				'Fixed some cool stuff on Chart Editor\nand other PRs',	'Исправлены некоторые крутые вещи в редакторе диаграмм\nи другие вещи',		'https://twitter.com/kade0912',			'64A250'],
+			['Keoiki',				'keoiki',			'Note Splash Animations','Анимация всплеска нот',										'https://twitter.com/Keoiki_',			'D2D2D2'],
+			['Nebula the Zorua',	'nebula',			'LUA JIT Fork and some Lua reworks', 'LUA JIT развилка и некоторые переделки в Lua',							'https://twitter.com/Nebula_Zorua',		'7D40B2'],
+			['Smokey',				'smokey',			'Sprite Atlas Support',	'Поддержка спрайтовых атласов',										'https://twitter.com/Smokey_5_',		'483D92'],
 			[''],
 			["Funkin' Crew"],
-			['ninjamuffin99',		'ninjamuffin99',	"Programmer of Friday Night Funkin'",							'https://twitter.com/ninja_muffin99',	'CF2D2D'],
-			['PhantomArcade',		'phantomarcade',	"Animator of Friday Night Funkin'",								'https://twitter.com/PhantomArcade3K',	'FADC45'],
-			['evilsk8r',			'evilsk8r',			"Artist of Friday Night Funkin'",								'https://twitter.com/evilsk8r',			'5ABD4B'],
-			['kawaisprite',			'kawaisprite',		"Composer of Friday Night Funkin'",								'https://twitter.com/kawaisprite',		'378FC7']
+			['ninjamuffin99',		'ninjamuffin99',	"Programmer of Friday Night Funkin'","Программист в Friday Night Funkin'",							'https://twitter.com/ninja_muffin99',	'CF2D2D'],
+			['PhantomArcade',		'phantomarcade',	"Animator of Friday Night Funkin'","Аниматор в Friday Night Funkin'",								'https://twitter.com/PhantomArcade3K',	'FADC45'],
+			['evilsk8r',			'evilsk8r',			"Artist of Friday Night Funkin'","Артист в Friday Night Funkin'",								'https://twitter.com/evilsk8r',			'5ABD4B'],
+			['kawaisprite',			'kawaisprite',		"Composer of Friday Night Funkin'","Композитор в Friday Night Funkin'",								'https://twitter.com/kawaisprite',		'378FC7']
 		];
 		
 		for(i in pisspoop){
@@ -131,9 +132,9 @@ class CreditsState extends MusicBeatState
 			grpOptions.add(optionText);
 
 			if(isSelectable) {
-				if(creditsStuff[i][5] != null)
+				if(creditsStuff[i][6] != null)
 				{
-					Paths.currentModDirectory = creditsStuff[i][5];
+					Paths.currentModDirectory = creditsStuff[i][6];
 				}
 
 				var icon:AttachedSprite = new AttachedSprite('credits/' + creditsStuff[i][1]);
@@ -159,7 +160,15 @@ class CreditsState extends MusicBeatState
 		add(descBox);
 
 		descText = new FlxText(50, FlxG.height + offsetThing - 25, 1180, "", 32);
+		if(ClientPrefs.language == 'English')
+		{
 		descText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER/*, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK*/);
+		}
+		else
+		{
+		descText.setFormat(Paths.font("vcr-rus.ttf"), 32, FlxColor.WHITE, CENTER/*, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK*/);
+		}
+
 		descText.scrollFactor.set();
 		//descText.borderSize = 2.4;
 		descBox.sprTracker = descText;
@@ -217,8 +226,8 @@ class CreditsState extends MusicBeatState
 				}
 			}
 
-			if(controls.ACCEPT && (creditsStuff[curSelected][3] == null || creditsStuff[curSelected][3].length > 4)) {
-				CoolUtil.openLink(creditsStuff[curSelected][3]);
+			if(controls.ACCEPT && (creditsStuff[curSelected][4] == null || creditsStuff[curSelected][4].length > 4)) {
+				CoolUtil.openLink(creditsStuff[curSelected][4]);
 			}
 			if (controls.BACK)
 			{
@@ -291,7 +300,14 @@ class CreditsState extends MusicBeatState
 			}
 		}
 
+		if(ClientPrefs.language == 'English')
+		{
 		descText.text = creditsStuff[curSelected][2];
+		}
+		else
+		{
+		descText.text = creditsStuff[curSelected][3];
+		}
 		descText.y = FlxG.height - descText.height + offsetThing - 60;
 
 		if(moveTween != null) moveTween.cancel();
@@ -327,7 +343,8 @@ class CreditsState extends MusicBeatState
 	#end
 
 	function getCurrentBGColor() {
-		var bgColor:String = creditsStuff[curSelected][4];
+		var bgColor:String = creditsStuff[curSelected][5];
+		
 		if(!bgColor.startsWith('0x')) {
 			bgColor = '0xFF' + bgColor;
 		}

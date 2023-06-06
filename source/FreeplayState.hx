@@ -3,7 +3,6 @@ package;
 #if desktop
 import Discord.DiscordClient;
 #end
-import flixel.FlxCamera;
 import flixel.effects.FlxFlicker;
 import flixel.tweens.FlxEase;
 import editors.ChartingState;
@@ -34,16 +33,11 @@ using StringTools;
 class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
-    var camZooming:Bool = ClientPrefs.camZooms;
 	var load:Bool = false;
 	var loaded:Bool = false;
 
-    private var camBackground:FlxCamera;
-	
-	public var camINTERFACE:FlxCamera;
-	
 	var selector:FlxText;
-	private static var curSelected:Int = 0;
+	var curSelected:Int = 0;
 	var curDifficulty:Int = -1;
 	private static var lastDifficultyName:String = '';
     private var updateTime:Bool = true;
@@ -74,7 +68,7 @@ class FreeplayState extends MusicBeatState
 	var bg:FlxSprite;
 	var intendedColor:Int;
 	var colorTween:FlxTween;
-	var camZoom:FlxTween;
+	
 
 	override function create()
 	{
@@ -85,24 +79,12 @@ class FreeplayState extends MusicBeatState
 		PlayState.isStoryMode = false;
 		WeekData.reloadWeekFiles(false);
 
-		camBackground = new FlxCamera();
-		camINTERFACE = new FlxCamera();
-
-		camINTERFACE.bgColor.alpha = 0;
-
-		FlxG.cameras.reset(camBackground);
-		FlxG.cameras.add(camINTERFACE, false);
-
-		// FlxCamera.defaultCameras = [camBackground];
-		FlxG.cameras.setDefaultDrawTarget(camBackground, true);
-
-        camINTERFACE.alpha = 1;
 
 		#if desktop
 		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null);
+		DiscordClient.changePresence("In the freeplay" + songs[curSelected], null);
 		#end
-
+		
 		for (i in 0...WeekData.weeksList.length) {
 			if(weekIsLocked(WeekData.weeksList[i])) continue;
 
@@ -156,11 +138,19 @@ class FreeplayState extends MusicBeatState
 		
 		for (i in 0...songs.length)
 		{
-			var songText:FlixText = new FlixText(90, 320, songs[i].songName,45,FlxColor.WHITE,CENTER);
-			songText.isMenu = true;
+			var songText:FlixText = new FlixText(90, 320, i + ". " + songs[i].songName,true);
+			songText.isMenuItem = true;
+			songText.changeX = false;
 			//songText.itemType = 'D-Shape';
 			songText.targetY = i - curSelected;
 			grpSongs.add(songText);
+			
+			var maxWidth = 980;
+			if(songText.width > maxWidth)
+		    {
+				songText.scaleX = maxWidth;
+			}
+			
 
 			Paths.currentModDirectory = songs[i].folder;
 
@@ -171,16 +161,16 @@ class FreeplayState extends MusicBeatState
 			// using a FlxGroup is too much fuss!
 			iconOpponentArray.push(icon);
 			add(icon);
-	    	icon.cameras = [camINTERFACE];
+	    	
 
 			// songText.x += 40;
-			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
+			// DONT PUT X IN THE FIRST PARAMETER OF new FlixText() !!
 			// songText.screenCenter(X);
 		}
 		WeekData.setDirectoryFromWeek();
 		
 		scoreText = new FlxText(0, 0, 0, "", 32);
-		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
+		scoreText.setFormat(Paths.font("vcr-rus.ttf"), 32, FlxColor.WHITE, RIGHT);
 
 		scoreBG = new FlxSprite(0, 0).makeGraphic(FlxG.width, 116, 0xFF000000);
 		scoreBG.alpha = 0.8;
@@ -200,16 +190,17 @@ class FreeplayState extends MusicBeatState
         add(timeTxt);
 
         rateTxt = new FlxText(FlxG.width - 320, scoreText.y, 0, "", 32);
-        rateTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
+        rateTxt.setFormat(Paths.font("vcr-rus.ttf"), 32, FlxColor.WHITE, RIGHT);
 		rateTxt.scrollFactor.set();
 		add(rateTxt);
 
 		loadTxt = new FlxText(0, FlxG.height - 148, 800, "", 32);
-		loadTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, LEFT);
+		loadTxt.setFormat(Paths.font("vcr-rus.ttf"), 32, FlxColor.WHITE, LEFT);
 		loadTxt.alpha = 0;
 		add(loadTxt);
 
 		if(curSelected >= songs.length) curSelected = 0;
+	    
 		bg.color = songs[curSelected].color;
 		intendedColor = bg.color;
 
@@ -222,9 +213,7 @@ class FreeplayState extends MusicBeatState
 		changeSelection();
 		changeDiff();
 		
-		camZoom = FlxTween.tween(this, {}, 0);
-
-		var swag:Alphabet = new Alphabet(1, 0, "swag");
+		var swag:FlixText = new FlixText(1, 0, "swag");
 
 		// JUST DOIN THIS SHIT FOR TESTING!!!
 		/* 
@@ -247,32 +236,35 @@ class FreeplayState extends MusicBeatState
 		textBG.alpha = 0.8;
 		add(textBG);
 
+		var leText:String;
 		#if PRELOAD_ALL
 		#if android
-		var leText:String = "Press C to open the Gameplay Changers Menu. \nPress Y to Reset your Score and Accuracy.";
+		if(ClientPrefs.language == 'English')
+		leText = "Press C to open the Gameplay Changers Menu. \nPress Y to Reset your Score and Accuracy.";
+		else
+		leText = "Нажмите C для открытия меню изменения игрового геймплея.\nНажмите Y для сброса счета и рейтинга.";
+
 		var size:Int = 16;
 		#else
-		var leText:String = "Press F11 to make your device fullscreen.\nPress CTRL to open the Gameplay Changers Menu.\nPress RESET to Reset your Score and Accuracy.";
+		if(ClientPrefs.language == 'English')
+		leText = "Press CTRL to open the Gameplay Changers Menu.\nPress RESET to Reset your Score and Accuracy.";
+		else
+		leText = "Нажмите CTRL для открытия меню изменения игрового геймплея.\nНажмите Y для сброса счета и рейтинга.";
+
 		var size:Int = 16;
 		#end
 		#else
-		var leText:String = "Press C to open the Gameplay Changers Menu. \nPress Y to Reset your Score and Accuracy.";
+		if(ClientPrefs.language == 'English')
+		leText = "Press C to open the Gameplay Changers Menu. \nPress Y to Reset your Score and Accuracy.";
+		else
+		leText = "Нажмите C для открытия меню изменения игрового геймплея.\nНажмите Y для сброса счета и рейтинга.";
+
 		var size:Int = 18;
 		#end
-		var text:FlxText = new FlxText(0, FlxG.height - 60, FlxG.width, leText, size);
-		text.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, LEFT);
+		var text:FlxText = new FlxText(0, FlxG.height - 40, FlxG.width, leText, size);
+		text.setFormat(Paths.font("vcr-rus.ttf"), size, FlxColor.WHITE, LEFT);
 		text.scrollFactor.set();
 		add(text);
-		
-		timeTxt.cameras = [camINTERFACE];
-        scoreText.cameras = [camINTERFACE];
-		scoreBG.cameras = [camINTERFACE];
-		diffText.cameras = [camINTERFACE];
-		textBG.cameras = [camINTERFACE];
-		text.cameras = [camINTERFACE];
-		rateTxt.cameras = [camINTERFACE];
-		iconBG.cameras = [camINTERFACE];
-		loadTxt.cameras = [camINTERFACE];
 
                 #if android
                 addVirtualPad(FULL, A_B_C_X_Y_Z);
@@ -319,19 +311,7 @@ class FreeplayState extends MusicBeatState
 	var holdTime:Float = 0;
 	override function update(elapsed:Float)
 	{
-		if(barValue >= 1)
-		{
-		barValue = 1;
-		loaded = true;
-		}
 
-        if(loaded)
-		loadTxt.text = 'Done.';
-
-	   	if (camZooming)
-		{
-			camBackground.zoom = FlxMath.lerp(1.05, camBackground.zoom, CoolUtil.boundTo(1 - (elapsed * 3.125), 0, 1));
-		}
 	   	songLength = FlxG.sound.music.length;
 	   	Conductor.songPosition = FlxG.sound.music.time;
 	   		if(updateTime) {
@@ -383,13 +363,21 @@ class FreeplayState extends MusicBeatState
 			ratingSplit.push('');
 		}
 		
-		while(ratingSplit[1].length < 1) { //Less than 2 decimals in it, add decimals then
+		while(ratingSplit[1].length < 2) { //Less than 2 decimals in it, add decimals then
 			ratingSplit[1] += '0';
 		}
 
+		if(ClientPrefs.language == 'English')
+		{
 		scoreText.text = 'Best Score: ' + lerpScore;
 		rateTxt.text = 'Rating: ' + ratingSplit.join('.') + ' %';
-		
+		}
+		else
+		{
+		scoreText.text = 'Лучший Счёт: ' + lerpScore;
+		rateTxt.text = 'Рейтинг: ' + ratingSplit.join('.') + ' %';
+		}
+
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
 		var accepted = controls.ACCEPT;
@@ -455,6 +443,7 @@ class FreeplayState extends MusicBeatState
 			#end
 			persistentUpdate = false;
 			openSubState(new GameplayChangersSubstate());
+			GameplayChangersSubstate.fromFreeplay = true;
 		}
 			if(instPlaying != curSelected)
 			{
@@ -474,7 +463,9 @@ class FreeplayState extends MusicBeatState
 				vocals.play();
 				vocals.persist = true;
 				vocals.looped = true;
+
 				vocals.volume = ClientPrefs.vocalVolume;
+
 				Conductor.changeBPM(PlayState.SONG.bpm);
 				instPlaying = curSelected;
 				#end
@@ -500,7 +491,7 @@ class FreeplayState extends MusicBeatState
 			PlayState.SONG = Song.loadFromJson(poop, songLowercase);
 			PlayState.isStoryMode = false;
 			PlayState.storyDifficulty = curDifficulty;
-                        FlxG.sound.play(Paths.sound('confirmMenu'),0.7);
+            FlxG.sound.play(Paths.sound('confirmMenu'),0.7);
 			trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
 			if(colorTween != null) {
 				colorTween.cancel();
@@ -509,15 +500,20 @@ class FreeplayState extends MusicBeatState
 			for (item in grpSongs.members){
 			if (item.targetY == 0)
 			{
-			FlxFlicker.flicker(item, 1.05, 0.06, false, false);
+			FlxTween.tween(item, {x: 300}, 0.8, {ease: FlxEase.quartInOut});
 			FlxFlicker.flicker(iconOpponentArray[curSelected], 1.05, 0.06, false, false);
+			}
+			else
+			{
+				FlxTween.tween(item, {x: -1590}, 0.8, {ease: FlxEase.backInOut});
 			}
 		}
 			        FlxG.sound.music.stop();
                     vocals.stop();
                     
 		            new FlxTimer().start(1.3, function(tmr:FlxTimer)
-		            {	
+		            {
+						loaded = true;	
 			        if (FlxG.keys.pressed.SHIFT #if android || _virtualpad.buttonZ.pressed #end){
 	                    	LoadingState.loadAndSwitchState(new ChartingState());
 	                    } else {
@@ -538,9 +534,12 @@ class FreeplayState extends MusicBeatState
 		if(load)
 		{
 		barValue += (elapsed);
-		loadTxt.text = 'Loading... ${Highscore.floorDecimal(barValue * 100, 2)}%';
+		if(ClientPrefs.language == 'English')
+		loadTxt.text = 'Loading...';
+		else
+		loadTxt.text = 'Загрузка...';
+
 		loadTxt.alpha = 1;
-		loaded = false;
 		}
 		super.update(elapsed);
 	}
@@ -554,10 +553,6 @@ class FreeplayState extends MusicBeatState
 
 	override function beatHit()
 	{
-           if (camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms)
-		{
-			camBackground.zoom += 0.015;
-		}
            for (i in 0...iconOpponentArray.length)
 		    {
 				iconOpponentArray[i].scale.set(1.2,1.2);
@@ -588,7 +583,12 @@ class FreeplayState extends MusicBeatState
 		#end
 
 		PlayState.storyDifficulty = curDifficulty;
+
+		if(ClientPrefs.language == 'English')
 		diffText.text = CoolUtil.difficultyString() + ' MODE <';
+		else
+		diffText.text = CoolUtil.difficultyString() + ' РЕЖИМ <';
+
 	}
 
 	function changeSelection(change:Int = 0, playSound:Bool = true)

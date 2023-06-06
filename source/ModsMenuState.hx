@@ -79,10 +79,24 @@ class ModsMenuState extends MusicBeatState
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
 		bg.screenCenter();
-
+        
+		if(ClientPrefs.language == 'English')
+		{
 		noModsTxt = new FlxText(0, 0, FlxG.width, "NO MODS INSTALLED\nPRESS BACK TO EXIT AND INSTALL A MOD", 48);
-		if(FlxG.random.bool(0.1)) noModsTxt.text += '\nBITCH.'; //meanie
-		noModsTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		}
+		else
+		{
+		noModsTxt = new FlxText(0, 0, FlxG.width, "МОДЫ НЕ УСТАНОВЛЕНЫ\nНАЖМИТЕ ВЫХОД И УСТАНОВИТЕ МОД", 48);
+		}
+		if(ClientPrefs.language == 'English')
+		{
+		if(FlxG.random.bool(0.1)) noModsTxt.text += '\nSHIT.'; //meanie
+		}
+		else
+		{
+		if(FlxG.random.bool(0.1)) noModsTxt.text += '\nДЕРЬМО.'; //meanie			
+		}
+		noModsTxt.setFormat(Paths.font("vcr-rus.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		noModsTxt.scrollFactor.set();
 		noModsTxt.borderSize = 2;
 		add(noModsTxt);

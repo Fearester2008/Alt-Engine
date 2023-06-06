@@ -117,6 +117,8 @@ class FunkinLua {
 		set('inChartEditor', false);
 
 		// Song/Week shit
+		set('hasVoices',PlayState.SONG.needsVoices);
+		set('composer', PlayState.SONG.composer);
 		set('curBpm', Conductor.bpm);
 		set('bpm', PlayState.SONG.bpm);
 		set('scrollSpeed', PlayState.SONG.speed);

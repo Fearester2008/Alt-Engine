@@ -33,7 +33,20 @@ class CoolUtil
 		trace(snap);
 		return (m / snap);
 	}
+	public static function getInterval(size:Float):String
+		{
+			var data:Int = 0;
 	
+			final intervalArray:Array<String> = ['B', 'KB', 'MB', 'GB', 'GGB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+			while (size > 1024 && data < intervalArray.length - 1)
+			{
+				data++;
+				size = size / 1024;
+			}
+	
+			size = Math.round(size * 100) / 100;
+			return size + ' ' + intervalArray[data];
+		}
 	public static function getDifficultyFilePath(num:Null<Int> = null)
 	{
 		if(num == null) num = PlayState.storyDifficulty;

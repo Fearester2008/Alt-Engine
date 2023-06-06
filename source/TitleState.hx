@@ -601,7 +601,7 @@ class TitleState extends MusicBeatState
 	public static var closedState:Bool = false;
 	override function beatHit()
 	{
-	    if (curBeat % 1 == 0) 
+	    if (curBeat % 16 == 0) 
 		{
 			//FlxG.camera.zoom += 0.065;
 			FlxTween.tween(FlxG.camera, {zoom:1.03}, 0.3, {ease: FlxEase.quadOut, type: BACKWARD});

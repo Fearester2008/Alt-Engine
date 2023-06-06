@@ -3,6 +3,7 @@ package;
 #if desktop
 import Discord.DiscordClient;
 #end
+import flixel.FlxCamera;
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -23,6 +24,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
+import flixel.util.FlxColor;
 import flixel.graphics.FlxGraphic;
 import Controls;
 
@@ -30,6 +32,9 @@ using StringTools;
 
 class GameplayChangersSubstate extends MusicBeatSubstate
 {
+	public static var fromFreeplay:Bool = false;
+	public static var fromStory:Bool = false;
+
 	private var curOption:GameplayOption = null;
 	private var curSelected:Int = 0;
 	private var optionsArray:Array<Dynamic> = [];
@@ -97,13 +102,21 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		return null;
 	}
 
-	public function new()
+	override function create()
 	{
-		super();
+		super.create();
 		
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		bg.alpha = 0.6;
+		var camera:FlxCamera;
+		camera = new FlxCamera();
+        var bg:FlxSprite;
+
+		FlxG.cameras.reset(camera);
+
+		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		bg.color = FlxColor.fromRGB(FlxG.random.int(0, 255), FlxG.random.int(0, 255), FlxG.random.int(0, 255));
+		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
+		bg.screenCenter();
 
 		// avoids lagspikes while scrolling through menus!
 		grpOptions = new FlxTypedGroup<Alphabet>();
@@ -174,13 +187,20 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		if (controls.BACK) {
 			
 			#if android
-			FlxTransitionableState.skipNextTransOut = true;
 			FlxG.resetState();
 			#else
 			close();
 			#end
 			ClientPrefs.saveSettings();
 			FlxG.sound.play(Paths.sound('cancelMenu'));
+			if(fromFreeplay)
+			{
+			fromFreeplay = false;
+			}
+			if(fromStory)
+			{
+			fromStory = false;
+			}
 		}
 
 		if(nextAccept <= 0)

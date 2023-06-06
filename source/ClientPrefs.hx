@@ -12,6 +12,7 @@ class ClientPrefs {
     public static var iconBop:String = 'Alt';
     public static var lightStrums:Bool = true;
     public static var oldInput:Bool = true;
+	public static var language:String = 'English';
     public static var sysInfo:String = 'OG FPS';
 	public static var downScroll:Bool = false;
 	public static var middleScroll:Bool = false;
@@ -32,7 +33,9 @@ class ClientPrefs {
 	public static var instVolume:Float = 1;
 	public static var mainVolume:Float = 1;
 	public static var winIcon:Bool = false;
+	public static var results:Bool = false;
 	public static var beatMode:String = 'Both camera';
+	public static var volumeType:String = 'multiplicative';
 	public static var beatType:String = '1/16';
     public static var screenRes:String = '1280x720';
     public static var judgementCounter:Bool = false;
@@ -74,7 +77,7 @@ class ClientPrefs {
 		'opponentplay' => false
 	];
 
-	public static var comboOffset:Array<Int> = [0, 0, 0, 0, 0, 0];
+	public static var comboOffset:Array<Int> = [0, 0, 0, 0];
 	public static var ratingOffset:Int = 0;
 	public static var sickWindow:Int = 45;
 	public static var goodWindow:Int = 90;
@@ -115,10 +118,13 @@ class ClientPrefs {
 
 	public static function saveSettings() {
         FlxG.save.data.hitboxmode = hitboxmode;
+		FlxG.save.data.volumeType = volumeType;
 	FlxG.save.data.hitboxalpha = hitboxalpha;
 	
         FlxG.save.data.screenRes = screenRes;
-        FlxG.save.data.oldInput = oldInput;
+        FlxG.save.data.results = results;
+    
+		FlxG.save.data.oldInput = oldInput;
         FlxG.save.data.drainType = drainType;
 		FlxG.save.data.downScroll = downScroll;
 		FlxG.save.data.sysInfo = sysInfo;
@@ -130,6 +136,7 @@ class ClientPrefs {
 		FlxG.save.data.noteSplashes = noteSplashes;
 		FlxG.save.data.lowQuality = lowQuality;
 		FlxG.save.data.shaders = shaders;
+		FlxG.save.data.language = language;
 		FlxG.save.data.framerate = framerate;
 		//FlxG.save.data.cursing = cursing;
 		//FlxG.save.data.violence = violence;
@@ -183,6 +190,15 @@ class ClientPrefs {
 	public static function loadPrefs() {
         if(FlxG.save.data.iconBop != null) {
 			iconBop = FlxG.save.data.iconBop;
+		}
+		if(FlxG.save.data.results != null) {
+			results = FlxG.save.data.results;
+		}
+		if(FlxG.save.data.volumeType != null) {
+			volumeType = FlxG.save.data.volumeType;
+		}
+		if(FlxG.save.data.language != null) {
+		    language = FlxG.save.data.language;
 		}
 		if(FlxG.save.data.lightStrums != null) {
 			lightStrums = FlxG.save.data.lightStrums;

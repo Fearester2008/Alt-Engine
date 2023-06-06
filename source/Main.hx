@@ -17,9 +17,6 @@ import lime.app.Application;
 import openfl.events.UncaughtErrorEvent;
 import haxe.CallStack;
 import haxe.io.Path;
-#if desktop
-import Discord.DiscordClient;
-#end
 import sys.FileSystem;
 import sys.io.File;
 import sys.io.Process;
@@ -31,7 +28,7 @@ class Main extends Sprite
 {
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var gameHeight:Int = 720;  // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
-	var initialState:Class<FlxState> = #if !android OpenState; #else TitleState; #end // The FlxState the game starts with.
+	var initialState:Class<FlxState> = #if android AndroidCache; #else CacheState; #end // The FlxState the game starts with.
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
 	var framerate:Int = 60; // How many frames per second the game should run at.
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
@@ -73,7 +70,10 @@ class Main extends Sprite
 	{
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
+		var resolution = ClientPrefs.screenRes.split('x');
 
+		gameWidth = Std.parseInt(resolution[0]);
+		gameHeight = Std.parseInt(resolution[1]);
 		if (zoom == -1)
 		{
 			var ratioX:Float = stageWidth / gameWidth;
@@ -103,6 +103,10 @@ class Main extends Sprite
 
 		#if CRASH_HANDLER
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
+		#end
+
+		#if desktop
+		InitDiscordRpc.initial(true);
 		#end
 	}
 
@@ -144,7 +148,7 @@ class Main extends Sprite
 
 		Application.current.window.alert(errMsg, "Error!");
 		#if desktop
-		DiscordClient.shutdown();
+		InitDiscordRpc.sleeping(true);
 		#end
 		//Sys.exit(1);
 	}
