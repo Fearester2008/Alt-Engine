@@ -174,7 +174,7 @@ class FlxVirtualPad extends FlxSpriteGroup {
 	}
 
 	public static function getFrames():FlxAtlasFrames {
-		return loadGraphic(FlxGraphic.fromFrame(FlxAtlasFrames.fromSparrow(Assets.getBitmapData('assets/androidcontrols/virtualpad.png')
+		return loadGraphic(FlxGraphic.fromFrame(FlxAtlasFrames.fromSparrow(Assets.getBitmapData('assets/androidcontrols/virtualpad.png'))));
 	}
 
 	override public function destroy():Void {
