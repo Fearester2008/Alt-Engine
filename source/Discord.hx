@@ -13,6 +13,7 @@ using StringTools;
 
 class DiscordClient
 {
+	#if desktop
 	public static var isInitialized:Bool = false;
 	public function new()
 	{
@@ -99,5 +100,6 @@ class DiscordClient
 			changePresence(details, state, smallImageKey, hasStartTimestamp, endTimestamp);
 		});
 	}
+	#end
 	#end
 }
