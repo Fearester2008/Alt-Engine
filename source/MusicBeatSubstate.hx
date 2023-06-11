@@ -70,8 +70,11 @@ class MusicBeatSubstate extends FlxSubState
 	
 	override function destroy() {
 		#if android
-		controls.removeFlxInput(trackedinputsUI);
-		controls.removeFlxInput(trackedinputsNOTES);
+		if (trackedinputsNOTES != [])
+			controls.removeFlxInput(trackedinputsNOTES);
+
+		if (trackedinputsUI != [])
+			controls.removeFlxInput(trackedinputsUI);
 		#end
 
 		super.destroy();
@@ -84,10 +87,12 @@ class MusicBeatSubstate extends FlxSubState
 
 		updateCurStep();
 		updateBeat();
-
+                
+		#if !android
 		if(FlxG.keys.justPressed.F11)
         	FlxG.fullscreen = !FlxG.fullscreen;
-		
+		#end
+			
 		if (oldStep != curStep && curStep > 0)
 			stepHit();
 
