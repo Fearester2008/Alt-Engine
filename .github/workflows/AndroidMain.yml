@@ -62,8 +62,6 @@ jobs:
           haxelib --quiet git hxCodec https://github.com/JonnycatMeow/hxCodec-old.git
           haxelib --quiet git linc_luajit https://github.com/Sirox228/linc_luajit
           haxelib --quiet git extension-androidtools https://github.com/MaysLastPlay77/extension-androidtools
-          haxelib --quiet install hxcpp-debug-server
-          haxelib --quiet git extension-kizzyrpc https://github.com/MAJigsaw77/extension-kizzyrpc
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib list
       - name: Create Version Tag
