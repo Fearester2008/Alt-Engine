@@ -1,7 +1,7 @@
 package;
 
 import Sys.sleep;
-#if desktop 
+#if desktop
 import discord_rpc.DiscordRpc;
 #end
 #if LUA_ALLOWED
@@ -16,7 +16,6 @@ class DiscordClient
 	public static var isInitialized:Bool = false;
 	public function new()
 	{
-		#if desktop
 		trace("Discord Client starting...");
 		DiscordRpc.start({
 			clientID: "1104335650603417670",
@@ -34,9 +33,8 @@ class DiscordClient
 		}
 
 		DiscordRpc.shutdown();
-		#end
 	}
-	#if desktop
+	
 	public static function shutdown()
 	{
 		DiscordRpc.shutdown();
@@ -51,7 +49,7 @@ class DiscordClient
 			largeImageText: "Alt Engine"
 		});
 	}
-    #end
+
 	static function onError(_code:Int, _message:String)
 	{
 		trace('Error! $_code : $_message');
@@ -61,7 +59,7 @@ class DiscordClient
 	{
 		trace('Disconnected! $_code : $_message');
 	}
-#if desktop
+
 	public static function initialize()
 	{
 		var DiscordDaemon = sys.thread.Thread.create(() ->
@@ -85,7 +83,7 @@ class DiscordClient
 			details: details,
 			state: state,
 			largeImageKey: 'icon',
-			largeImageText: "Engine Version: " + MainMenuState.altEngineVersion,
+			largeImageText: "Engine Version: " + VersionStuff.altEngineVersion,
 			smallImageKey : smallImageKey,
 			// Obtained times are in milliseconds so they are divided so Discord can use it
 			startTimestamp : Std.int(startTimestamp / 1000),
@@ -94,8 +92,8 @@ class DiscordClient
 
 		//trace('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasStartTimestamp, $endTimestamp');
 	}
-#end
-	#if (LUA_ALLOWED && desktop)
+
+	#if LUA_ALLOWED
 	public static function addLuaCallbacks(lua:State) {
 		Lua_helper.add_callback(lua, "changePresence", function(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float) {
 			changePresence(details, state, smallImageKey, hasStartTimestamp, endTimestamp);

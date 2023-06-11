@@ -138,12 +138,12 @@ class TitleState extends MusicBeatState
 		#if CHECK_FOR_UPDATES
 		if(ClientPrefs.checkForUpdates && !closedState) {
 			trace('checking for update');
-			var http = new haxe.Http("https://raw.githubusercontent.com/Fearester/Alt-Engine-Public/main/gitVersion.txt");
+			var http = new haxe.Http("https://raw.githubusercontent.com/Fearester2008/Alt-Engine-Public/main/gitVersion.txt");
 
 			http.onData = function (data:String)
 			{
 				updateVersion = data.split('\n')[0].trim();
-				var curVersion:String = MainMenuState.altEngineVersion.trim();
+				var curVersion:String = VersionStuff.altEngineVersion.trim();
 				trace('version online: ' + updateVersion + ', your version: ' + curVersion);
 				if(updateVersion != curVersion) {
 					trace('versions arent matching!');
@@ -252,8 +252,11 @@ class TitleState extends MusicBeatState
 				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 			}
 		}
-
+        if(FreeplayState.playOnOtherState)
+		Conductor.changeBPM(PlayState.SONG.bpm);
+		else 
 		Conductor.changeBPM(titleJSON.bpm);
+
 		persistentUpdate = true;
 
 		var bg:FlxSprite = new FlxSprite();

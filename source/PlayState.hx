@@ -1,5 +1,6 @@
 package;
 
+import utils.*;
 import flixel.graphics.FlxGraphic;
 #if desktop
 import Discord.DiscordClient;
@@ -85,19 +86,6 @@ class PlayState extends MusicBeatState
 	public static var missMult:Int = 0;
     public var timeString:String;
     public static var fromPlayState:Bool = false;
-
-	public static var ratingStuff:Array<Dynamic> = [
-		['You Suck!', 0.2], //From 0% to 19%
-		['Shit', 0.4], //From 20% to 39%
-		['Bad', 0.5], //From 40% to 49%
-		['Bruh', 0.6], //From 50% to 59%
-		['Meh', 0.69], //From 60% to 68%
-		['Nice', 0.7], //69%
-		['Good', 0.8], //From 70% to 79%
-		['Great', 0.9], //From 80% to 89%
-		['Sick!', 1], //From 90% to 99%
-		['Perfect!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
-	];
 	
 	//event variables
 	private var isCameraOnForcedPos:Bool = false;
@@ -175,6 +163,7 @@ class PlayState extends MusicBeatState
 	public var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
 
 	public var camZooming:Bool = false;
+	public var eventZoom:Bool = false;
 	public var camZoomingMult:Float = 1;
 	public var camZoomingDecay:Float = 1;
 	private var curSong:String = "";
@@ -963,7 +952,7 @@ class PlayState extends MusicBeatState
 
 		if(ClientPrefs.timeBarType == 'Song Name')
 		{
-			timeTxt.text = SONG.song + ' [ ' + CoolUtil.difficultyString() + ' ]';
+			timeString = SONG.song + ' [ ' + CoolUtil.difficultyString() + ' ]';
 		}
 		updateTime = showTime;
 		
@@ -2894,16 +2883,16 @@ class PlayState extends MusicBeatState
 					timeTxt.text = timeString;
 
 					if(ClientPrefs.timeBarType != 'Song Name') {
-						timeString = FlxStringUtil.formatTime(secondsTotal, false);
+						timeString = TimeUtil.formativeTime(secondsTotal, false);
 					}
 					if(ClientPrefs.timeBarType == 'Song Percentage') {
 						timeString = '(${HelperFunctions.truncateFloat(songPercent * 100, 1)}%)';
 					}
 					if(ClientPrefs.timeBarType == 'Time Length') {
-						timeString = '${FlxStringUtil.formatTime(secondsTotal, false)} - ${FlxStringUtil.formatTime(Math.floor(songLength / 1000), false)}';
+						timeString = '${TimeUtil.formativeTime(secondsTotal, false)} - ${TimeUtil.formativeTime(Math.floor(songLength / 1000), false)}';
 					}
 					if(ClientPrefs.timeBarType == 'Time Length Percent') {
-						timeString = '(${HelperFunctions.truncateFloat(songPercent * 100, 1)}%) - (${FlxStringUtil.formatTime(secondsTotal, false)} / ${FlxStringUtil.formatTime(Math.floor(songLength / 1000), false)})';
+						timeString = '(${HelperFunctions.truncateFloat(songPercent * 100, 1)}%) - (${TimeUtil.formativeTime(secondsTotal, false)} / ${TimeUtil.formativeTime(Math.floor(songLength / 1000), false)})';
 					}
 				}
 			}
@@ -2911,7 +2900,7 @@ class PlayState extends MusicBeatState
 			// Conductor.lastSongPos = FlxG.sound.music.time;
 		}
 
-		if (camZooming)
+		if (camZooming || eventZoom)
 		{
 			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, CoolUtil.boundTo(1 - (elapsed * 5.925 * camZoomingDecay), 0, 1));
 			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, CoolUtil.boundTo(1 - (elapsed * 5.925 * camZoomingDecay), 0, 1));
@@ -3390,7 +3379,8 @@ class PlayState extends MusicBeatState
 				killHenchmen();
 
 			case 'Add Camera Zoom':
-				if(ClientPrefs.camZooms && FlxG.camera.zoom < 1.35) {
+				if(ClientPrefs.camZooms && FlxG.camera.zoom < 1.35 && eventZoom) {
+					
 					var camZoom:Float = Std.parseFloat(value1);
 					var hudZoom:Float = Std.parseFloat(value2);
 					if(Math.isNaN(camZoom)) camZoom = 0.015;

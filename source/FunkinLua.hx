@@ -37,7 +37,7 @@ import flixel.system.FlxAssets.FlxShader;
 #if (!flash && sys)
 import flixel.addons.display.FlxRuntimeShader;
 #end
-
+import lime.app.Application;
 #if sys
 import sys.FileSystem;
 import sys.io.File;
@@ -159,7 +159,8 @@ class FunkinLua {
 		set('hits', 0);
 
 		set('rating', 0);
-		set('version', MainMenuState.altEngineVersion.trim());
+		set('version', VersionStuff.altEngineVersion.trim());
+		set('appVersion',  Application.current.meta.get('version'));
 
 		set('inGameOver', false);
 		set('mustHitSection', false);

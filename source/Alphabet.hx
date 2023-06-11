@@ -168,7 +168,7 @@ class Alphabet extends FlxSpriteGroup
 
 	override function update(elapsed:Float)
 	{
-                var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
+        var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
 		if (isMenuItem)
 		{
 			var lerpVal:Float = CoolUtil.boundTo(elapsed * 9.6, 0, 1);

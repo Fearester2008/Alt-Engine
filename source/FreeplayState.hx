@@ -20,6 +20,7 @@ import flixel.util.FlxColor;
 import flixel.ui.FlxBar;
 import flixel.tweens.FlxTween;
 import lime.utils.Assets;
+import openfl.utils.Assets;
 import flixel.system.FlxSound;
 import openfl.utils.Assets as OpenFlAssets;
 import WeekData;
@@ -57,7 +58,7 @@ class FreeplayState extends MusicBeatState
 	var intendedRating:Float = 0;
 
 	var selectedThing:Bool = false;
-
+    public static var playOnOtherState:Bool = false;
 	private var grpSongs:FlxTypedGroup<FlixText>;
 	private var curPlaying:Bool = false;
 
@@ -82,7 +83,7 @@ class FreeplayState extends MusicBeatState
 
 		#if desktop
 		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the freeplay: " + songs[curSelected], null);
+		DiscordClient.changePresence("In the freeplay" + songs[curSelected], null);
 		#end
 		
 		for (i in 0...WeekData.weeksList.length) {
@@ -138,15 +139,12 @@ class FreeplayState extends MusicBeatState
 		
 		for (i in 0...songs.length)
 		{
-			var songText:FlixText = new FlixText(90, 320, i + ". " + songs[i].songName,45,FlxColor.WHITE, LEFT);
+			var songText:FlixText = new FlixText(90, 320, i + 1 + ". " + songs[i].songName,45, FlxColor.WHITE, LEFT);
 			songText.isMenu = true;
 			songText.changedX = false;
-			//songText.itemType = 'D-Shape';
+			songText.itemType = 'Classic';
 			songText.targetY = i - curSelected;
 			grpSongs.add(songText);
-			
-	
-			
 			
 
 			Paths.currentModDirectory = songs[i].folder;
@@ -197,7 +195,6 @@ class FreeplayState extends MusicBeatState
 		add(loadTxt);
 
 		if(curSelected >= songs.length) curSelected = 0;
-	    
 		bg.color = songs[curSelected].color;
 		intendedColor = bg.color;
 
@@ -431,6 +428,7 @@ class FreeplayState extends MusicBeatState
 			}
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			MusicBeatState.switchState(new MainMenuState());
+			destroyFreeplayVocals();
 		}
 
 		if(ctrl)
@@ -465,6 +463,9 @@ class FreeplayState extends MusicBeatState
 
 				Conductor.changeBPM(PlayState.SONG.bpm);
 				instPlaying = curSelected;
+
+				playOnOtherState = true;
+
 				#end
 			}
 
@@ -474,15 +475,7 @@ class FreeplayState extends MusicBeatState
 			persistentUpdate = false;
 			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
 			var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
-			/*#if MODS_ALLOWED
-			if(!sys.FileSystem.exists(Paths.modsJson(songLowercase + '/' + poop)) && !sys.FileSystem.exists(Paths.json(songLowercase + '/' + poop))) {
-			#else
-			if(!OpenFlAssets.exists(Paths.json(songLowercase + '/' + poop))) {
-			#end
-				poop = songLowercase;
-				curDifficulty = 1;
-				trace('Couldnt find file');
-			}*/
+
 			trace(poop);
 
 			PlayState.SONG = Song.loadFromJson(poop, songLowercase);
