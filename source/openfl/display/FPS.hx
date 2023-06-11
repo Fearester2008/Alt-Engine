@@ -125,7 +125,7 @@ class FPS extends TextField
 			text = "FPS: " + '[' + currentFPS + '] ';
 			text += "\nMemory: " + ${CoolUtil.getInterval(memoryMegas)};
 			text += "\nMemory Peak: " + ${CoolUtil.getInterval(memoryMegas)};
-			text += "\nAlt Engine version: " + MainMenuState.altEngineVersion;
+			text += "\nAlt Engine version: " + VersionStuff.altEngineVersion;
 			text += "\nOperating system: " + '${lime.system.System.platformLabel}';
             }
 			textColor = 0xFF02FF74;
@@ -133,15 +133,15 @@ class FPS extends TextField
 			{
 				textColor = 0xFFFF0000;
 			}
-			if (memoryMegas > 2000 || currentFPS <= ClientPrefs.framerate / 3)
+			if (memoryMegas > 2000)
 				{
 				textColor = 0xFFFF7B00;
 				}
-			if (memoryMegas > 1000 || currentFPS <= ClientPrefs.framerate / 2)
+			if (memoryMegas > 1000)
 				{
 				textColor = 0xFFE5FF00;
 				}
-			if (memoryMegas > 500 || currentFPS <= ClientPrefs.framerate)
+			if (memoryMegas > 500)
 				{
 				textColor = 0xFF2BFF00;
 				}
