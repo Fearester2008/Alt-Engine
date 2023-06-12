@@ -186,7 +186,7 @@ class ResultsScreen extends MusicBeatSubstate {
 		if(PlayState.instance.dad.healthIcon == null)
 			iconPlayer2.changeIcon('bf');
 		
-		if (controls.ACCEPT) {
+		if (FlxG.keys.justPressed.ENTER #if android || _virtualpad.buttonA.justPressed #end) {
 			if (PlayState.isStoryMode)
 				MusicBeatState.switchState(new StoryMenuState());
 			else
