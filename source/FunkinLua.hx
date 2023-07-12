@@ -51,8 +51,8 @@ import DialogueBoxPsych;
 import hscript.Parser;
 import hscript.Interp;
 import hscript.Expr;
-import hscript.HScript;
 #end
+import hscript.HScript;
 
 #if desktop
 import Discord;

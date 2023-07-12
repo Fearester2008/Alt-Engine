@@ -35,7 +35,7 @@ class DiscordClient
 
 		DiscordRpc.shutdown();
 	}
-	
+
 	public static function shutdown()
 	{
 		DiscordRpc.shutdown();
