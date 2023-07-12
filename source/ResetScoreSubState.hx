@@ -3,6 +3,7 @@ import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.util.FlxColor;
 import flixel.addons.transition.FlxTransitionableState;
+import utils.*;
 
 using StringTools;
 
@@ -80,6 +81,8 @@ class ResetScoreSubState extends MusicBeatSubstate
 
 	override function update(elapsed:Float)
 	{
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "Reset Song Data");
+
 		bg.alpha += elapsed * 1.5;
 		if(bg.alpha > 0.6) bg.alpha = 0.6;
 

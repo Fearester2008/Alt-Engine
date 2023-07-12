@@ -1,4 +1,4 @@
-
+#if sys
 package;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -66,8 +66,10 @@ class AndroidCache extends FlxState
 
 		FlxG.worldBounds.set(0,0);
         
+		#if !android
 		bitmapData = new Map<String,FlxGraphic>();
 		bitmapData2 = new Map<String,FlxGraphic>();
+		#end
 
 		super.create();
 		
@@ -97,7 +99,7 @@ class AndroidCache extends FlxState
 		loadingSpeen.antialiasing = true;
 		add(loadingSpeen);
 		
-		
+		#if (cpp && !android)
 		for (i in FileSystem.readDirectory(SUtil.getPath() + "assets/shared/images/characters/"))
 		{
 			if (!i.endsWith(".png"))
@@ -151,7 +153,7 @@ class AndroidCache extends FlxState
 			}
 
 		#end
-		
+		#end
 
 		sys.thread.Thread.create(() -> {
 			cache();
@@ -183,7 +185,7 @@ class AndroidCache extends FlxState
 	
 	function cache()
 	{
-		#if android
+		#if (!linux && !android)
 
 		for (i in images)
 		{
@@ -263,3 +265,4 @@ class AndroidCache extends FlxState
 		});
 	}
 }
+#end

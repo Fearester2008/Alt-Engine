@@ -1,5 +1,7 @@
 package;
 
+import utils.*;
+
 #if desktop
 import sys.thread.Thread;
 #end
@@ -185,6 +187,8 @@ class TitleState extends MusicBeatState
 
 		if(!initialized)
 		{
+			AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "Init...");
+
 			if(FlxG.save.data != null && FlxG.save.data.fullscreen)
 			{
 				FlxG.fullscreen = FlxG.save.data.fullscreen;
@@ -206,11 +210,16 @@ class TitleState extends MusicBeatState
 		MusicBeatState.switchState(new ChartingState());
 		#else
 			if (initialized)
+			{
 				startIntro();
+				AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "Initialized Game...");
+			}
 			else
 			{
 				new FlxTimer().start(1, function(tmr:FlxTimer)
 				{
+					AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "Initialized Game...");
+
 					startIntro();
 				});
 			}
@@ -429,6 +438,8 @@ class TitleState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In Title Menu.");
+
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
@@ -492,6 +503,10 @@ class TitleState extends MusicBeatState
 				transitioning = true;
 				// FlxG.sound.music.stop();
 
+				MainMenuState.firstStart = true;
+				MainMenuState.finishedAnim = true;
+	
+
 				new FlxTimer().start(1, function(tmr:FlxTimer)
 				{
 						MusicBeatState.switchState(new MainMenuState());
@@ -536,10 +551,7 @@ class TitleState extends MusicBeatState
 								}
 							});
 							FlxG.sound.music.fadeOut();
-							if(FreeplayState.vocals != null)
-							{
-								FreeplayState.vocals.fadeOut();
-							}
+							
 							closedState = true;
 							transitioning = true;
 							playJingle = true;
@@ -604,7 +616,7 @@ class TitleState extends MusicBeatState
 	public static var closedState:Bool = false;
 	override function beatHit()
 	{
-	    if (curBeat % 16 == 0) 
+	    if (curBeat % 4 == 0) 
 		{
 			//FlxG.camera.zoom += 0.065;
 			FlxTween.tween(FlxG.camera, {zoom:1.03}, 0.3, {ease: FlxEase.quadOut, type: BACKWARD});
@@ -623,13 +635,14 @@ class TitleState extends MusicBeatState
 		}
 
 		if(!closedState) {
+
 			sickBeats++;
 			switch (sickBeats)
 			{
 				case 1:
 					//FlxG.sound.music.stop();
 					FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
-					FlxG.sound.music.fadeIn(4, 0, ClientPrefs.mainVolume);
+					FlxG.sound.music.fadeIn(4, 0, 1);
 				case 2:
 					#if PSYCH_WATERMARKS
 					createCoolText(['Alt Engine by'], 15);
@@ -642,8 +655,8 @@ class TitleState extends MusicBeatState
 					addMoreText('Fearester', 15);
 					addMoreText('StefanBETA2008', 15);
 					addMoreText('Rom4chek', 15);
-                                        addMoreText('Thanks to ShadowMario and',15);
-                                        addMoreText('M.A.Jigsaw for the engine',15);
+                    addMoreText('Thanks to ShadowMario and',15);
+                	addMoreText('M.A.Jigsaw for the engine',15);
 					#else
 					addMoreText('present');
 					#end
@@ -770,10 +783,6 @@ class TitleState extends MusicBeatState
 				if(easteregg == 'SHADOW')
 				{
 					FlxG.sound.music.fadeOut();
-					if(FreeplayState.vocals != null)
-					{
-						FreeplayState.vocals.fadeOut();
-					}
 				}
 				#end
 			}

@@ -36,7 +36,6 @@ class Main extends Sprite
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
 	var startFullscreen:Bool = false; 
 	public static var fpsVar:FPS;
-	public static var changeID:Int = 0;
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
@@ -99,6 +98,8 @@ class Main extends Sprite
 			fpsVar.visible = ClientPrefs.showFPS;
 		}
 
+		AppUtil.getAppData();
+
 		#if html5
 		FlxG.autoPause = false;
 		FlxG.mouse.visible = false;
@@ -109,7 +110,7 @@ class Main extends Sprite
 		#end
 
 		#if desktop
-		InitDiscordRpc.initial(true);
+		InitDiscordRpcUtil.initial(true);
 		#end
 	}
 
@@ -151,7 +152,7 @@ class Main extends Sprite
 
 		Application.current.window.alert(errMsg, "Error!");
 		#if desktop
-		InitDiscordRpc.sleeping(true);
+		InitDiscordRpcUtil.sleeping(true);
 		#end
 		//Sys.exit(1);
 	}

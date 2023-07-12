@@ -1,5 +1,6 @@
 package;
 
+import utils.*;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -69,6 +70,7 @@ class ModsMenuState extends MusicBeatState
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 		WeekData.setDirectoryFromWeek();
+
 
 		#if desktop
 		// Updating Discord Rich Presence
@@ -484,6 +486,8 @@ class ModsMenuState extends MusicBeatState
 	var canExit:Bool = true;
 	override function update(elapsed:Float)
 	{
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Mods Menu.");
+
 		if(noModsTxt.visible)
 		{
 			noModsSine += 180 * elapsed;

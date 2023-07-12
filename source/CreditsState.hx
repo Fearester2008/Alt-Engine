@@ -1,5 +1,5 @@
 package;
-
+import utils.*;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -187,6 +187,8 @@ class CreditsState extends MusicBeatState
 	var holdTime:Float = 0;
 	override function update(elapsed:Float)
 	{
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Credits Menu.");
+
 		if (FlxG.sound.music.volume < 0.7)
 		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;

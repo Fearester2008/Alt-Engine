@@ -1,5 +1,6 @@
 package;
 
+import utils.*;
 import lime.app.Promise;
 import lime.app.Future;
 import flixel.FlxG;
@@ -112,6 +113,8 @@ class LoadingState extends MusicBeatState
 	
 	override function update(elapsed:Float)
 	{
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "Loading...");
+
 		super.update(elapsed);
 		funkay.setGraphicSize(Std.int(0.88 * FlxG.width + 0.9 * (funkay.width - 0.88 * FlxG.width)));
 		funkay.updateHitbox();

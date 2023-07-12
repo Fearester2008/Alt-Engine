@@ -33,13 +33,12 @@ import openfl.utils.Assets as OpenFLAssets;
 import sys.FileSystem;
 import sys.io.File;
 #end
-
+import utils.*;
 using StringTools;
 
 class CacheState extends FlxState
 {	
 
-	
 	var doneFiles = 0;
 	var shouldBeDone = 0;
 
@@ -65,7 +64,7 @@ class CacheState extends FlxState
 
 	override function create()
 	{
-	
+			
 		FlxG.mouse.visible = true;
 
 		FlxG.worldBounds.set(0,0);
@@ -184,11 +183,13 @@ class CacheState extends FlxState
 				}
 			}
 		}
+
 		super.update(elapsed);
 	}
 	
 	function cache()
 	{
+
 		#if (!linux && !android)
 
 		for (i in images)

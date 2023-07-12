@@ -1,5 +1,7 @@
 package;
 
+import utils.*;
+
 import Controls.Control;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -18,7 +20,6 @@ import flixel.effects.FlxFlicker;
 import flixel.util.FlxTimer;
 class PauseSubState extends MusicBeatSubstate
 {
-	var shiftActive:Bool = false;
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [];
@@ -33,12 +34,15 @@ class PauseSubState extends MusicBeatSubstate
 	var curTime:Float = Math.max(0, Conductor.songPosition);
 	public static var goToOptions:Bool = false;
 	public static var goBack:Bool = false;
+	public static var elapsedNowTime:Float = 0;
+	public static var eString:String;
 
 	public static var songName:String = '';
 
 	public function new(x:Float, y:Float)
 	{
 		super();
+
 		if(CoolUtil.difficulties.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
 
 		if(PlayState.chartingMode)
@@ -168,6 +172,7 @@ class PauseSubState extends MusicBeatSubstate
 	var cantUnpause:Float = 0.1;
 	override function update(elapsed:Float)
 	{
+
 		cantUnpause -= elapsed;
 		if (pauseMusic.volume < 0.7)
 			pauseMusic.volume += 0.01 * elapsed;
@@ -238,7 +243,7 @@ class PauseSubState extends MusicBeatSubstate
 		        	FlxFlicker.flicker(item, 1.05, 0.06, true, false);
 		        	FlxG.sound.play(Paths.sound('confirmMenu'));
 			    }
-		    	}
+		    	}				
 				if(menuItems.length - 1 != curSelected && difficultyChoices.contains(daSelected)) {
 					var name:String = PlayState.SONG.song;
 					var poop = Highscore.formatSong(name, curSelected);
@@ -419,8 +424,6 @@ class PauseSubState extends MusicBeatSubstate
 				case 'Toggle Botplay':
 					PlayState.instance.cpuControlled = !PlayState.instance.cpuControlled;
 					PlayState.changedDifficulty = true;
-					PlayState.instance.botplayTxt.visible = PlayState.instance.cpuControlled;
-					PlayState.instance.botplayTxt.alpha = 1;
 					PlayState.instance.botplaySine = 0;
 				case 'Debug Mode':
 					MusicBeatState.switchState(new editors.ChartingState());
@@ -429,7 +432,7 @@ class PauseSubState extends MusicBeatSubstate
 						PlayState.seenCutscene = true;
 						options.OptionsState.fromPlayState = true;
 						MusicBeatState.switchState(new options.OptionsState());
-						FlxG.sound.playMusic(Paths.music('freakyMenu'));
+						FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song));
 						FlxG.sound.music.fadeIn(2, 0, 1);
 				case "Exit to menu":
 					PlayState.deathCounter = 0;

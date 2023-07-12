@@ -1,4 +1,4 @@
-/*package;
+package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -25,4 +25,3 @@ class DifficultyItem extends FlxSprite
             }
 }
 
-//unused

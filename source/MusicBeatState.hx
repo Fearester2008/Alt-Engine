@@ -1,5 +1,6 @@
 package;
 
+import utils.*;
 import Conductor.BPMChangeEvent;
 import flixel.FlxG;
 import flixel.addons.ui.FlxUIState;
@@ -14,6 +15,12 @@ import flixel.util.FlxGradient;
 import flixel.FlxState;
 import flixel.FlxCamera;
 import flixel.FlxBasic;
+
+
+#if LUA_ALLOWED
+import llua.Lua;
+import llua.State;
+#end
 
 #if android
 import flixel.input.actions.FlxActionInput;
@@ -73,11 +80,7 @@ class MusicBeatState extends FlxUIState
 			case DUO:
 				controls.setVirtualPadNOTES(androidc.vpad, DUO, NONE);
 			case HITBOX:
-			   if(ClientPrefs.hitboxmode != 'New'){
-				controls.setHitBox(androidc.hbox);
-				}else{
 				controls.setNewHitBox(androidc.newhbox);
-				}
 			default:
 		}
 
@@ -114,12 +117,13 @@ class MusicBeatState extends FlxUIState
 	}
 
 	override function create() {
+
 		camBeat = FlxG.camera;
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;
 		super.create();
 
 		if(!skip) {
-			openSubState(new CustomFadeTransition(0.7, true));
+			openSubState(new CustomFadeTransition(0.4, true));
 		}
 		FlxTransitionableState.skipNextTransOut = false;
 	}
@@ -131,10 +135,10 @@ class MusicBeatState extends FlxUIState
 
 		updateCurStep();
 		updateBeat();
-		
-if(FlxG.keys.justPressed.F11)
+
+		if(FlxG.keys.justPressed.F11)
         	FlxG.fullscreen = !FlxG.fullscreen;
-		
+
 		if (oldStep != curStep)
 		{
 			if(curStep > 0)
@@ -207,7 +211,7 @@ if(FlxG.keys.justPressed.F11)
 		var curState:Dynamic = FlxG.state;
 		var leState:MusicBeatState = curState;
 		if(!FlxTransitionableState.skipNextTransIn) {
-			leState.openSubState(new CustomFadeTransition(0.6, false));
+			leState.openSubState(new CustomFadeTransition(0.3, false));
 			if(nextState == FlxG.state) {
 				CustomFadeTransition.finishCallback = function() {
 					FlxG.resetState();

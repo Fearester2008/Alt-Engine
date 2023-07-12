@@ -1,5 +1,6 @@
 package;
 
+import utils.*;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -81,6 +82,23 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		option.displayFormat = '%vX';
 		optionsArray.push(option);
 
+		var voption:GameplayOption = new GameplayOption('Inst Volume', 'instVolume', 'float', 1);
+		voption.scrollSpeed = 2.0;
+		voption.minValue = 0.35;
+		voption.changeValue = 0.05;
+		voption.decimals = 2;
+		voption.maxValue = 1;
+		optionsArray.push(voption);
+
+		var voption:GameplayOption = new GameplayOption('Vocal Volume', 'vocalVolume', 'float', 1);
+		voption.scrollSpeed = 2.0;
+		voption.minValue = 0.35;
+		voption.changeValue = 0.05;
+		voption.decimals = 2;
+		voption.displayFormat = '%v';
+		voption.maxValue = 1;
+		optionsArray.push(voption);
+
 		var option:GameplayOption = new GameplayOption('Instakill on Miss', 'instakill', 'bool', false);
 		optionsArray.push(option);
 
@@ -89,6 +107,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 
 		var option:GameplayOption = new GameplayOption('Botplay', 'botplay', 'bool', false);
 		optionsArray.push(option);
+
 	}
 
 	public function getOptionByName(name:String)
@@ -175,6 +194,8 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 	var holdValue:Float = 0;
 	override function update(elapsed:Float)
 	{
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Gameplay Changers Menu.");
+
 		if (controls.UI_UP_P)
 		{
 			changeSelection(-1);

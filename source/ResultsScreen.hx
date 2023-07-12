@@ -1,5 +1,6 @@
 package;
 
+import utils.*;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
@@ -12,16 +13,20 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import Controls.Control;
 
 class ResultsScreen extends MusicBeatSubstate {
 	var background:FlxSprite;
 	var resultsText:FlxText;
+	var endText:FlxText;
 	var results:FlxText;
 	var songNameText:FlxText;
 	var difficultyNameTxt:FlxText;
 	var judgementCounterTxt:FlxText;
 	var pressEnterTxt:FlxText;
 	var pressEnterTxtSine:Float = 0;
+	var hits:Int = PlayState.instance.noteHit;
+	var cpuControl:Bool = PlayState.instance.cpuControlled;
 
 	public var iconPlayer1:HealthIcon;
 	public var iconPlayer2:HealthIcon;
@@ -92,14 +97,30 @@ class ResultsScreen extends MusicBeatSubstate {
 		difficultyNameTxt.updateHitbox();
 		add(difficultyNameTxt);
 
-		judgementCounterTxt = new FlxText(0, -5, FlxG.width, '', 86);
+		judgementCounterTxt = new FlxText(0, 450, FlxG.width, '', 86);
 		if(ClientPrefs.language == 'Russian')
 		{
+		if(hits == 0 && !cpuControl)
+		{
+		judgementCounterTxt.text = 'Счёт: 0\nПромахи: 0\nАккуратность: 0%';	
+		}
+		else
+		{
 		judgementCounterTxt.text = 'Счёт: ' + campaignScore + '\nПромахи: ' + songMisses + '\nАккуратность: ' + ratingPercent + '%';	
+		}
+	    }
+		else
+		{
+		if(hits == 0 && !cpuControl) 
+		{
+			judgementCounterTxt.text = 'Score: 0\nMisses: 0\nAccuracy: 0%';	
+
 		}
 		else
 		{
 		judgementCounterTxt.text = 'Score: ' + campaignScore + '\nMisses: ' + songMisses + '\nAccuracy: ' + ratingPercent + '%';
+
+		}
 		}
 		judgementCounterTxt.scrollFactor.set();
 		judgementCounterTxt.setFormat(Paths.font("vcr-rus.ttf"), 36, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -173,6 +194,8 @@ class ResultsScreen extends MusicBeatSubstate {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "Results.");
+
 
 		reloadPositions();
 
@@ -186,7 +209,7 @@ class ResultsScreen extends MusicBeatSubstate {
 		if(PlayState.instance.dad.healthIcon == null)
 			iconPlayer2.changeIcon('bf');
 		
-		if (FlxG.keys.justPressed.ENTER #if android || _virtualpad.buttonA.justPressed #end) {
+		if (controls.ACCEPT #if android || _virtualpad.buttonA.justPressed #end) {
 			if (PlayState.isStoryMode)
 				MusicBeatState.switchState(new StoryMenuState());
 			else

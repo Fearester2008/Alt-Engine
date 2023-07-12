@@ -139,7 +139,7 @@ class SUtil
 		Sys.println("Making a simple alert ...");
 
 		SUtil.applicationAlert("App Error!", errMsg);
-		System.exit(0);
+		System.exit(1);
 	}
 
 	private static function applicationAlert(title:String, description:String)

@@ -33,24 +33,24 @@ class CustomFadeTransition extends MusicBeatSubstate {
 		transGradient.scrollFactor.set();
 		add(transGradient);
 
-		transBlack = new FlxSprite().makeGraphic(width, height + 400, FlxColor.BLACK);
+		transBlack = new FlxSprite().makeGraphic(width + 600, height, FlxColor.BLACK);
 		transBlack.scrollFactor.set();
 		add(transBlack);
 
-		transGradient.x -= (width - FlxG.width) / 2;
-		transBlack.x = transGradient.x;
+		transGradient.y -= (height - FlxG.height) / 2;
+		transBlack.y = transGradient.y;
 
 		if(isTransIn) {
-			transGradient.y = transBlack.y - transBlack.height;
-			FlxTween.tween(transGradient, {y: transGradient.height + 50}, duration, {
+			transGradient.x = transBlack.x - transBlack.width;
+			FlxTween.tween(transGradient, {x: transGradient.width + 50}, duration, {
 				onComplete: function(twn:FlxTween) {
 					close();
 				},
 			ease: FlxEase.linear});
 		} else {
-			transGradient.y = -transGradient.height;
-			transBlack.y = transGradient.y - transBlack.height + 50;
-			leTween = FlxTween.tween(transGradient, {y: transGradient.height + 50}, duration, {
+			transGradient.x = -transGradient.width;
+			transBlack.x = transGradient.x - transBlack.width + 50;
+			leTween = FlxTween.tween(transGradient, {x: transGradient.width + 50}, duration, {
 				onComplete: function(twn:FlxTween) {
 					if(finishCallback != null) {
 						finishCallback();
@@ -68,15 +68,15 @@ class CustomFadeTransition extends MusicBeatSubstate {
 
 	override function update(elapsed:Float) {
 		if(isTransIn) {
-			transBlack.y = transGradient.y + transGradient.height;
+			transBlack.x = transGradient.x + transGradient.width;
 		} else {
-			transBlack.y = transGradient.y - transBlack.height;
+			transBlack.x = transGradient.x - transBlack.width;
 		}
 		super.update(elapsed);
 		if(isTransIn) {
-			transBlack.y = transGradient.y + transGradient.height;
+			transBlack.x = transGradient.x + transGradient.width;
 		} else {
-			transBlack.y = transGradient.y - transBlack.height;
+			transBlack.x = transGradient.x - transBlack.width;
 		}
 	}
 

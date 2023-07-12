@@ -20,6 +20,8 @@ class OutdatedState extends MusicBeatState
 	{
 		super.create();
 
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Update Check Menu.");
+
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(bg);
 
