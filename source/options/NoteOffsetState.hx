@@ -1,5 +1,6 @@
 package options;
 
+import utils.*;
 import flixel.util.FlxStringUtil;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -204,6 +205,9 @@ class NoteOffsetState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
+
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Note Offset Menu.");
+
 		var addNum:Int = 1;
 		if(FlxG.keys.pressed.SHIFT) addNum = 10;
 

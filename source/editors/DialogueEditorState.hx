@@ -1,4 +1,5 @@
 package editors;
+import utils.*;
 
 #if desktop
 import Discord.DiscordClient;
@@ -321,6 +322,8 @@ class DialogueEditorState extends MusicBeatState
 	var blockPressWhileTypingOn:Array<FlxUIInputText> = [];
 	var transitioning:Bool = false;
 	override function update(elapsed:Float) {
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Dialogue Editor Menu.");
+
 		if(transitioning) {
 			super.update(elapsed);
 			return;

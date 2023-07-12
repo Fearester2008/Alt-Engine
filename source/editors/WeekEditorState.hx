@@ -1,5 +1,7 @@
 package editors;
 
+import utils.*;
+
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -431,6 +433,9 @@ class WeekEditorState extends MusicBeatState
 	
 	override function update(elapsed:Float)
 	{
+
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Week Editor Menu.");
+
 		if(loadedWeek != null) {
 			weekFile = loadedWeek;
 			loadedWeek = null;

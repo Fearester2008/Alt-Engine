@@ -1,5 +1,6 @@
 package editors;
 
+import utils.*;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -92,6 +93,8 @@ class MasterEditorMenu extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Mod Editors Menu.");
+
 		if (controls.UI_UP_P)
 		{
 			changeSelection(-1);

@@ -1,5 +1,7 @@
 package editors;
 
+import utils.*;
+
 import Section.SwagSection;
 import Song.SwagSong;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -333,6 +335,8 @@ class EditorPlayState extends MusicBeatState
 	public var noteKillOffset:Float = 350;
 	public var spawnTime:Float = 2000;
 	override function update(elapsed:Float) {
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Test Song Chart Menu.");
+
 		if (FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justReleased.BACK #end)
 		{
 			FlxG.sound.music.pause();
@@ -513,7 +517,7 @@ class EditorPlayState extends MusicBeatState
 
 		keyShit();
 		scoreTxt.text = 'Hits: ' + songHits + ' | Misses: ' + songMisses;
-		sectionTxt.text = 'Beat: ' + curSection;
+		sectionTxt.text = 'Section: ' + curSection;
 		beatTxt.text = 'Beat: ' + curBeat;
 		stepTxt.text = 'Step: ' + curStep;
 		super.update(elapsed);

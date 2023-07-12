@@ -17,6 +17,7 @@ import flash.geom.Matrix;
  * A class primarily containing functions related
  * to formatting different data types to strings.
  */
+
 class TimeUtil
 {
     /**
@@ -27,20 +28,23 @@ class TimeUtil
      * @param EndTicks The second timestamp from the system.
      * @return A String containing the formatted time elapsed information.
      */
+
     public static inline function formatTicks(StartTicks:Int, EndTicks:Int):String
     {
         return (Math.abs(EndTicks - StartTicks) / 1000) + "s";
     }
-
-    public static function formativeTime(Seconds:Float, ShowMS:Bool = false):String
+   
+    public static function formativeTime(Seconds:Float, ?ShowMS:Bool = false, ?hoursEnabled:Bool = false):String
     {
         var time:Int = Std.int(Seconds);
         var hours:Int = Std.int(time / 3600);
         var minutes:Int = Std.int((time % 3600) / 60);
         var seconds:Int = Std.int(time % 60);
-        var timeString:String = (hours < 10 ? "0" : "") + hours + ":"
-                                + (minutes < 10 ? "0" : "") + minutes + ":"
-                                + (seconds < 10 ? "0" : "") + seconds;
+
+        var hhString:String = (hours < 10 ? "0" : "") + hours + ":";
+        var mmString:String = (minutes < 10 ? "0" : "") + minutes + ":";
+        var ssString:String = (seconds < 10 ? "0" : "") + seconds;
+        var timeString:String = if(hoursEnabled) hhString + mmString + ssString else mmString + ssString;
 
         if (ShowMS)
         {
@@ -49,5 +53,5 @@ class TimeUtil
         }
 
         return timeString;
-    }
+    }     
 }

@@ -1,4 +1,5 @@
 package editors;
+import utils.*;
 
 #if desktop
 import Discord.DiscordClient;
@@ -93,6 +94,7 @@ class ChartingState extends MusicBeatState
 		['Camera Follow Pos', "Value 1: X\nValue 2: Y\n\nThe camera won't change the follow point\nafter using this, for getting it back\nto normal, leave both values blank."],
 		['Alt Idle Animation', "Sets a specified suffix after the idle animation name.\nYou can use this to trigger 'idle-alt' if you set\nValue 2 to -alt\n\nValue 1: Character to set (Dad, BF or GF)\nValue 2: New suffix (Leave it blank to disable)"],
 		['Screen Shake', "Value 1: Camera shake\nValue 2: HUD shake\n\nEvery value works as the following example: \"1, 0.05\".\nThe first number (1) is the duration.\nThe second number (0.05) is the intensity."],
+		['NOther Shake', "Value 1: Notes Shake\nValue 2: Other Camera Shake"],
 		['Change Character', "Value 1: Character to change (Dad, BF, GF)\nValue 2: New character's name"],
 		['Change Scroll Speed', "Value 1: Scroll Speed Multiplier (1 is default)\nValue 2: Time it takes to change fully in seconds."],
 		['Set Property', "Value 1: Variable name\nValue 2: New value"]
@@ -1545,6 +1547,8 @@ class ChartingState extends MusicBeatState
 	var colorSine:Float = 0;
 	override function update(elapsed:Float)
 	{
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Chart Editor.");
+
 		curStep = recalculateSteps();
 
 		if(FlxG.sound.music.time < 0) {

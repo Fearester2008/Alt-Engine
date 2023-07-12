@@ -42,6 +42,14 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			false);
 		addOption(option);
 
+		var option:Option = new Option('Combo Stacking',
+			'if checked, ratings and numbers sprites will be stacking, and memory will be much loading.',
+			'Если флажок установлен, спрайты рейтингов и цифр будут группироваться, тем временем нагружать очень сильно вашу память.',
+			'stacking',
+			'bool',
+			true);
+		addOption(option);
+
 		//I'd suggest using "Downscroll" as an example for making your own option since it is the simplest here
 		var option:Option = new Option('Downscroll', //Name
 			'If checked, notes go Down instead of Up, simple enough.', //Description
@@ -77,7 +85,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 
 		var option:Option = new Option('Light Strums',
 			"If checked, your notes going to be lighting. [WITH BOTPLAY OR WHEN OPPONENT GOING TO BE ON NOTES!].",
-            'Если флажок установлен, ваши стрелки и стрелки противника будут подсвечиваться. [ПРИ ИГРЕ БОТОМ ИЛИ КОГДА ОППОНЕНТ БУДЕТ НАЖИМАТЬ НА СТРЕКЛКИ!].',
+            'Если флажок установлен, ваши стрелки и стрелки противника будут подсвечиваться. [ПРИ ИГРЕ БОТОМ ИЛИ КОГДА ОППОНЕНТ БУДЕТ НАЖИМАТЬ НА СТРЕЛКИ!].',
 			'lightStrums',
 			'bool',
 			true);

@@ -1,5 +1,7 @@
 package options;
 
+import utils.*;
+
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -93,6 +95,9 @@ class NotesSubState extends MusicBeatSubstate
 
 	var changingNote:Bool = false;
 	override function update(elapsed:Float) {
+
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Note Editor Menu.");
+
 		if(changingNote) {
 			if(holdTime < 0.5) {
 				if(controls.UI_LEFT_P) {

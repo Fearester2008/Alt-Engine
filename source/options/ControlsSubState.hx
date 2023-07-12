@@ -1,4 +1,5 @@
 package options;
+import utils.*;
 
 #if desktop
 import Discord.DiscordClient;
@@ -115,6 +116,7 @@ class ControlsSubState extends MusicBeatSubstate {
 	var leaving:Bool = false;
 	var bindingTime:Float = 0;
 	override function update(elapsed:Float) {
+
 		if(!rebindingKey) {
 			if (controls.UI_UP_P) {
 				changeSelection(-1);
@@ -182,6 +184,8 @@ class ControlsSubState extends MusicBeatSubstate {
 		if(nextAccept > 0) {
 			nextAccept -= 1;
 		}
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Controls Editor Menu.");
+
 		super.update(elapsed);
 	}
 

@@ -1,4 +1,5 @@
 package editors;
+import utils.*;
 
 #if desktop
 import Discord.DiscordClient;
@@ -1097,6 +1098,8 @@ class CharacterEditorState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Character Editor Menu.");
+
 		MusicBeatState.camBeat = FlxG.camera;
 		if(char.animationsArray[curAnim] != null) {
 			textAnim.text = char.animationsArray[curAnim].anim;

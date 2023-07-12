@@ -128,22 +128,22 @@ class FPS extends TextField
 			text += "\nAlt Engine version: " + VersionStuff.altEngineVersion;
 			text += "\nOperating system: " + '${lime.system.System.platformLabel}';
             }
-			textColor = 0xFF02FF74;
-			if (memoryMegas > 3000 || currentFPS <= ClientPrefs.framerate / 4)
+			textColor = 0xFF03069C;
+			if (memoryMegas > 3000)
 			{
-				textColor = 0xFFFF0000;
+				textColor = 0xFF830101;
 			}
 			if (memoryMegas > 2000)
 				{
-				textColor = 0xFFFF7B00;
+				textColor = 0xFFA14E00;
 				}
 			if (memoryMegas > 1000)
 				{
-				textColor = 0xFFE5FF00;
+				textColor = 0xFFB1C406;
 				}
 			if (memoryMegas > 500)
 				{
-				textColor = 0xFF2BFF00;
+				textColor = 0xFF1A8F03;
 				}
 
 			#if (gl_stats && !disable_cffi && (!html5 || !canvas))

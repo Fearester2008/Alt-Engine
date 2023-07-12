@@ -122,24 +122,6 @@ class VisualsUISubState extends BaseOptionsMenu
 		['FPS ALT', 'System', 'OG FPS', 'PE FPS']);
 	    addOption(option);
 
-		#if CHECK_FOR_UPDATES
-		var option:Option = new Option('Check for Updates',
-			'On Release builds, turn this on to check for updates when you start the game.',
-			'На выпущенных сборках будут проверяться обновления при старте игры.',
-			'checkForUpdates',
-			'bool',
-			true);
-		addOption(option);
-		#end
-
-		var option:Option = new Option('Combo Stacking',
-			"If unchecked, Ratings and Combo won't stack, saving on System Memory and making them easier to read",
-			'Если флажок не установлен, изображения рейтингов , комбо и цифр не будут кучковаться, что делает игру быстрее.',
-			'comboStacking',
-			'bool',
-			true);
-		addOption(option);
-
 		super();
 	}
 
@@ -148,5 +130,4 @@ class VisualsUISubState extends BaseOptionsMenu
 		if(Main.fpsVar != null)
 			Main.fpsVar.visible = ClientPrefs.showFPS;
 	}
-	
 }

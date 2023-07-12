@@ -1,5 +1,6 @@
 package options;
 
+import utils.*;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -30,7 +31,7 @@ using StringTools;
 
 class OptionsState extends MusicBeatState
 {
-	var options:Array<String> = ['Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay', 'Volume Settings'];
+	var options:Array<String> = ['Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay'];
 	private var grpOptions:FlxTypedGroup<FlixText>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
@@ -39,32 +40,35 @@ class OptionsState extends MusicBeatState
 	function openSelectedSubstate(label:String) {
 		switch(label) {
 			case 'Note Colors':
-				#if android
-				removeVirtualPad();
-				#end
 				openSubState(new options.NotesSubState());
+				#if android
+				removeVirtualPad();
+				#end
 			case 'Controls':
-				#if android
-				removeVirtualPad();
-				#end
 				openSubState(new options.ControlsSubState());
+				#if android
+				removeVirtualPad();
+				#end
 			case 'Graphics':
-				#if android
-				removeVirtualPad();
-				#end
 				openSubState(new options.GraphicsSettingsSubState());
+				#if android
+				removeVirtualPad();
+				#end
 			case 'Visuals and UI':
-				#if android
-				removeVirtualPad();
-				#end
 				openSubState(new options.VisualsUISubState());
-			case 'Gameplay':
 				#if android
 				removeVirtualPad();
 				#end
+			case 'Gameplay':
 				openSubState(new options.GameplaySettingsSubState());
+				#if android
+				removeVirtualPad();
+				#end
 			case 'Adjust Delay and Combo':
 				LoadingState.loadAndSwitchState(new options.NoteOffsetState());
+				#if android
+				removeVirtualPad();
+				#end
 		}
 	}
 
@@ -103,11 +107,6 @@ class OptionsState extends MusicBeatState
 		changeSelection();
 		ClientPrefs.saveSettings();
 
-		#if android
-		addVirtualPad(FULL, A_B_C);
-		addPadCamera();
-		#end
-			
 		super.create();
 	}
 
@@ -118,6 +117,9 @@ class OptionsState extends MusicBeatState
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
+
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Options Menu.");
+
 
 		if (controls.UI_UP_P) {
 			changeSelection(-1);

@@ -1,4 +1,5 @@
 package options;
+import utils.*;
 
 #if desktop
 import Discord.DiscordClient;
@@ -37,7 +38,6 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	private var checkboxGroup:FlxTypedGroup<CheckboxThingie>;
 	private var grpTexts:FlxTypedGroup<AttachedText>;
 
-	private var boyfriend:Character = null;
 	private var descBox:FlxSprite;
 	private var descText:FlxText;
 
@@ -48,6 +48,8 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	{
 		super();
 
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The " + title + " Menu.");
+
 		if(title == null) title = 'Options';
 		if(rpcTitle == null) rpcTitle = 'Options Menu';
 		
@@ -56,7 +58,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		#end
 		
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		bg.color = 0xFFea71fd;
+		bg.color = 0xff00ff73;
 		bg.screenCenter();
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
@@ -114,17 +116,12 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			}
 			//optionText.snapToPosition(); //Don't ignore me when i ask for not making a fucking pull request to uncomment this line ok
 
-			if(optionsArray[i].showBoyfriend && boyfriend == null)
-			{
-				reloadBoyfriend();
-			}
 			updateTextFrom(optionsArray[i]);
 		}
 
 		changeSelection();
 		reloadCheckboxes();
-		
-		#if android
+		#if android 
 		addVirtualPad(FULL, A_B_C);
 		addPadCamera();
 		#end
@@ -327,30 +324,8 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		descBox.setGraphicSize(Std.int(descText.width + 20), Std.int(descText.height + 25));
 		descBox.updateHitbox();
 
-		if(boyfriend != null)
-		{
-			boyfriend.visible = optionsArray[curSelected].showBoyfriend;
-		}
 		curOption = optionsArray[curSelected]; //shorter lol
 		FlxG.sound.play(Paths.sound('scrollMenu'));
-	}
-
-	public function reloadBoyfriend()
-	{
-		var wasVisible:Bool = false;
-		if(boyfriend != null) {
-			wasVisible = boyfriend.visible;
-			boyfriend.kill();
-			remove(boyfriend);
-			boyfriend.destroy();
-		}
-
-		boyfriend = new Character(840, 170, 'bf', true);
-		boyfriend.setGraphicSize(Std.int(boyfriend.width * 0.75));
-		boyfriend.updateHitbox();
-		boyfriend.dance();
-		insert(1, boyfriend);
-		boyfriend.visible = wasVisible;
 	}
 
 	function reloadCheckboxes() {
