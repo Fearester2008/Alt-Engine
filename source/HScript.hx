@@ -1,4 +1,4 @@
-package hscript;
+package;
 
 import FunkinLua;
 import animateatlas.AtlasFrameMaker;
