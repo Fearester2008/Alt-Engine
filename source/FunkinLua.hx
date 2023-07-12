@@ -47,7 +47,7 @@ import Type.ValueType;
 import Controls;
 import DialogueBoxPsych;
 
-#if HSCRIPT_ALLOWED
+#if hscript
 import hscript.Parser;
 import hscript.Interp;
 import hscript.Expr;
@@ -73,7 +73,7 @@ class FunkinLua {
 	public var scriptName:String = '';
 	public var closed:Bool = false;
 
-	#if HSCRIPT_ALLOWED
+	#if hscript
 	public static var hscript:HScript = null;
 	#end
 	
@@ -888,7 +888,7 @@ class FunkinLua {
 		Lua_helper.add_callback(lua, "runHaxeCode", function(codeToRun:String) {
 			var retVal:Dynamic = null;
 
-			#if HSCRIPT_ALLOWED
+			#if hscript
 			initHaxeModule();
 			try {
 				retVal = hscript.execute(codeToRun);
@@ -2764,7 +2764,7 @@ class FunkinLua {
 		return false;
 	}
 
-	#if HSCRIPT_ALLOWED
+	#if hscript
 	public function initHaxeModule()
 	{
 		if(hscript == null)
