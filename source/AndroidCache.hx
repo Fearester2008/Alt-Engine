@@ -13,9 +13,7 @@ import flixel.util.FlxTimer;
 import flixel.text.FlxText;
 import flixel.system.FlxSound;
 import lime.app.Application;
-#if windows
 import Discord.DiscordClient;
-#end
 import openfl.display.BitmapData;
 import openfl.utils.Assets;
 import haxe.Exception;
@@ -67,12 +65,15 @@ class AndroidCache extends FlxState
 		FlxG.mouse.visible = true;
 
 		FlxG.worldBounds.set(0,0);
-
+        
+		#if !android
 		bitmapData = new Map<String,FlxGraphic>();
 		bitmapData2 = new Map<String,FlxGraphic>();
+		#end
 
 		super.create();
 		
+
 		splash = new FlxSprite().loadGraphic(Paths.image("logoBump"));
 		splash.screenCenter();
 		splash.y -= 30;
@@ -98,7 +99,7 @@ class AndroidCache extends FlxState
 		loadingSpeen.antialiasing = true;
 		add(loadingSpeen);
 		
-		#if (android)
+		#if (cpp && !android)
 		for (i in FileSystem.readDirectory(SUtil.getPath() + "assets/shared/images/characters/"))
 		{
 			if (!i.endsWith(".png"))
@@ -184,7 +185,7 @@ class AndroidCache extends FlxState
 	
 	function cache()
 	{
-		#if (!linux && android)
+		#if (!linux && !android)
 
 		for (i in images)
 		{

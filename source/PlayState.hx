@@ -61,6 +61,7 @@ import FunkinLua;
 import DialogueBoxPsych;
 import Conductor.Rating;
 import flixel.system.FlxAssets.FlxShader;
+import stages.objects.*;
 
 #if !flash 
 import flixel.addons.display.FlxRuntimeShader;
@@ -83,7 +84,6 @@ class PlayState extends MusicBeatState
 	public static var STRUM_X = 42;
 	public static var STRUM_X_MIDDLESCROLL = -278;
 
-	public static var missMult:Int = 0;
     public var timeString:String;
     public static var fromPlayState:Bool = false;
 	public var elapsedTime:Float = 0;
@@ -328,7 +328,7 @@ class PlayState extends MusicBeatState
 	// stores the last combo score objects in an array
 	public static var lastScore:Array<FlxSprite> = [];
     
-	public var modeText:String = (isStoryMode) ? "Story Mode: " + WeekData.getCurrentWeek().weekName : "Freeplay:";
+	public var modeText:String = (isStoryMode) ? "Story Mode: " + WeekData.getCurrentWeek().weekName : "Freeplay ";
 
 	override public function create()
 	{
@@ -434,7 +434,7 @@ class PlayState extends MusicBeatState
 		}
 		else
 		{
-			detailsText = "Freeplay";
+			detailsText = "Freeplay: " + SONG.song;
 		}
 
 		// String for when the game is paused
@@ -876,11 +876,6 @@ class PlayState extends MusicBeatState
 					gfVersion = 'gf';
 			}
 
-			switch(Paths.formatToSongPath(SONG.song))
-			{
-				case 'stress':
-					gfVersion = 'pico-speaker';
-			}
 			SONG.gfVersion = gfVersion; //Fix for the Chart Editor
 		}
 
@@ -3924,7 +3919,6 @@ class PlayState extends MusicBeatState
 		//trace(noteDiff, ' ' + Math.abs(note.strumTime - Conductor.songPosition));
 
 		// boyfriend.playAnim('hey');
-		missMult = 0;
 		vocals.volume = 1;
 
 		var placement:String = Std.string(combo);
@@ -4299,10 +4293,9 @@ class PlayState extends MusicBeatState
 		});
 		combo = 0;
 		
-		if(!daNote.isSustainNote)
-		{
-		health -= (daNote.missHealth * healthLoss) * missMult;
-		}
+		
+		health -= (daNote.missHealth * healthLoss);
+
 		if(instakillOnMiss)
 		{
 			vocals.volume = 0;
@@ -4311,7 +4304,6 @@ class PlayState extends MusicBeatState
 
 		//For testing purposes
 		//trace(daNote.missHealth);
-		missMult++;
 		songMisses++;
 		vocals.volume = 0;
 		if(!practiceMode) songScore -= 10;
@@ -4476,15 +4468,11 @@ class PlayState extends MusicBeatState
 			if (!note.isSustainNote)
 			{
 				combo += 1;
-				missMult = 0;
 				noteHit += 1;
 				if(combo > 9999) combo = 9999;
 				popUpScore(note);
 			}
-			if(!note.isSustainNote)
-            {
             health += note.hitHealth * healthGain;
-            }
 			if(!note.noAnimation) {
 				var animToPlay:String = singAnimations[Std.int(Math.abs(note.noteData))];
 

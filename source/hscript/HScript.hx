@@ -81,7 +81,6 @@ class HScript
 		interp.variables.set('Alphabet', Alphabet);
 		interp.variables.set('Application', Application);
 		interp.variables.set('CustomSubState', CustomSubstate);
-        interp.variables.set('CustomState', CustomState);
 		#if (!flash && sys)
 		interp.variables.set('FlxRuntimeShader', FlxRuntimeShader);
 		#end
@@ -106,18 +105,6 @@ class HScript
 				return true;
 			}
 			return false;
-		});
-        interp.variables.set("import", function(lib:Dynamic, ?as:Null<Dynamic>) // Does this even work?
-		{
-			if (lib != null && Type.resolveClass(lib) != null)
-			{
-				interp.variables.set(as != null ? as : lib, Type.resolveClass(lib));
-			}
-			if (lib == null && Type.resolveClass(lib) == null)
-			{
-				Application.current.window.alert(lib + " not imported, please import it lib: \n" + lib, "Import Lib Error!!!");
-			}
-            
 		});
 	}
 

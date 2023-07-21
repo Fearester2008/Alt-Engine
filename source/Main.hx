@@ -98,8 +98,6 @@ class Main extends Sprite
 			fpsVar.visible = ClientPrefs.showFPS;
 		}
 
-		AppUtil.getAppData();
-
 		#if html5
 		FlxG.autoPause = false;
 		FlxG.mouse.visible = false;
@@ -154,7 +152,7 @@ class Main extends Sprite
 		#if desktop
 		InitDiscordRpcUtil.sleeping(true);
 		#end
-		//Sys.exit(1);
+		Sys.exit(1);
 	}
 	#end
 }

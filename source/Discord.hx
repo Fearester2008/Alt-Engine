@@ -1,5 +1,6 @@
 package;
 
+import lime.app.Application;
 import Sys.sleep;
 #if desktop
 import discord_rpc.DiscordRpc;
@@ -15,27 +16,61 @@ class DiscordClient
 {
 	#if desktop
 	public static var isInitialized:Bool = false;
+	private static var _defaultID:String =  "1104335650603417670";
+	public static var clientID(default, set):String = _defaultID;
+
+	private static var _settings:Dynamic = {
+		details: "In The Menus",
+		state: null,
+		largeImageKey: 'icon',
+		largeImageText: "Psych Engine",
+		smallImageKey: null,
+		startTimestamp: null,
+		endTimestamp: null
+	};
+
 	public function new()
 	{
 		trace("Discord Client starting...");
 		DiscordRpc.start({
-			clientID: "1104335650603417670",
+			clientID: clientID,
 			onReady: onReady,
 			onError: onError,
 			onDisconnected: onDisconnected
 		});
 		trace("Discord Client started.");
 
-		while (true)
+		var ID:String = clientID;
+		while (ID == clientID)
 		{
 			DiscordRpc.process();
 			sleep(2);
 			//trace("Discord Client Update");
 		}
 
-		DiscordRpc.shutdown();
+		// DiscordRpc.shutdown();
 	}
-
+	public static function check() {
+		if(!ClientPrefs.showDiscordActivity)
+		{
+			if(isInitialized) shutdown();
+			isInitialized = false;
+		}
+		else
+			{
+				start();
+			}
+	}
+	public static function start()
+	{
+			if(!isInitialized && ClientPrefs.showDiscordActivity)
+				{
+					initialize();
+					Application.current.window.onClose.add(function() {
+						shutdown();
+					});
+				}
+	}
 	public static function shutdown()
 	{
 		DiscordRpc.shutdown();
@@ -43,12 +78,21 @@ class DiscordClient
 	
 	static function onReady()
 	{
-		DiscordRpc.presence({
-			details: "In the Menus",
-			state: null,
-			largeImageKey: 'icon',
-			largeImageText: "Alt Engine"
-		});
+		DiscordRpc.presence(_settings);
+	}
+
+	private static function set_clientID(newID:String) {
+		var change:Bool = (clientID != newID);
+		clientID = newID;
+
+		if(change && isInitialized)
+		{
+			shutdown();
+			isInitialized = false;
+			start();
+			DiscordRpc.process();
+		}
+		return newID;
 	}
 
 	static function onError(_code:Int, _message:String)
@@ -94,6 +138,10 @@ class DiscordClient
 		//trace('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasStartTimestamp, $endTimestamp');
 	}
 
+	public static function resetID() {
+		clientID = _defaultID;
+	}
+	
 	#if LUA_ALLOWED
 	public static function addLuaCallbacks(lua:State) {
 		Lua_helper.add_callback(lua, "changePresence", function(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float) {

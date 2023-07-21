@@ -27,8 +27,8 @@ class ClientPrefs {
 	public static var camZooms:Bool = true;
 	public static var hideHud:Bool = false;
 	public static var healthBarAlpha:Float = 1;
+	public static var showDiscordActivity:Bool = true;
 
-	public static var winIcon:Bool = false;
 	public static var results:Bool = false;
 	public static var stacking:Bool = true;
 	public static var beatMode:String = 'Both camera';
@@ -120,6 +120,8 @@ class ClientPrefs {
 		FlxG.save.data.downScroll = downScroll;
 		FlxG.save.data.sysInfo = sysInfo;
 		FlxG.save.data.middleScroll = middleScroll;
+		FlxG.save.data.showDiscordActivity = showDiscordActivity;
+
 		FlxG.save.data.opponentStrums = opponentStrums;
 		FlxG.save.data.showFPS = showFPS;
 		FlxG.save.data.flashing = flashing;
@@ -181,6 +183,10 @@ class ClientPrefs {
 		if(FlxG.save.data.language != null) {
 		    language = FlxG.save.data.language;
 		}
+		if(FlxG.save.data.showDiscordActivity != null) {
+		    showDiscordActivity = FlxG.save.data.showDiscordActivity;
+		}
+		
 		if(FlxG.save.data.lightStrums != null) {
 			lightStrums = FlxG.save.data.lightStrums;
 		}

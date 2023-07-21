@@ -121,7 +121,13 @@ class VisualsUISubState extends BaseOptionsMenu
 		'OG FPS',
 		['FPS ALT', 'System', 'OG FPS', 'PE FPS']);
 	    addOption(option);
-
+		var option:Option = new Option('Use DiscordRPC',
+		'If unchecked, hides "Playing Box" in Discord.',
+		'Если флажок не установлен, прячет "Бокс с вашей игрой" в Дискорд.',
+		'showDiscordActivity',
+		'bool',
+		true);
+	addOption(option);
 		super();
 	}
 
@@ -130,4 +136,6 @@ class VisualsUISubState extends BaseOptionsMenu
 		if(Main.fpsVar != null)
 			Main.fpsVar.visible = ClientPrefs.showFPS;
 	}
+
+	
 }

@@ -2,7 +2,6 @@ package;
 
 import utils.*;
 
-
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -32,8 +31,10 @@ class MainMenuState extends MusicBeatState
 	public static var firstStart:Bool = true;
 	public static var finishedAnim:Bool = true;
 
+	var bgItems:FlxSprite;
 	var menuItems:FlxTypedGroup<FlxSprite>;
 	var logoBl:FlxSprite;
+
 	private var camGame:FlxCamera;
 	private var camAchievement:FlxCamera;
 	
@@ -94,16 +95,12 @@ class MainMenuState extends MusicBeatState
 		var yScroll:Float = Math.max(0.25 - (0.05 * (options.length - 4)), 0.1);
 		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
 		bg.setGraphicSize(Std.int(bg.width * 1.175));
-		bg.scrollFactor.x = 0;
-		bg.scrollFactor.y = 0.10;
 		bg.updateHitbox();
 		bg.screenCenter();
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
 
 		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
-		magenta.scrollFactor.x = 0;
-		magenta.scrollFactor.y = 0.10;
 		magenta.setGraphicSize(Std.int(magenta.width * 1.175));
 		magenta.updateHitbox();
 		magenta.screenCenter();
@@ -112,8 +109,7 @@ class MainMenuState extends MusicBeatState
 		magenta.color = 0xFFfd719b;
 		add(magenta);
 		
-		// magenta.scrollFactor.set();
-		var bgItems:FlxSprite = new FlxSprite(-80).makeGraphic(600, 1360, FlxColor.BLACK);
+		bgItems = new FlxSprite(-600).makeGraphic(650, 1360, FlxColor.BLACK);
 		bgItems.updateHitbox();
 		bgItems.angle = 10;
 		bgItems.screenCenter(Y);
@@ -141,7 +137,7 @@ class MainMenuState extends MusicBeatState
 		for (i in 0...options.length)
 		{
 			var offset:Float = 108 - (Math.max(options.length, 4) - 4) * 80;
-			var menuItem:FlxSprite = new FlxSprite(90, (i * 140)  + offset);
+			var menuItem:FlxSprite = new FlxSprite(-500, (i * 140)  + offset);
 			menuItem.scale.x = scale;
 			menuItem.scale.y = scale;
 			menuItem.frames = Paths.getSparrowAtlas('mainmenu/menu_' + options[i]);
@@ -160,11 +156,21 @@ class MainMenuState extends MusicBeatState
 
 			if(firstStart)
 			{
-				FlxTween.tween(menuItem, {y: 60 + (i * 160)}, 1 + (i * 0.25), {
-					ease: FlxEase.expoInOut, 
+						FlxTween.tween(menuItem, {y: 60 + (i * 160)}, 1 + (i * 0.25), {
+							ease: FlxEase.expoInOut, 
+							onComplete: function(tween:FlxTween)
+							{
+								changeItem();
+							}
+						});
+						FlxTween.tween(menuItem, {x: 90}, 1 + (i * 0.25), {
+							ease: FlxEase.expoInOut
+						});
+					
+				FlxTween.tween(bgItems, {x: -130}, 1, {
+					ease: FlxEase.backInOut, 
 					onComplete: function(tween:FlxTween)
 					{
-						finishedAnim = true;
 						changeItem();
 					}
 				});
@@ -246,8 +252,8 @@ class MainMenuState extends MusicBeatState
 					{
 						if (curSelected != spr.ID)
 						{
-							FlxTween.tween(spr, {x: -900 , alpha: 0}, 0.4, {
-								ease: FlxEase.quadOut,
+							FlxTween.tween(spr, {x: -900}, 1, {
+								ease: FlxEase.backInOut,
 								onComplete: function(twn:FlxTween)
 								{
 									spr.kill();
@@ -256,11 +262,19 @@ class MainMenuState extends MusicBeatState
 						}
 						else
 						{
-							FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
-							{
-								openSelectedSubstate(options[curSelected]);
-							});
+							
+								FlxTween.tween(spr, {x: -900}, 1, {
+									ease: FlxEase.backInOut,
+									onComplete: function(twn:FlxTween)
+									{
+										openSelectedSubstate(options[curSelected]);
+									}
+								});
 						}
+					});
+					
+					FlxTween.tween(bgItems, {x: -800}, 1, {
+						ease: FlxEase.backInOut
 					});
 			}
 			#if (desktop || android)
@@ -317,14 +331,14 @@ class MainMenuState extends MusicBeatState
 				if(menuItems.length > 4) {
 					add = menuItems.length * 8;
 				}
-				FlxTween.tween(spr, {x: 130}, 0.3, {
+				FlxTween.tween(spr, {x: 130}, 0.2, {
 					ease: FlxEase.circInOut
 				});
 				spr.centerOffsets();
 			}
 			else
 			{
-				FlxTween.tween(spr, {x: 90}, 0.3, {
+				FlxTween.tween(spr, {x: 90}, 0.2, {
 					ease: FlxEase.circInOut
 				});
 			}
