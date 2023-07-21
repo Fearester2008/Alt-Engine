@@ -13,14 +13,7 @@ class InitDiscordRpcUtil
     {
         if(init)
         {
-        if(!DiscordClient.isInitialized)
-            {
-                DiscordClient.initialize();
-                Application.current.window.onClose.add(function()
-                {
-                    DiscordClient.shutdown();
-                });
-            }
+        DiscordClient.start();
         }
     }
     public static function sleeping(turn:Bool = false)

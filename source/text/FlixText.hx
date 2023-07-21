@@ -41,7 +41,7 @@ class FlixText extends FlxSpriteGroup {
                 }
                 if(changedX)
                 {
-                theText.x = FlxMath.lerp(theText.x, theXPos, CoolUtil.boundTo(elapsed * 32, 0, 1));	
+                theText.x = FlxMath.lerp(theText.x, 90 + (scaledY * 15), CoolUtil.boundTo(elapsed * 32, 0, 1));	
                 }
             }
         super.update(elapsed);
