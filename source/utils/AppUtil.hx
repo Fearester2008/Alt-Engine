@@ -4,6 +4,11 @@ import lime.app.Application;
 import utils.*;
 import flixel.util.FlxColor;
 
+#if LUA_ALLOWED
+import llua.Lua;
+import llua.State;
+#end
+
 using StringTools;
 
 class AppUtil {
@@ -58,4 +63,21 @@ class AppUtil {
                return;
    
             }
+    #if LUA_ALLOWED
+        public static function addLuasCallbacks(state:State)
+    {
+        		Lua_helper.add_callback(lua, "getAppData", function() {
+			getAppData();
+		});
+		Lua_helper.add_callback(lua, "setAppData", function(title:String, ?version:String, ?action:String) {
+			setAppData(title, version, action);
+		});
+		Lua_helper.add_callback(lua, "setAppTitle", function(title:String) {
+			setAppTitle(title);
+		});
+		Lua_helper.add_callback(lua, "setAppVersion", function(ver:String) {
+		    setAppVersion(ver);
+		});
+    }
+    #end
 }
