@@ -64,7 +64,7 @@ class AppUtil {
    
             }
     #if LUA_ALLOWED
-        public static function addLuasCallbacks(state:State)
+        public static function addLuasCallbacks(lua:State)
     {
         		Lua_helper.add_callback(lua, "getAppData", function() {
 			getAppData();
