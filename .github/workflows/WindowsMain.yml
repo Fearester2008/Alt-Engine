@@ -67,4 +67,4 @@ jobs:
         uses: actions/upload-artifact@v2.2.4
         with:
           name: Windows Build
-          path: export/release/windows/bin/app/build/outputs/exe/debug
+          path: export/release/windows/bin
