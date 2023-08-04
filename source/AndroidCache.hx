@@ -66,10 +66,8 @@ class AndroidCache extends FlxState
 
 		FlxG.worldBounds.set(0,0);
         
-		#if !android
 		bitmapData = new Map<String,FlxGraphic>();
 		bitmapData2 = new Map<String,FlxGraphic>();
-		#end
 
 		super.create();
 		
@@ -99,7 +97,7 @@ class AndroidCache extends FlxState
 		loadingSpeen.antialiasing = true;
 		add(loadingSpeen);
 		
-		#if (cpp && !android)
+		#if (cpp && android)
 		for (i in FileSystem.readDirectory(SUtil.getPath() + "assets/shared/images/characters/"))
 		{
 			if (!i.endsWith(".png"))
@@ -185,14 +183,14 @@ class AndroidCache extends FlxState
 	
 	function cache()
 	{
-		#if (!linux && !android)
+		#if (!linux && android)
 
 		for (i in images)
 		{
 			var replaced = i.replace(".png","");
-			var data:BitmapData = BitmapData.fromFile("assets/shared/images/characters" + i);
+			var data:BitmapData = BitmapData.fromFile(SUtil.getPath() + "assets/shared/images/characters" + i);
 			#if MODS_ALLOWED
-			var data:BitmapData = BitmapData.fromFile("mods/images/characters" + i);
+			var data:BitmapData = BitmapData.fromFile(SUtil.getPath() + "mods/images/characters" + i);
 			#end
 			var graph = FlxGraphic.fromBitmapData(data);
 			graph.persist = true;
@@ -204,9 +202,9 @@ class AndroidCache extends FlxState
         for (i in images)
 			{
 				var replaced = i.replace(".png","");
-				var data:BitmapData = BitmapData.fromFile("assets/shared/images/" + i);
+				var data:BitmapData = BitmapData.fromFile(SUtil.getPath() + "assets/shared/images/" + i);
 				#if MODS_ALLOWED
-				var data:BitmapData = BitmapData.fromFile("mods/images/" + i);
+				var data:BitmapData = BitmapData.fromFile(SUtil.getPath() + "mods/images/" + i);
 				#end
 				var graph = FlxGraphic.fromBitmapData(data);
 				graph.persist = true;
@@ -220,7 +218,6 @@ class AndroidCache extends FlxState
 			doneFiles++;
 			trace(i);
 			loaded = true;
-
 		}
 		#end
 
