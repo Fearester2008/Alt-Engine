@@ -69,8 +69,8 @@ class NotesSubState extends MusicBeatSubstate
 				grpNumbers.add(optionText);
 			}
 
-			var note:FlxSprite = new FlxSprite(posX, yPos);
-			note.frames = Paths.getSparrowAtlas('NOTE_assets');
+			var note:FlxSprite = new FlxSprite(posX - 70, yPos);
+			note.frames = Paths.getSparrowAtlas('NOTE_assets', 'shared');
 			var animations:Array<String> = ['purple0', 'blue0', 'green0', 'red0'];
 			note.animation.addByPrefix('idle', animations[i]);
 			note.animation.play('idle');
