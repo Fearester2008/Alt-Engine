@@ -146,9 +146,14 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			changeSelection(1);
 		}
 
+		
 		if (controls.BACK) {
-			close();
-			FlxG.sound.play(Paths.sound('cancelMenu'));
+		#if android
+		FlxG.resetState();
+		#else
+		close();
+		#end
+		FlxG.sound.play(Paths.sound('cancelMenu'));
 		}
 
 		if(nextAccept <= 0)
