@@ -40,14 +40,29 @@ class OptionsState extends MusicBeatState
 	function openSelectedSubstate(label:String) {
 		switch(label) {
 			case 'Note Colors':
+				#if android
+				removeVirtualPad();
+				#end
 				openSubState(new options.NotesSubState());
 			case 'Controls':
+				#if android
+				removeVirtualPad();
+				#end
 				openSubState(new options.ControlsSubState());
 			case 'Graphics':
+				#if android
+				removeVirtualPad();
+				#end
 				openSubState(new options.GraphicsSettingsSubState());
 			case 'Visuals and UI':
+				#if android
+				removeVirtualPad();
+				#end
 				openSubState(new options.VisualsUISubState());
 			case 'Gameplay':
+				#if android
+				removeVirtualPad();
+				#end
 				openSubState(new options.GameplaySettingsSubState());
 			case 'Adjust Delay and Combo':
 				MusicBeatState.switchState(new options.NoteOffsetState());
@@ -90,8 +105,7 @@ class OptionsState extends MusicBeatState
 		ClientPrefs.saveSettings();
 
 		#if android
-		addVirtualPad(UP_DOWN, A_B_C);
-		addPadCamera();
+		addVirtualPad(UP_DOWN, A_B);
 		#end
 			
 		super.create();
