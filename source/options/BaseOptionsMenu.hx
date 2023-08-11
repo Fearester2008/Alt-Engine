@@ -1,6 +1,6 @@
 package options;
-import utils.*;
 
+import utils.*;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -48,8 +48,6 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	{
 		super();
 
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The " + title + " Menu.");
-
 		if(title == null) title = 'Options';
 		if(rpcTitle == null) rpcTitle = 'Options Menu';
 		
@@ -58,7 +56,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		#end
 		
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		bg.color = 0xff00b7ff;
+		bg.color = 0xFFea71fd;
 		bg.screenCenter();
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
@@ -121,7 +119,8 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 		changeSelection();
 		reloadCheckboxes();
-		#if android 
+		
+		#if android
 		addVirtualPad(FULL, A_B_C);
 		addPadCamera();
 		#end
@@ -137,6 +136,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	var holdValue:Float = 0;
 	override function update(elapsed:Float)
 	{
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The " + title + " Menu.");
 		if (controls.UI_UP_P)
 		{
 			changeSelection(-1);
@@ -324,6 +324,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		descBox.setGraphicSize(Std.int(descText.width + 20), Std.int(descText.height + 25));
 		descBox.updateHitbox();
 
+		
 		curOption = optionsArray[curSelected]; //shorter lol
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 	}
