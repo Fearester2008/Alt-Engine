@@ -38,40 +38,36 @@ class OptionsState extends MusicBeatState
 	public static var fromPlayState:Bool = false;
 
 	function openSelectedSubstate(label:String) {
-		switch(label) {
+		switch (label) {
 			case 'Note Colors':
+				#if android
+				removeVirtualPad();
+				#end
 				openSubState(new options.NotesSubState());
-				#if android
-				removeVirtualPad();
-				#end
 			case 'Controls':
+				#if android
+				removeVirtualPad();
+				#end
 				openSubState(new options.ControlsSubState());
-				#if android
-				removeVirtualPad();
-				#end
 			case 'Graphics':
+				#if android
+				removeVirtualPad();
+				#end
 				openSubState(new options.GraphicsSettingsSubState());
-				#if android
-				removeVirtualPad();
-				#end
 			case 'Visuals and UI':
+				#if android
+				removeVirtualPad();
+				#end
 				openSubState(new options.VisualsUISubState());
-				#if android
-				removeVirtualPad();
-				#end
 			case 'Gameplay':
+				#if android
+				removeVirtualPad();
+				#end
 				openSubState(new options.GameplaySettingsSubState());
-				#if android
-				removeVirtualPad();
-				#end
 			case 'Adjust Delay and Combo':
-				LoadingState.loadAndSwitchState(new options.NoteOffsetState());
-				#if android
-				removeVirtualPad();
-				#end
+				MusicBeatState.switchState(new options.NoteOffsetState());
 		}
 	}
-
 	var selectorLeft:Alphabet;
 	var selectorRight:Alphabet;
 
