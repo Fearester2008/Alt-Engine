@@ -90,13 +90,18 @@ class NotesSubState extends MusicBeatSubstate
 		hsbText.scaleY = 0.6;
 		add(hsbText);
 
+		#if android
+		addVirtualPad(FULL, A_B_C);
+		addPadCamera();
+		#end
+			
 		changeSelection();
 	}
 
 	var changingNote:Bool = false;
 	override function update(elapsed:Float) {
 
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Note Editor Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Note Settings Menu.");
 
 		if(changingNote) {
 			if(holdTime < 0.5) {
