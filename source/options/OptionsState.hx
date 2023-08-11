@@ -1,6 +1,6 @@
 package options;
-
 import utils.*;
+
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -9,7 +9,6 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import text.*;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
@@ -25,6 +24,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
+import text.*;
 import Controls;
 
 using StringTools;
@@ -35,8 +35,8 @@ class OptionsState extends MusicBeatState
 	private var grpOptions:FlxTypedGroup<FlixText>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
-        public static var fromPlayState:Bool = false;
-	
+	public static var fromPlayState:Bool = false;
+
 	function openSelectedSubstate(label:String) {
 		switch(label) {
 			case 'Note Colors':
@@ -65,7 +65,7 @@ class OptionsState extends MusicBeatState
 				#end
 				openSubState(new options.GameplaySettingsSubState());
 			case 'Adjust Delay and Combo':
-			MusicBeatState.switchState(new options.NoteOffsetState());
+				MusicBeatState.switchState(new options.NoteOffsetState());
 		}
 	}
 
@@ -73,9 +73,6 @@ class OptionsState extends MusicBeatState
 	var selectorRight:Alphabet;
 
 	override function create() {
-		Paths.clearStoredMemory();
-		Paths.clearUnusedMemory();
-
 		#if desktop
 		DiscordClient.changePresence("Options Menu", null);
 		#end
@@ -108,9 +105,10 @@ class OptionsState extends MusicBeatState
 		ClientPrefs.saveSettings();
 
 		#if android
-		addVirtualPad(UP_DOWN, A_B);
+		addVirtualPad(FULL, A_B_C);
+		addPadCamera();
 		#end
-
+			
 		super.create();
 	}
 
@@ -121,8 +119,7 @@ class OptionsState extends MusicBeatState
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Options Menu.");
+AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Options Menu.");
 
 		if (controls.UI_UP_P) {
 			changeSelection(-1);
@@ -132,7 +129,7 @@ class OptionsState extends MusicBeatState
 		}
 
 		if (controls.BACK) {
-		FlxG.sound.play(Paths.sound('cancelMenu'));
+			FlxG.sound.play(Paths.sound('cancelMenu'));
 			if(PlayState.instance != null && OptionsState.fromPlayState)
 			{
 				FlxG.sound.music.volume = 0;
