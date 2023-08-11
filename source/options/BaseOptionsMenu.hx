@@ -1,5 +1,6 @@
 package options;
 
+import flixel.addons.transition.FlxTransitionableState;
 import utils.*;
 #if desktop
 import Discord.DiscordClient;
@@ -150,6 +151,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		if (controls.BACK) {
 		#if android
 		FlxG.resetState();
+		FlxTransitionableState.skipNextTransOut = true;
 		#else
 		close();
 		#end
