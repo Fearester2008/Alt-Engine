@@ -1,5 +1,6 @@
 package options;
 
+import utils.*;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -8,7 +9,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.addons.transition.FlxTransitionableState;
+import text.*;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
@@ -31,10 +32,11 @@ using StringTools;
 class OptionsState extends MusicBeatState
 {
 	var options:Array<String> = ['Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay'];
-	private var grpOptions:FlxTypedGroup<Alphabet>;
+	private var grpOptions:FlxTypedGroup<FlixText>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
-
+        public static var fromPlayState:Bool = false;
+	
 	function openSelectedSubstate(label:String) {
 		switch(label) {
 			case 'Note Colors':
@@ -63,7 +65,7 @@ class OptionsState extends MusicBeatState
 				#end
 				openSubState(new options.GameplaySettingsSubState());
 			case 'Adjust Delay and Combo':
-				LoadingState.loadAndSwitchState(new options.NoteOffsetState());
+			MusicBeatState.switchState(new options.NoteOffsetState());
 		}
 	}
 
@@ -86,12 +88,12 @@ class OptionsState extends MusicBeatState
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
 
-		grpOptions = new FlxTypedGroup<Alphabet>();
+		grpOptions = new FlxTypedGroup<FlixText>();
 		add(grpOptions);
 
 		for (i in 0...options.length)
 		{
-			var optionText:FlixText = new Alphabet(0, 0, options[i], true);
+			var optionText:FlixText = new FlixText(0, 0, options[i], 45, FlxColor.WHITE, LEFT);
 			optionText.screenCenter();
 			optionText.y += (100 * (i - (options.length / 2))) + 50;
 			grpOptions.add(optionText);
@@ -101,22 +103,6 @@ class OptionsState extends MusicBeatState
 		//add(selectorLeft);
 		selectorRight = new Alphabet(0, 0, '<', true);
 		//add(selectorRight);
-
-		changeSelection();
-		ClientPrefs.saveSettings();
-
-		#if android
-		var tipText:FlxText = new FlxText(10, 12, 0, 'Press X to Go In Android Controls Menu', 16);
-		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		tipText.borderSize = 2;
-		tipText.scrollFactor.set();
-		add(tipText);
-		var tipText:FlxText = new FlxText(10, 32, 0, 'Press Y to Go In Hitbox Settings Menu', 16);
-		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		tipText.borderSize = 2;
-		tipText.scrollFactor.set();
-		add(tipText);
-		#end
 
 		changeSelection();
 		ClientPrefs.saveSettings();
@@ -136,6 +122,8 @@ class OptionsState extends MusicBeatState
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Options Menu.");
+
 		if (controls.UI_UP_P) {
 			changeSelection(-1);
 		}
@@ -144,8 +132,17 @@ class OptionsState extends MusicBeatState
 		}
 
 		if (controls.BACK) {
-			FlxG.sound.play(Paths.sound('cancelMenu'));
-			MusicBeatState.switchState(new MainMenuState());
+		FlxG.sound.play(Paths.sound('cancelMenu'));
+			if(PlayState.instance != null && OptionsState.fromPlayState)
+			{
+				FlxG.sound.music.volume = 0;
+				MusicBeatState.switchState(new PlayState());
+				OptionsState.fromPlayState = false;
+			}
+			else
+			{
+				MusicBeatState.switchState(new MainMenuState());
+			}
 		}
 
 		if (controls.ACCEPT) {
