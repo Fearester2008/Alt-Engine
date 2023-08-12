@@ -10,7 +10,7 @@ import flixel.text.FlxText;
 class FlixText extends FlxSpriteGroup {
     public var theText:FlxText;
     public var targetY:Float = 0;
-    public var isMenu:Bool = false;
+    public var isMenuItem:Bool = false;
     public var theXPos:Float = 0;
     public var changedX:Bool = false;
     public var changedY:Bool = true;
@@ -33,7 +33,7 @@ class FlixText extends FlxSpriteGroup {
 
     override function update(elapsed:Float) { //hehe boi, Alphabet.hx update code.
         var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3); 
-        if (isMenu)
+        if (isMenuItem)
             {    
                 if(changedY)
                 {
@@ -41,7 +41,7 @@ class FlixText extends FlxSpriteGroup {
                 }
                 if(changedX)
                 {
-                theText.x = FlxMath.lerp(theText.x, 90 + (scaledY * 15), CoolUtil.boundTo(elapsed * 32, 0, 1));	
+                theText.x = FlxMath.lerp(theText.x, theXPos, CoolUtil.boundTo(elapsed * 32, 0, 1));	
                 }
             }
         super.update(elapsed);
