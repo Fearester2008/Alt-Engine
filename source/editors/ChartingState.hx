@@ -1562,7 +1562,7 @@ class ChartingState extends MusicBeatState
 		}
 		Conductor.songPosition = FlxG.sound.music.time;
 		_song.song = UI_songTitle.text;
-
+		_song.composer = UI_songComposer.text;
 		strumLineUpdateY();
 		for (i in 0...8){
 			strumLineNotes.members[i].y = strumLine.y;

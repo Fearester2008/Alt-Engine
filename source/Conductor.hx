@@ -1,7 +1,6 @@
 package;
 
 import Song.SwagSong;
-import flixel.FlxG;
 
 typedef BPMChangeEvent =
 {
@@ -151,6 +150,7 @@ class Conductor
 		stepCrochet = crochet / 4;
 	}
 }
+
 class Rating
 {
 	public var name:String = '';
@@ -160,22 +160,17 @@ class Rating
 	public var ratingMod:Float = 1;
 	public var score:Int = 550;
 	public var noteSplash:Bool = true;
-    public var hits:Int = 0;
-    public var percent:Float = 0;
 
 	public function new(name:String)
 	{
 		this.name = name;
 		this.image = name;
 		this.counter = name + 's';
-		this.hitWindow = 0;
-
-		var window:String = name + 'Window';
-		try
+		this.hitWindow = Reflect.field(ClientPrefs, name + 'Window');
+		if(hitWindow == null)
 		{
-			this.hitWindow = Reflect.field(ClientPrefs, window);
+			hitWindow = 0;
 		}
-		catch(e) FlxG.log.error(e);
 	}
 
 	public function increase(blah:Int = 1)

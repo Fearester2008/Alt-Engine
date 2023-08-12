@@ -74,6 +74,8 @@ class FreeplayState extends MusicBeatState
 	var bg:FlxSprite;
 	var intendedColor:Int;
 	var colorTween:FlxTween;
+	
+
 
 	override function create()
 	{
@@ -146,7 +148,7 @@ class FreeplayState extends MusicBeatState
 		for (i in 0...songs.length)
 		{
 			var songText:FlixText = new FlixText(90, 320, i + 1 + ". " + songs[i].songName,45, FlxColor.WHITE, LEFT);
-			songText.isMenu = true;
+			songText.isMenuItem = true;
 			songText.changedX = false;
 			songText.targetY = i - curSelected;
 			grpSongs.add(songText);

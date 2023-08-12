@@ -38,7 +38,6 @@ import flixel.system.FlxAssets.FlxShader;
 import flixel.addons.display.FlxRuntimeShader;
 #end
 import lime.app.Application;
-import utils.*;
 #if sys
 import sys.FileSystem;
 import sys.io.File;
@@ -54,7 +53,7 @@ import hscript.Interp;
 import hscript.Expr;
 #end
 import hscript.HScript;
- 
+
 #if desktop
 import Discord;
 #end
@@ -905,22 +904,6 @@ class FunkinLua {
 			if(retVal == null) Lua.pushnil(lua);
 			return retVal;
 		});
-		Lua_helper.add_callback(lua, "import", function(libName:String, ?libPackage:String = "") {
-			#if hscript
-			initHaxeModule();
-			try {
-					var dyn:String = "";
-					if(libPackage.length > 0)
-						dyn = libPackage + ".";
-
-					hscript.variables.set(libName, Type.resolveClass(dyn + libName));
-			}
-			catch(e:Dynamic) {
-				luaTrace(scriptName.replace(SUtil.getPath(), "") + ":" + lastCalledFunction + " - " + e, false, false, FlxColor.RED);
-				Application.current.window.alert(scriptName.replace(SUtil.getPath(), "") + ":" + lastCalledFunction + " - " + e, "HLUA Error!!!");
-			}
-			#end
-		});  
 
 		Lua_helper.add_callback(lua, "loadSong", function(?name:String = null, ?difficultyNum:Int = -1) {
 			if(name == null || name.length < 1)
@@ -942,22 +925,7 @@ class FunkinLua {
 				PlayState.instance.vocals.volume = 0;
 			}
 		});
-		Lua_helper.add_callback(lua, "getAppData", function() {
-			AppUtil.getAppData();
-		});
-		Lua_helper.add_callback(lua, "setAppData", function(title:String, ?version:String, ?action:String) {
-			AppUtil.setAppData(title, version, action);
-		});
-		Lua_helper.add_callback(lua, "setAppTitle", function(title:String) {
-			AppUtil.setAppTitle(title);
-		});
-		Lua_helper.add_callback(lua, "setAppVersion", function(ver:String) {
-			AppUtil.setAppVersion(ver);
-		});
-		Lua_helper.add_callback(lua, "formatTime", function(sec:Float, ?showMS:Bool, ?showHH:Bool) {
-			var str:String = TimeUtil.formativeTime(sec, showMS, showHH);
-			return str;
-		});
+
 		Lua_helper.add_callback(lua, "loadGraphic", function(variable:String, image:String, ?gridX:Int = 0, ?gridY:Int = 0) {
 			var killMe:Array<String> = variable.split('.');
 			var spr:FlxSprite = getObjectDirectly(killMe[0]);
@@ -3392,6 +3360,40 @@ class CustomSubstate extends MusicBeatSubstate
 	override function destroy()
 	{
 		PlayState.instance.callOnLuas('onCustomSubstateDestroy', [name]);
+		super.destroy();
+	}
+}
+class CustomState extends MusicBeatState
+{
+	public static var name:String = 'unnamed';
+	public static var instance:CustomState;
+
+	override function create()
+	{
+		instance = this;
+
+		PlayState.instance.callOnLuas('onCustomStateCreate', [name]);
+		super.create();
+		PlayState.instance.callOnLuas('onCustomStateCreatePost', [name]);
+	}
+	
+	public function new(name:String)
+	{
+		CustomState.name = name;
+		super();
+		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+	}
+	
+	override function update(elapsed:Float)
+	{
+		PlayState.instance.callOnLuas('onCustomStateUpdate', [name, elapsed]);
+		super.update(elapsed);
+		PlayState.instance.callOnLuas('onCustomStateUpdatePost', [name, elapsed]);
+	}
+
+	override function destroy()
+	{
+		PlayState.instance.callOnLuas('onCustomStateDestroy', [name]);
 		super.destroy();
 	}
 }

@@ -58,6 +58,14 @@ class VisualsUISubState extends BaseOptionsMenu
 			'Time Left',
 			['Time Left', 'Time Elapsed', 'Song Name', 'Disabled', 'Time Length', 'Song Percentage', 'Time Length Percent']);
 		addOption(option);
+		var option:Option = new Option('Time Bar Style:',
+			"What should the Time Bar style?",
+			'Каким должен быть стиль бара таймера?',
+			'timeBarVisual',
+			'string',
+			'Alt New',
+	['Psych', 'Alt New', 'Alt Old'/*, 'Song Name'*/]);
+		addOption(option);
         var option:Option = new Option('Language: ',
 			"What should be the language?",
 			'Каким должен быть язык?',
@@ -136,6 +144,4 @@ class VisualsUISubState extends BaseOptionsMenu
 		if(Main.fpsVar != null)
 			Main.fpsVar.visible = ClientPrefs.showFPS;
 	}
-
-	
 }

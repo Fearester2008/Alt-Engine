@@ -29,9 +29,11 @@ class ClientPrefs {
 	public static var healthBarAlpha:Float = 1;
 	public static var showDiscordActivity:Bool = true;
 
+	public static var winIcon:Bool = false;
 	public static var results:Bool = false;
 	public static var stacking:Bool = true;
 	public static var beatMode:String = 'Both camera';
+	public static var timeBarVisual:String = 'Psych';
 	public static var beatType:String = '1/16';
     public static var screenRes:String = '1280x720';
     public static var judgementCounter:Bool = false;
@@ -111,7 +113,9 @@ class ClientPrefs {
 
         FlxG.save.data.hitboxmode = hitboxmode;
 	FlxG.save.data.hitboxalpha = hitboxalpha;
-	
+	FlxG.save.data.timeBarVisual = timeBarVisual;
+	FlxG.save.data.showDiscordActivity = showDiscordActivity;
+
         FlxG.save.data.screenRes = screenRes;
         FlxG.save.data.results = results;
 		FlxG.save.data.stacking = stacking;
@@ -120,8 +124,6 @@ class ClientPrefs {
 		FlxG.save.data.downScroll = downScroll;
 		FlxG.save.data.sysInfo = sysInfo;
 		FlxG.save.data.middleScroll = middleScroll;
-		FlxG.save.data.showDiscordActivity = showDiscordActivity;
-
 		FlxG.save.data.opponentStrums = opponentStrums;
 		FlxG.save.data.showFPS = showFPS;
 		FlxG.save.data.flashing = flashing;
@@ -171,8 +173,14 @@ class ClientPrefs {
         if(FlxG.save.data.iconBop != null) {
 			iconBop = FlxG.save.data.iconBop;
 		}
+		if(FlxG.save.data.showDiscordActivity != null) {
+		    showDiscordActivity = FlxG.save.data.showDiscordActivity;
+		}
 		if(FlxG.save.data.healthBarAlpha != null) {
 			healthBarAlpha = FlxG.save.data.healthBarAlpha;
+		}
+		if(FlxG.save.data.timeBarVisual != null) {
+			timeBarVisual = FlxG.save.data.timeBarVisual;
 		}
 		if(FlxG.save.data.results != null) {
 			results = FlxG.save.data.results;
@@ -183,10 +191,6 @@ class ClientPrefs {
 		if(FlxG.save.data.language != null) {
 		    language = FlxG.save.data.language;
 		}
-		if(FlxG.save.data.showDiscordActivity != null) {
-		    showDiscordActivity = FlxG.save.data.showDiscordActivity;
-		}
-		
 		if(FlxG.save.data.lightStrums != null) {
 			lightStrums = FlxG.save.data.lightStrums;
 		}

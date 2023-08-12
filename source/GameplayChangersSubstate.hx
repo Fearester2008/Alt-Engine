@@ -82,6 +82,14 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		option.displayFormat = '%vX';
 		optionsArray.push(option);
 
+		var voption:GameplayOption = new GameplayOption('Playback Rate', 'songspeed', 'float', 1);
+		voption.scrollSpeed = 2.0;
+		voption.minValue = 0.35;
+		voption.changeValue = 0.05;
+		voption.decimals = 2;
+		voption.maxValue = 5;
+		optionsArray.push(voption);
+
 		var option:GameplayOption = new GameplayOption('Instakill on Miss', 'instakill', 'bool', false);
 		optionsArray.push(option);
 
@@ -177,9 +185,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 	var holdValue:Float = 0;
 	override function update(elapsed:Float)
 	{
-		AppUtil.setAppData('title', "Friday Night Funkin'");
-		AppUtil.setAppData('version', VersionStuff.altEngineVersion + VersionStuff.stage);
-		AppUtil.setAppData('action', "Changing Gameplay Settings.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Gameplay Changers Menu.");
 
 		if (controls.UI_UP_P)
 		{
