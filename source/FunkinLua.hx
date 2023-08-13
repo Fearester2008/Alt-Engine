@@ -160,7 +160,7 @@ class FunkinLua {
 		set('hits', 0);
 
 		set('rating', 0);
-		set('version', MainMenuState.altEngineVersion.trim());
+		set('version', VersionStuff.altEngineVersion.trim());
 		set('appVersion',  Application.current.meta.get('version'));
 		
 		set('inGameOver', false);
