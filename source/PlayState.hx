@@ -329,7 +329,7 @@ class PlayState extends MusicBeatState
 	// stores the last combo score objects in an array
 	public static var lastScore:Array<FlxSprite> = [];
     
-	public var modeText:String = (isStoryMode) ? "Story Mode: " + WeekData.getCurrentWeek().weekName : "Freeplay:";
+	public var modeText:String = (isStoryMode) ? "Story Mode: " + WeekData.getCurrentWeek().weekName : "Freeplay";
 
 	override public function create()
 	{
@@ -2976,10 +2976,11 @@ class PlayState extends MusicBeatState
 					switch(ClientPrefs.timeBarType)
 					{
 						case 'Time Left' | 'Time Elapsed':
-						timeString = TimeUtil.formativeTime(secondsTotal, false) + " " + SONG.song;
+						timeString = TimeUtil.formativeTime(secondsTotal, false) + " - " + SONG.song;
 						songWatermark.visible = false;
 						musicianWatermark.visible = false;
 						waterBg.visible = false;
+                    	AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, modeText + " - Playing: " + SONG.song + " On  " + timeString);
 						case 'Song Name':
 						timeString = SONG.song + ' - ' + CoolUtil.difficultyString();
 						AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, modeText);
@@ -2996,15 +2997,14 @@ class PlayState extends MusicBeatState
 						waterBg.visible = false;
 						AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In " + SONG.song + " Mode: " + modeText);
 						case 'Song Percentage':
-						AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, modeText + " - Playing: " + SONG.song);
-						timeString = '${HelperFunctions.truncateFloat(songPercent * 100, 1)}%' + " - " + SONG.song;
+						timeString = '${HelperFunctions.truncateFloat(songPercent * 100, 0)}%' + " - " + SONG.song;
 						AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, modeText + " - Playing: " + SONG.song);
 						case 'Time Length':
-							AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, modeText + " - Playing: " + SONG.song + " On  " + timeString);
+						AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, modeText + " - Playing: " + SONG.song + " On  " + timeString);
 						timeString = '${TimeUtil.formativeTime(secondsTotal, false)} - ${TimeUtil.formativeTime(totalTime, false)}';
 						case 'Time Length Percent':
-						timeString = '${HelperFunctions.truncateFloat(songPercent * 100, 1)}% - (${TimeUtil.formativeTime(secondsTotal, false)} / ${TimeUtil.formativeTime(Std.int(totalTime), false)})';
-						AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, modeText + " - Playing: " + SONG.song + " On: " + timeString);
+						timeString = '${HelperFunctions.truncateFloat(songPercent * 100, 0)}% - (${TimeUtil.formativeTime(secondsTotal, false)} / ${TimeUtil.formativeTime(Std.int(totalTime), false)})';
+						AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, " - " + modeText);
 					}
 				}
 			}
