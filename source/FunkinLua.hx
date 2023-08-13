@@ -1,5 +1,6 @@
 package;
 
+import lime.app.Application;
 import openfl.display.BitmapData;
 #if LUA_ALLOWED
 import llua.Lua;
@@ -37,7 +38,7 @@ import flixel.system.FlxAssets.FlxShader;
 #if (!flash && sys)
 import flixel.addons.display.FlxRuntimeShader;
 #end
-import lime.app.Application;
+
 #if sys
 import sys.FileSystem;
 import sys.io.File;
@@ -52,6 +53,7 @@ import hscript.Parser;
 import hscript.Interp;
 import hscript.Expr;
 #end
+
 import hscript.HScript;
 
 #if desktop
@@ -118,8 +120,6 @@ class FunkinLua {
 		set('inChartEditor', false);
 
 		// Song/Week shit
-		set('hasVoices',PlayState.SONG.needsVoices);
-		set('composer', PlayState.SONG.composer);
 		set('curBpm', Conductor.bpm);
 		set('bpm', PlayState.SONG.bpm);
 		set('scrollSpeed', PlayState.SONG.speed);
@@ -160,13 +160,16 @@ class FunkinLua {
 		set('hits', 0);
 
 		set('rating', 0);
-		set('version', VersionStuff.altEngineVersion.trim());
+		set('version', MainMenuState.altEngineVersion.trim());
 		set('appVersion',  Application.current.meta.get('version'));
-
+		
 		set('inGameOver', false);
 		set('mustHitSection', false);
 		set('altAnim', false);
 		set('gfSection', false);
+
+		set('hasVoices',PlayState.SONG.needsVoices);
+		set('composer', PlayState.SONG.composer);
 
 		// Gameplay settings
 		set('healthGainMult', PlayState.instance.healthGain);
@@ -206,6 +209,7 @@ class FunkinLua {
 		set('cameraZoomOnBeat', ClientPrefs.camZooms);
 		set('flashingLights', ClientPrefs.flashing);
 		set('noteOffset', ClientPrefs.noteOffset);
+		set('healthBarAlpha', ClientPrefs.healthBarAlpha);
 		set('noResetButton', ClientPrefs.noReset);
 		set('lowQuality', ClientPrefs.lowQuality);
 		set('shadersEnabled', ClientPrefs.shaders);
@@ -903,6 +907,22 @@ class FunkinLua {
 			if(retVal != null && !isOfTypes(retVal, [Bool, Int, Float, String, Array])) retVal = null;
 			if(retVal == null) Lua.pushnil(lua);
 			return retVal;
+		});
+
+		Lua_helper.add_callback(lua, "addHaxeLibrary", function(libName:String, ?libPackage:String = '') {
+			#if hscript
+			initHaxeModule();
+			try {
+				var str:String = '';
+				if(libPackage.length > 0)
+					str = libPackage + '.';
+
+				hscript.variables.set(libName, Type.resolveClass(str + libName));
+			}
+			catch (e:Dynamic) {
+				luaTrace(scriptName + ":" + lastCalledFunction + " - " + e, false, false, FlxColor.RED);
+			}
+			#end
 		});
 
 		Lua_helper.add_callback(lua, "loadSong", function(?name:String = null, ?difficultyNum:Int = -1) {
@@ -3360,40 +3380,6 @@ class CustomSubstate extends MusicBeatSubstate
 	override function destroy()
 	{
 		PlayState.instance.callOnLuas('onCustomSubstateDestroy', [name]);
-		super.destroy();
-	}
-}
-class CustomState extends MusicBeatState
-{
-	public static var name:String = 'unnamed';
-	public static var instance:CustomState;
-
-	override function create()
-	{
-		instance = this;
-
-		PlayState.instance.callOnLuas('onCustomStateCreate', [name]);
-		super.create();
-		PlayState.instance.callOnLuas('onCustomStateCreatePost', [name]);
-	}
-	
-	public function new(name:String)
-	{
-		CustomState.name = name;
-		super();
-		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
-	}
-	
-	override function update(elapsed:Float)
-	{
-		PlayState.instance.callOnLuas('onCustomStateUpdate', [name, elapsed]);
-		super.update(elapsed);
-		PlayState.instance.callOnLuas('onCustomStateUpdatePost', [name, elapsed]);
-	}
-
-	override function destroy()
-	{
-		PlayState.instance.callOnLuas('onCustomStateDestroy', [name]);
 		super.destroy();
 	}
 }
