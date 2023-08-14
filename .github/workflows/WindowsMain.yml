@@ -32,6 +32,7 @@ jobs:
       - name: Install Haxelib
         run: |
           haxelib setup C:/haxelib
+          haxelib remove hxcpp
           haxelib git hxcpp https://github.com/Fearester2008/hxcpp
           haxelib install lime 7.9.0
           haxelib install openfl 9.1.0
