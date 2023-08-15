@@ -21,7 +21,6 @@ import flixel.util.FlxTimer;
 class PauseSubState extends MusicBeatSubstate
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
-
 	var menuItems:Array<String> = [];
 	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty',#if android 'Debug Mode', #end 'Options', 'Exit to menu'];
 	var difficultyChoices = [];
@@ -34,15 +33,15 @@ class PauseSubState extends MusicBeatSubstate
 	var curTime:Float = Math.max(0, Conductor.songPosition);
 	public static var goToOptions:Bool = false;
 	public static var goBack:Bool = false;
-	public static var elapsedNowTime:Float = 0;
-	public static var eString:String;
-
+	public static var elapsedTime:Int = 0;
+	var timeTest:String = '';
 	public static var songName:String = '';
+	public static var openedState:Bool = false;
 
 	public function new(x:Float, y:Float)
 	{
 		super();
-
+		openedState = true;
 		if(CoolUtil.difficulties.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
 
 		if(PlayState.chartingMode)
@@ -173,7 +172,13 @@ class PauseSubState extends MusicBeatSubstate
 	override function update(elapsed:Float)
 	{
 
-		cantUnpause -= elapsed;
+		if(openedState)
+		{
+	    elapsedTime++;
+		}
+		timeTest = TimeUtil.startTimer(((elapsedTime / 12) / 2.2));
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "Paused - " + PlayState.SONG.song + " Elapsed: " + timeTest);
+
 		if (pauseMusic.volume < 0.7)
 			pauseMusic.volume += 0.01 * elapsed;
 
@@ -389,6 +394,7 @@ class PauseSubState extends MusicBeatSubstate
 	    switch (option)
 			{
 				case "Resume":
+					elapsedTime = 0;
 					close();
 				case 'Change Difficulty':
 					menuItems = difficultyChoices;
@@ -398,12 +404,15 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.instance.practiceMode = !PlayState.instance.practiceMode;
 					PlayState.changedDifficulty = true;
 					practiceText.visible = PlayState.instance.practiceMode;
-				case "Restart Song":
+				case "Restart Song": 
+					elapsedTime = 0;
 					restartSong();
 				case "Leave Charting Mode":
+					elapsedTime = 0;
 					restartSong();
 					PlayState.chartingMode = false;
 				case 'Skip Time':
+					elapsedTime = 0;
 					if(curTime < Conductor.songPosition)
 					{
 						PlayState.startOnTime = curTime;
@@ -419,6 +428,7 @@ class PauseSubState extends MusicBeatSubstate
 						close();
 					}
 				case "End Song":
+					elapsedTime = 0;
 					close();
 					PlayState.instance.finishSong(true);
 				case 'Toggle Botplay':
@@ -426,15 +436,18 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.changedDifficulty = true;
 					PlayState.instance.botplaySine = 0;
 				case 'Debug Mode':
+					elapsedTime = 0;
 					MusicBeatState.switchState(new editors.ChartingState());
 					PlayState.chartingMode = true;
 				case "Options":
+					elapsedTime = 0;
 						PlayState.seenCutscene = true;
 						options.OptionsState.fromPlayState = true;
 						MusicBeatState.switchState(new options.OptionsState());
 						FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song));
 						FlxG.sound.music.fadeIn(2, 0, 1);
 				case "Exit to menu":
+					elapsedTime = 0;
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;
 

@@ -173,7 +173,6 @@ class PlayState extends MusicBeatState
 	
 	public var gfSpeed:Int = 1;
 	public var health:Float = 1;
-	public var shownHealth:Float = 1;
 	public var combo:Int = 0;
 
 	private var healthBarBG:AttachedSprite;
@@ -335,6 +334,8 @@ class PlayState extends MusicBeatState
 	{
 		Paths.clearStoredMemory();
 
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "Loading - " + SONG.song + " In " + modeText);
+		
 		// for lua
 		instance = this;
         precacheList.set(SONG.song, 'music');
@@ -424,8 +425,6 @@ class PlayState extends MusicBeatState
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
 		
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "Loading - " + SONG.song + " In " + modeText);
-
 		#if desktop
 		storyDifficultyText = CoolUtil.difficulties[storyDifficulty];
 
@@ -962,7 +961,7 @@ class PlayState extends MusicBeatState
 			timeTxt = new FlxText(600, (!ClientPrefs.downScroll) ? 28 : FlxG.height - 32, FlxG.width, "", 20);
 			timeTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			case 'Psych':
-			timeTxt = new FlxText(STRUM_X + (FlxG.width / 2) - 248, 12, 900, "", 32);
+			timeTxt = new FlxText(STRUM_X + (FlxG.width / 2) - 248, (!ClientPrefs.downScroll) ? 14 : FlxG.height - 32, 900, "", 32);
 			timeTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		}
 		
@@ -972,10 +971,7 @@ class PlayState extends MusicBeatState
 		timeTxt.borderSize = 2;
 		timeTxt.visible = showTime;
 
-		if(ClientPrefs.timeBarType == 'Song Name')
-		{
-			timeTxt.text = SONG.song + ' [ ' + CoolUtil.difficultyString() + ' ]';
-		}
+		
 		updateTime = showTime;
 
 		switch(ClientPrefs.timeBarVisual)
@@ -989,7 +985,7 @@ class PlayState extends MusicBeatState
 		timeBar.createImageBar(Paths.image('timebars/new/timeBar-new'), Paths.image('timebars/new/timeBarProgress-new'), FlxColor.RED, FlxColor.GREEN);
 		timeBar.color = FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]);
 		case 'Psych':
-		timeBar = new FlxBar(timeTxt.x + 4, 19, LEFT_TO_RIGHT, 400, 19, this, 'songPercent', 0, 1);
+		timeBar = new FlxBar(timeTxt.x + 4, (!ClientPrefs.downScroll) ? 24 : FlxG.height - 24, LEFT_TO_RIGHT, 400, 19, this, 'songPercent', 0, 1);
 		timeBar.createImageBar(Paths.image('timebars/psych/timeBarBG'),Paths.image('timebars/psych/timeBar'), FlxColor.BLACK, FlxColor.WHITE);
 		}
 
@@ -1119,7 +1115,7 @@ class PlayState extends MusicBeatState
 		if(ClientPrefs.downScroll) healthBarBG.y = 0.11 * FlxG.height;
 
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
-			'shownHealth', 0, 2);
+			'health', 0, 2);
 		healthBar.scrollFactor.set();
 		// healthBar
 		healthBar.visible = !ClientPrefs.hideHud || !cpuControlled;
@@ -1127,12 +1123,12 @@ class PlayState extends MusicBeatState
 		add(healthBar);
 		healthBarBG.sprTracker = healthBar;
 
-		waterBg = new FlxSprite(1020, healthBarBG.y - 50).makeGraphic(420, 60, 0xFF000000);
+		waterBg = new FlxSprite(1020, (!ClientPrefs.downScroll) ? healthBarBG.y - 50 : (healthBarBG.y + 50)).makeGraphic(420, 60, 0xFF000000);
 		waterBg.alpha = 0.6;
 		waterBg.visible = !ClientPrefs.hideHud;
 		add(waterBg);	
 
-		songWatermark = new FlxText(0, healthBarBG.y - 50, FlxG.width ,SONG.song + " - " + CoolUtil.difficultyString(), 28);
+		songWatermark = new FlxText(0, (!ClientPrefs.downScroll) ? healthBarBG.y - 50 : (healthBarBG.y + 50), FlxG.width ,SONG.song + " - " + CoolUtil.difficultyString(), 28);
 		songWatermark.setFormat(Paths.font("vcr-rus.ttf"), 20, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		songWatermark.scrollFactor.set();
 		songWatermark.screenCenter(X);
@@ -1141,7 +1137,7 @@ class PlayState extends MusicBeatState
 
 		var mStr:String = (SONG.composer != null) ? "By: " + SONG.composer : "";
 
-		musicianWatermark = new FlxText(0, healthBarBG.y - 30, FlxG.width , mStr, 28);
+		musicianWatermark = new FlxText(0, songWatermark.y + 20 , FlxG.width , mStr, 28);
 		musicianWatermark.setFormat(Paths.font("vcr-rus.ttf"), 20, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		musicianWatermark.scrollFactor.set();
 		musicianWatermark.screenCenter(X);
@@ -1193,14 +1189,14 @@ class PlayState extends MusicBeatState
 			case 'Alt Old' | 'Alt New':
 			if(ClientPrefs.language == "English")
 			{
-			botplayTxt = new FlxText(400, (!ClientPrefs.downScroll) ? timeBar.y + 55 : timeBar.y - 55, FlxG.width - 800, (cpuControlled) ? "BOTPLAY" : "NOT BOTPLAY", 32);
+			botplayTxt = new FlxText(400, (!ClientPrefs.downScroll) ? timeBar.y + 55 : timeBar.y - 55, FlxG.width - 800, "BOTPLAY", 32);
 			}
 			else
 			{
-			botplayTxt = new FlxText(400, (!ClientPrefs.downScroll) ? timeBar.y + 55 : timeBar.y - 55, FlxG.width - 800, (cpuControlled) ? "ИГРА БОТОМ" : "БОТА НЕТ", 32);
+			botplayTxt = new FlxText(400, (!ClientPrefs.downScroll) ? timeBar.y + 55 : timeBar.y - 55, FlxG.width - 800, "ИГРА БОТОМ", 32);
 			}
 			case 'Psych':
-			botplayTxt = new FlxText(400, timeBar.y + 55, FlxG.width - 800, "BOTPLAY", 32);
+			botplayTxt = new FlxText(400, (!ClientPrefs.downScroll) ? timeBar.y + 55 : timeBar.y - 55, FlxG.width - 800, "BOTPLAY", 32);
 		}
 
 		botplayTxt.setFormat(Paths.font("vcr-rus.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -1208,6 +1204,22 @@ class PlayState extends MusicBeatState
 		botplayTxt.borderSize = 1.25;
 		botplayTxt.visible = cpuControlled;
 		add(botplayTxt);
+
+		switch(ClientPrefs.timeBarType)
+					{
+						case 'Time Left' | 'Time Elapsed':
+						songWatermark.visible = false;
+						musicianWatermark.visible = false;
+						waterBg.visible = false;
+						case 'Song Name':
+						songWatermark.visible = false;
+						musicianWatermark.visible = false;
+						waterBg.visible = false;
+						case 'Time Length':
+						songWatermark.visible = false;
+						musicianWatermark.visible = false;
+						waterBg.visible = false;
+					}
 
 		for(hud in [healthBar,healthBarBG,scoreTextBG,iconP1,iconP2,scoreTxt,botplayTxt,timeBar,timeTxt,doof,songWatermark,musicianWatermark,waterBg,judgementCounter])
 		hud.cameras = [camHUD];
@@ -2728,8 +2740,11 @@ class PlayState extends MusicBeatState
 	override public function update(elapsed:Float)
 	{
 		callOnLuas('onUpdate', [elapsed]);
-		elapsedTime = elapsed * 1000;
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, modeText + " " + timeString);
+		if(ClientPrefs.timeBarType != 'Disabled')
+			AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, modeText + " | " + timeString);
+			else
+			AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, modeText);
+
 		if(timeString == null)
 		{
 			timeString = "";
@@ -2892,7 +2907,6 @@ class PlayState extends MusicBeatState
 
 		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
 		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
-		shownHealth = FlxMath.lerp(shownHealth, health, CoolUtil.boundTo(elapsed * 7, 0, 1));
         if(ClientPrefs.iconBop == 'Psych')
         {
 		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
@@ -2973,38 +2987,26 @@ class PlayState extends MusicBeatState
 
 					timeTxt.text = timeString;
 					var totalTime:Float = Math.floor(songLength / 1000) / playbackRate;
+					if(ClientPrefs.timeBarType != 'Disabled')
+					AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, modeText + " | " + timeString);
+					else
+					AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, modeText + " - " + SONG.song);
+
 					switch(ClientPrefs.timeBarType)
 					{
 						case 'Time Left' | 'Time Elapsed':
-						timeString = TimeUtil.formativeTime(secondsTotal, false) + " - " + SONG.song;
-						songWatermark.visible = false;
-						musicianWatermark.visible = false;
-						waterBg.visible = false;
-                    	AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, modeText + " - Playing: " + SONG.song + " On  " + timeString);
+						timeString = TimeUtil.formativeTime(secondsTotal, false) + " [ " + SONG.song + " ]";
 						case 'Song Name':
 						timeString = SONG.song + ' - ' + CoolUtil.difficultyString();
-						AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, modeText);
-						songWatermark.visible = false;
-						musicianWatermark.visible = false;
-						waterBg.visible = false;
 						case 'Disabled':
 						timeString = "";
-						AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, modeText + " - " + SONG.song);
+						AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, modeText + " - " + SONG.song);
 						case 'Time Length':
 						timeString = '${TimeUtil.formativeTime(secondsTotal, false)} - ${TimeUtil.formativeTime(totalTime, false)}' + " - " + SONG.song;
-						songWatermark.visible = false;
-						musicianWatermark.visible = false;
-						waterBg.visible = false;
-						AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In " + SONG.song + " Mode: " + modeText);
 						case 'Song Percentage':
 						timeString = '${HelperFunctions.truncateFloat(songPercent * 100, 0)}%' + " - " + SONG.song;
-						AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, modeText + " - Playing: " + SONG.song);
-						case 'Time Length':
-						AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, modeText + " - Playing: " + SONG.song + " On  " + timeString);
-						timeString = '${TimeUtil.formativeTime(secondsTotal, false)} - ${TimeUtil.formativeTime(totalTime, false)}';
 						case 'Time Length Percent':
 						timeString = '${HelperFunctions.truncateFloat(songPercent * 100, 0)}% - (${TimeUtil.formativeTime(secondsTotal, false)} / ${TimeUtil.formativeTime(Std.int(totalTime), false)})';
-						AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, " - " + modeText);
 					}
 				}
 			}
@@ -3231,7 +3233,7 @@ class PlayState extends MusicBeatState
 			vocals.pause();
 		}
 		openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "Paused - " + SONG.song + " On " + timeString + " In " + modeText);
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "Paused - " + SONG.song + " On " + timeString + " In " + modeText);
 
 		//}
 
@@ -3251,7 +3253,7 @@ class PlayState extends MusicBeatState
 		#if desktop
 		DiscordClient.changePresence("Chart Editor", null, null, true);
 		#end
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Chart Mode - " + SONG.song);
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Chart Mode - " + SONG.song);
 	}
 
 	public var isDead:Bool = false; //Don't mess with this on Lua!!!
@@ -3279,7 +3281,7 @@ class PlayState extends MusicBeatState
 				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x - boyfriend.positionArray[0], boyfriend.getScreenPosition().y - boyfriend.positionArray[1], camFollowPos.x, camFollowPos.y));
 
 				// MusicBeatState.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-				AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "Game Over - " + PlayState.SONG.song + " In " + modeText);
+				AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "Game Over - " + PlayState.SONG.song + " In " + modeText);
 
 				#if desktop
 				// Game Over doesn't get his own variable because it's only used here
@@ -4550,10 +4552,9 @@ class PlayState extends MusicBeatState
 				if(combo > 9999) combo = 9999;
 				popUpScore(note);
 			}
-			if(!note.isSustainNote)
-            {
+			
             health += note.hitHealth * healthGain;
-            }
+            
 			if(!note.noAnimation) {
 				var animToPlay:String = singAnimations[Std.int(Math.abs(note.noteData))];
 
