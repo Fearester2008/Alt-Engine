@@ -1,6 +1,6 @@
 package options;
 import utils.*;
-import flixel.addons.transition.FlxTransitionableState;
+
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -111,8 +111,7 @@ class ControlsSubState extends MusicBeatSubstate {
 			}
 		}
 		#if android
-		addVirtualPad(FULL, A_B);
-		addPadCamera();
+		addVirtualPad(UP_DOWN, A_B);
 		#end
 		changeSelection();
 	}
@@ -134,12 +133,7 @@ class ControlsSubState extends MusicBeatSubstate {
 
 			if (controls.BACK) {
 				ClientPrefs.reloadControls();
-				#if android
-				FlxTransitionableState.skipNextTransOut = true;
-				FlxG.resetState();
-				#else
 				close();
-				#end
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 			}
 
@@ -193,7 +187,7 @@ class ControlsSubState extends MusicBeatSubstate {
 		if(nextAccept > 0) {
 			nextAccept -= 1;
 		}
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Controls Editor Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Controls Editor Menu.");
 
 		super.update(elapsed);
 	}

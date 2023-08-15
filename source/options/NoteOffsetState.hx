@@ -194,10 +194,10 @@ class NoteOffsetState extends MusicBeatState
 		FlxG.sound.playMusic(Paths.music('offsetSong'), 1, true);
 
 		#if android
-		addVirtualPad(FULL, A_B_C);
+		addVirtualPad(UP_DOWN, A_B);
 		addPadCamera();
 		#end
-			
+
 		super.create();
 	}
 
@@ -211,7 +211,7 @@ class NoteOffsetState extends MusicBeatState
 	override public function update(elapsed:Float)
 	{
 
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Note Offset Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Note Offset Menu.");
 
 		var addNum:Int = 1;
 		if(FlxG.keys.pressed.SHIFT) addNum = 10;

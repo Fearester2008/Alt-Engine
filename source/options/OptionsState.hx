@@ -1,6 +1,6 @@
 package options;
-import utils.*;
 
+import utils.*;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -40,32 +40,32 @@ class OptionsState extends MusicBeatState
 	function openSelectedSubstate(label:String) {
 		switch(label) {
 			case 'Note Colors':
-				#if android
-				removeVirtualPad();
-				#end
 				openSubState(new options.NotesSubState());
+				#if android
+				removeVirtualPad();
+				#end
 			case 'Controls':
-				#if android
-				removeVirtualPad();
-				#end
 				openSubState(new options.ControlsSubState());
+				#if android
+				removeVirtualPad();
+				#end
 			case 'Graphics':
-				#if android
-				removeVirtualPad();
-				#end
 				openSubState(new options.GraphicsSettingsSubState());
+				#if android
+				removeVirtualPad();
+				#end
 			case 'Visuals and UI':
-				#if android
-				removeVirtualPad();
-				#end
 				openSubState(new options.VisualsUISubState());
-			case 'Gameplay':
 				#if android
 				removeVirtualPad();
 				#end
+			case 'Gameplay':
 				openSubState(new options.GameplaySettingsSubState());
+				#if android
+				removeVirtualPad();
+				#end
 			case 'Adjust Delay and Combo':
-				MusicBeatState.switchState(new options.NoteOffsetState());
+				LoadingState.loadAndSwitchState(new options.NoteOffsetState());
 		}
 	}
 
@@ -78,7 +78,7 @@ class OptionsState extends MusicBeatState
 		#end
 
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		bg.color = 0xFFea71fd;
+		bg.color = 0xff00ff88;
 		bg.updateHitbox();
 
 		bg.screenCenter();
@@ -90,9 +90,8 @@ class OptionsState extends MusicBeatState
 
 		for (i in 0...options.length)
 		{
-			var optionText:FlixText = new FlixText(0, 0, options[i], 45, FlxColor.WHITE, LEFT);
-			optionText.screenCenter();
-			optionText.y += (100 * (i - (options.length / 2))) + 50;
+			var optionText:FlixText = new FlixText(0, 0, options[i], 60, FlxColor.WHITE, LEFT);
+			optionText.y += (150 * (i - (options.length / 2))) + 50;
 			grpOptions.add(optionText);
 		}
 
@@ -107,7 +106,6 @@ class OptionsState extends MusicBeatState
 		#if android
 		addVirtualPad(UP_DOWN, A_B);
 		#end
-			
 		super.create();
 	}
 
@@ -118,7 +116,8 @@ class OptionsState extends MusicBeatState
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Options Menu.");
+
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Options Menu.");
 
 		if (controls.UI_UP_P) {
 			changeSelection(-1);

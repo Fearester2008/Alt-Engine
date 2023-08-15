@@ -1,4 +1,5 @@
 package options;
+import flixel.addons.transition.FlxTransitionableState;
 import utils.*;
 
 #if desktop
@@ -48,7 +49,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	{
 		super();
 
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The " + title + " Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The " + title + " Menu.");
 
 		if(title == null) title = 'Options';
 		if(rpcTitle == null) rpcTitle = 'Options Menu';
@@ -147,7 +148,12 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		}
 
 		if (controls.BACK) {
-			close();
+		#if android
+		FlxG.resetState();
+		FlxTransitionableState.skipNextTransOut = true;
+		#else
+		close();
+		#end
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 		}
 
