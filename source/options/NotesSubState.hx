@@ -2,6 +2,7 @@ package options;
 
 import utils.*;
 
+import flixel.addons.transition.FlxTransitionableState;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -91,7 +92,7 @@ class NotesSubState extends MusicBeatSubstate
 		add(hsbText);
 
 		#if android
-		addVirtualPad(UP_DOWN, A_B_C);
+		addVirtualPad(FULL, A_B_C);
 		#end
 		changeSelection();
 	}
@@ -181,7 +182,12 @@ class NotesSubState extends MusicBeatSubstate
 
 		if (controls.BACK || (changingNote && controls.ACCEPT)) {
 			if(!changingNote) {
+				#if android
+				FlxTransitionableState.skipNextTransOut = true;
+				FlxG.resetState();
+				#else
 				close();
+				#end
 			} else {
 				changeSelection();
 			}
