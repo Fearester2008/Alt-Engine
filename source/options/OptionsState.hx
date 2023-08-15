@@ -65,7 +65,7 @@ class OptionsState extends MusicBeatState
 				removeVirtualPad();
 				#end
 			case 'Adjust Delay and Combo':
-				LoadingState.loadAndSwitchState(new options.NoteOffsetState());
+				MusicBeatState.switchState(new options.NoteOffsetState());
 		}
 	}
 
@@ -90,8 +90,9 @@ class OptionsState extends MusicBeatState
 
 		for (i in 0...options.length)
 		{
-			var optionText:FlixText = new FlixText(0, 0, options[i], 60, FlxColor.WHITE, LEFT);
-			optionText.y += (150 * (i - (options.length / 2))) + 50;
+			var optionText:FlixText = new FlixText(0, 0, options[i], 45, FlxColor.WHITE, LEFT);
+			optionText.y += (110 * (i - (options.length / 2))) + 50;
+			optionText.isMenuItem = true;
 			grpOptions.add(optionText);
 		}
 
