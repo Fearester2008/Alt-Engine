@@ -65,7 +65,7 @@ class OptionsState extends MusicBeatState
 				removeVirtualPad();
 				#end
 			case 'Adjust Delay and Combo':
-				MusicBeatState.switchState(new options.NoteOffsetState());
+				LoadingState.loadAndSwitchState(new options.NoteOffsetState());
 		}
 	}
 
