@@ -20,14 +20,14 @@ class OutdatedState extends MusicBeatState
 	{
 		super.create();
 
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Update Check Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Update Check Menu.");
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(bg);
 
 		warnText = new FlxText(0, 0, FlxG.width,
 			"Yo kid, looks like you're running an   \n
-			outdated version of Alt Engine (" + VersionStuff.altEngineVersion + "),\n
+			outdated version of Alt Engine (" + VersionStuff.altEngineVersion + VersionStuff.stage + "),\n
 			update it to " + VersionStuff.updateVersion + " because it's past your bedtime!\n
 			Press B to proceed anyway.\n
 			\n

@@ -81,7 +81,7 @@ class ResetScoreSubState extends MusicBeatSubstate
 
 	override function update(elapsed:Float)
 	{
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "Reset Song Data");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "Reset Song Data");
 
 		bg.alpha += elapsed * 1.5;
 		if(bg.alpha > 0.6) bg.alpha = 0.6;

@@ -194,7 +194,7 @@ class ResultsScreen extends MusicBeatSubstate {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "Results.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "Results.");
 
 
 		reloadPositions();

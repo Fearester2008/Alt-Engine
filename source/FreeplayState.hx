@@ -316,7 +316,7 @@ class FreeplayState extends MusicBeatState
 	{
         timeTxt.text = timeString;
 
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Select Song Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Select Song Menu.");
 
 	   	songLength = FlxG.sound.music.length;
 	   	Conductor.songPosition = FlxG.sound.music.time;

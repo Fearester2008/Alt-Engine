@@ -113,7 +113,7 @@ class LoadingState extends MusicBeatState
 	
 	override function update(elapsed:Float)
 	{
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "Loading...");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "Loading...");
 
 		super.update(elapsed);
 		funkay.setGraphicSize(Std.int(0.88 * FlxG.width + 0.9 * (funkay.width - 0.88 * FlxG.width)));

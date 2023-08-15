@@ -486,7 +486,7 @@ class ModsMenuState extends MusicBeatState
 	var canExit:Bool = true;
 	override function update(elapsed:Float)
 	{
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Mods Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Mods Menu.");
 
 		if(noModsTxt.visible)
 		{

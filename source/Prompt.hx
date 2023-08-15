@@ -97,7 +97,7 @@ class Prompt extends MusicBeatSubstate
 	
 	override public function update(elapsed:Float):Void 
 	{
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Prompt Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Prompt Menu.");
 	}
 	
 	function makeSelectorGraphic(panel:FlxSprite,w,h,color:FlxColor)

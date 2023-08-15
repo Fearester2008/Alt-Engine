@@ -88,6 +88,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		voption.changeValue = 0.05;
 		voption.decimals = 2;
 		voption.maxValue = 5;
+		voption.displayFormat = '%vX';
 		optionsArray.push(voption);
 
 		var option:GameplayOption = new GameplayOption('Instakill on Miss', 'instakill', 'bool', false);
@@ -185,7 +186,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 	var holdValue:Float = 0;
 	override function update(elapsed:Float)
 	{
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Gameplay Changers Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Gameplay Changers Menu.");
 
 		if (controls.UI_UP_P)
 		{

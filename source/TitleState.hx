@@ -145,7 +145,7 @@ class TitleState extends MusicBeatState
 			http.onData = function (data:String)
 			{
 				updateVersion = data.split('\n')[0].trim();
-				var curVersion:String = VersionStuff.altEngineVersion.trim();
+				var curVersion:String = VersionStuff.altEngineVersion + VersionStuff.stage.trim();
 				trace('version online: ' + updateVersion + ', your version: ' + curVersion);
 				if(updateVersion != curVersion) {
 					trace('versions arent matching!');
@@ -187,7 +187,7 @@ class TitleState extends MusicBeatState
 
 		if(!initialized)
 		{
-			AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "Init...");
+			AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "Init...");
 
 			if(FlxG.save.data != null && FlxG.save.data.fullscreen)
 			{
@@ -212,13 +212,13 @@ class TitleState extends MusicBeatState
 			if (initialized)
 			{
 				startIntro();
-				AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "Initialized Game...");
+				AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "Initialized Game...");
 			}
 			else
 			{
 				new FlxTimer().start(1, function(tmr:FlxTimer)
 				{
-					AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "Initialized Game...");
+					AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "Initialized Game...");
 
 					startIntro();
 				});
@@ -438,7 +438,7 @@ class TitleState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In Title Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In Title Menu.");
 
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;

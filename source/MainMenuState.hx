@@ -199,7 +199,7 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Main Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Main Menu.");
 		logoBl.animation.play('bump');
 		var shiftMult:Int = 1;
 
@@ -226,7 +226,7 @@ class MainMenuState extends MusicBeatState
 				selectedSomethin = true;
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				MusicBeatState.switchState(new TitleState());
-				AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Title Menu.");
+				AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Title Menu.");
 
 			}
 			if(FlxG.mouse.wheel != 0)
