@@ -54,4 +54,25 @@ class TimeUtil
 
         return timeString;
     }     
+
+    public static function startTimer(Seconds:Float, ?ShowMS:Bool = false, ?hoursEnabled:Bool = false):String
+    {
+        var time:Int = Std.int(Seconds);
+        var hours:Int = Std.int(time / 3600);
+        var minutes:Int = Std.int((time % 3600) / 60);
+        var seconds:Int = Std.int(time % 60);
+
+        var hhString:String = (hours < 10 ? "0" : "") + hours + ":";
+        var mmString:String = (minutes < 10 ? "0" : "") + minutes + ":";
+        var ssString:String = (seconds < 10 ? "0" : "") + seconds;
+        var timeString:String = if(hoursEnabled) hhString + mmString + ssString else mmString + ssString;
+
+        if (ShowMS)
+        {
+            var ms:Int = Std.int((Seconds - Std.int(Seconds)) * 100);
+            timeString += "." + (ms < 10 ? "0" : "") + ms;
+        }
+
+        return timeString;
+    }    
 }

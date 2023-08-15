@@ -11,7 +11,7 @@ class AppUtil {
     public static function getAppData():Void
     {
         var appName:String = "FNF' Alt Engine";
-        var appVersion:String = VersionStuff.altEngineVersion;
+        var appVersion:String = VersionStuff.altEngineVersion + VersionStuff.stage;
         Application.current.window.title = appName + " v" + appVersion;
         return;
     }

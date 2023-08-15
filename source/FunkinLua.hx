@@ -1,6 +1,6 @@
 package;
 
-import lime.app.Application;
+import utils.*;
 import openfl.display.BitmapData;
 #if LUA_ALLOWED
 import llua.Lua;
@@ -38,7 +38,7 @@ import flixel.system.FlxAssets.FlxShader;
 #if (!flash && sys)
 import flixel.addons.display.FlxRuntimeShader;
 #end
-
+import lime.app.Application;
 #if sys
 import sys.FileSystem;
 import sys.io.File;
@@ -53,7 +53,6 @@ import hscript.Parser;
 import hscript.Interp;
 import hscript.Expr;
 #end
-
 import hscript.HScript;
 
 #if desktop
@@ -120,6 +119,8 @@ class FunkinLua {
 		set('inChartEditor', false);
 
 		// Song/Week shit
+		set('hasVoices',PlayState.SONG.needsVoices);
+		set('composer', PlayState.SONG.composer);
 		set('curBpm', Conductor.bpm);
 		set('bpm', PlayState.SONG.bpm);
 		set('scrollSpeed', PlayState.SONG.speed);
@@ -160,16 +161,13 @@ class FunkinLua {
 		set('hits', 0);
 
 		set('rating', 0);
-		set('version', VersionStuff.altEngineVersion.trim());
+		set('version', VersionStuff.altEngineVersion + VersionStuff.stage.trim());
 		set('appVersion',  Application.current.meta.get('version'));
-		
+
 		set('inGameOver', false);
 		set('mustHitSection', false);
 		set('altAnim', false);
 		set('gfSection', false);
-
-		set('hasVoices',PlayState.SONG.needsVoices);
-		set('composer', PlayState.SONG.composer);
 
 		// Gameplay settings
 		set('healthGainMult', PlayState.instance.healthGain);
@@ -209,7 +207,6 @@ class FunkinLua {
 		set('cameraZoomOnBeat', ClientPrefs.camZooms);
 		set('flashingLights', ClientPrefs.flashing);
 		set('noteOffset', ClientPrefs.noteOffset);
-		set('healthBarAlpha', ClientPrefs.healthBarAlpha);
 		set('noResetButton', ClientPrefs.noReset);
 		set('lowQuality', ClientPrefs.lowQuality);
 		set('shadersEnabled', ClientPrefs.shaders);
@@ -234,6 +231,22 @@ class FunkinLua {
 		set('buildTarget', 'unknown');
 		#end
 
+		Lua_helper.add_callback(lua, "getAppData", function() {
+			AppUtil.getAppData();
+		});
+		Lua_helper.add_callback(lua, "setAppData", function(title:String, ?version:String, ?action:String) {
+			AppUtil.setAppData(title, version, action);
+		});
+		Lua_helper.add_callback(lua, "setAppTitle", function(title:String) {
+			AppUtil.setAppTitle(title);
+		});
+		Lua_helper.add_callback(lua, "setAppVersion", function(ver:String) {
+			AppUtil.setAppVersion(ver);
+		});
+		Lua_helper.add_callback(lua, "formatTime", function(sec:Float, ?showMS:Bool, ?showHH:Bool) {
+			var str:String = TimeUtil.formativeTime(sec, showMS, showHH);
+			return str;
+		});
 		// custom substate
 		Lua_helper.add_callback(lua, "openCustomSubstate", function(name:String, pauseGame:Bool = false) {
 			if(pauseGame)
@@ -909,22 +922,6 @@ class FunkinLua {
 			return retVal;
 		});
 
-		Lua_helper.add_callback(lua, "addHaxeLibrary", function(libName:String, ?libPackage:String = '') {
-			#if hscript
-			initHaxeModule();
-			try {
-				var str:String = '';
-				if(libPackage.length > 0)
-					str = libPackage + '.';
-
-				hscript.variables.set(libName, Type.resolveClass(str + libName));
-			}
-			catch (e:Dynamic) {
-				luaTrace(scriptName + ":" + lastCalledFunction + " - " + e, false, false, FlxColor.RED);
-			}
-			#end
-		});
-
 		Lua_helper.add_callback(lua, "loadSong", function(?name:String = null, ?difficultyNum:Int = -1) {
 			if(name == null || name.length < 1)
 				name = PlayState.SONG.song;
@@ -1402,13 +1399,13 @@ class FunkinLua {
 		});
 
 		Lua_helper.add_callback(lua, "setHealth", function(value:Float = 0) {
-			PlayState.instance.shownHealth = value;
+			PlayState.instance.health = value;
 		});
 		Lua_helper.add_callback(lua, "addHealth", function(value:Float = 0) {
-			PlayState.instance.shownHealth += value;
+			PlayState.instance.health += value;
 		});
 		Lua_helper.add_callback(lua, "getHealth", function() {
-			return PlayState.instance.shownHealth;
+			return PlayState.instance.health;
 		});
 
 		Lua_helper.add_callback(lua, "getColorFromHex", function(color:String) {
@@ -3380,6 +3377,40 @@ class CustomSubstate extends MusicBeatSubstate
 	override function destroy()
 	{
 		PlayState.instance.callOnLuas('onCustomSubstateDestroy', [name]);
+		super.destroy();
+	}
+}
+class CustomState extends MusicBeatState
+{
+	public static var name:String = 'unnamed';
+	public static var instance:CustomState;
+
+	override function create()
+	{
+		instance = this;
+
+		PlayState.instance.callOnLuas('onCustomStateCreate', [name]);
+		super.create();
+		PlayState.instance.callOnLuas('onCustomStateCreatePost', [name]);
+	}
+	
+	public function new(name:String)
+	{
+		CustomState.name = name;
+		super();
+		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+	}
+	
+	override function update(elapsed:Float)
+	{
+		PlayState.instance.callOnLuas('onCustomStateUpdate', [name, elapsed]);
+		super.update(elapsed);
+		PlayState.instance.callOnLuas('onCustomStateUpdatePost', [name, elapsed]);
+	}
+
+	override function destroy()
+	{
+		PlayState.instance.callOnLuas('onCustomStateDestroy', [name]);
 		super.destroy();
 	}
 }
