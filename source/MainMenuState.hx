@@ -189,7 +189,7 @@ class MainMenuState extends MusicBeatState
 		changeItem();
 
 		#if android
-		addVirtualPad(UP_DOWN, A_B_C_X_Y);
+		addVirtualPad(UP_DOWN, A_B_C_X_Y_Z);
 		#end
 
 		super.create();
@@ -205,7 +205,7 @@ class MainMenuState extends MusicBeatState
 
 		if (!selectedSomethin)
 		{
-			if(FlxG.keys.pressed.SHIFT #if android || _virtualpad.buttonZ.justPressed #end)
+			if(FlxG.keys.pressed.SHIFT)
 			{
 				shiftMult = 3;
 			}
@@ -221,7 +221,7 @@ class MainMenuState extends MusicBeatState
 				changeItem(1 * shiftMult);
 			}
 
-			if (#if android _virtualpad.buttonX.justPressed || #end FlxG.keys.pressed.BACKSPACE) 
+			if (#if android FlxG.android.justReleased.BACK || #end FlxG.keys.pressed.BACKSPACE) 
 			{
 				selectedSomethin = true;
 				FlxG.sound.play(Paths.sound('cancelMenu'));
