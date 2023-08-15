@@ -1,5 +1,6 @@
 package options;
 
+import flixel.addons.transition.FlxTransitionableState;
 import utils.*;
 import flixel.util.FlxStringUtil;
 import flixel.tweens.FlxEase;
