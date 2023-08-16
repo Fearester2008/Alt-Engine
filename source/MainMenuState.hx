@@ -2,7 +2,6 @@ package;
 
 import utils.*;
 
-
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -175,7 +174,11 @@ class MainMenuState extends MusicBeatState
 			}
 		}
 
-		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Alt Engine v" + VersionStuff.altEngineVersion + VersionStuff.stage, 12);
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Psych Engine v" + VersionStuff.psychEngineVersion, 12);
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionShit);
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 64, 0, "Alt Engine v" + VersionStuff.altEngineVersion + VersionStuff.stage, 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
@@ -205,7 +208,7 @@ class MainMenuState extends MusicBeatState
 
 		if (!selectedSomethin)
 		{
-			if(FlxG.keys.pressed.SHIFT)
+			if(FlxG.keys.pressed.SHIFT #if android || _virtualpad.buttonZ.justPressed #end)
 			{
 				shiftMult = 3;
 			}
@@ -221,7 +224,7 @@ class MainMenuState extends MusicBeatState
 				changeItem(1 * shiftMult);
 			}
 
-			if (#if android FlxG.android.justReleased.BACK || #end FlxG.keys.pressed.BACKSPACE) 
+			if (controls.BACK) 
 			{
 				selectedSomethin = true;
 				FlxG.sound.play(Paths.sound('cancelMenu'));
@@ -279,7 +282,7 @@ class MainMenuState extends MusicBeatState
             }
 			#end
             
-            if (FlxG.keys.justPressed.CONTROL #if android || _virtualpad.buttonZ.justPressed #end)
+            if (FlxG.keys.justPressed.CONTROL #if android || _virtualpad.buttonY.justPressed #end)
             {
                 selectedSomethin = true;
                 MusicBeatState.switchState(new ModsMenuState());
