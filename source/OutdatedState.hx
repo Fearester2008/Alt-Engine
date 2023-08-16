@@ -25,15 +25,20 @@ class OutdatedState extends MusicBeatState
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(bg);
 
-		warnText = new FlxText(0, 0, FlxG.width,
+		warnText = new FlxText(0, 0, FlxG.width,(ClientPrefs.language == 'English') ?
 			"Yo kid, looks like you're running an   \n
 			outdated version of Alt Engine (" + VersionStuff.altEngineVersion + VersionStuff.stage + "),\n
-			update it to " + VersionStuff.updateVersion + " because it's past your bedtime!\n
+			update it to " + VersionStuff.updateVersion + "!\n
 			Press B to proceed anyway.\n
 			\n
-			Press A to update the engine.",
+			Press A to install update for engine." : "Эй, чувак, похоже, ты используешь
+			устаревшую версию Alt Engine (" + VersionStuff.altEngineVersion + VersionStuff.stage +"),
+			обнови ее до " + VersionStuff.UpdateVersion + "!
+			 Нажмите B, чтобы продолжить в любом случае.\n
+			 \n
+			Нажмите A, чтобы установить обновление движка.",
 			32);
-		warnText.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
+		warnText.setFormat(Paths.font("vcr-rus.ttf"), 32, FlxColor.WHITE, LEFT);
 		warnText.screenCenter(Y);
 		add(warnText);
 
