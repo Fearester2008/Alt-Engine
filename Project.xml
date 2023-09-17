@@ -112,7 +112,6 @@
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/>
 	<haxelib name="discord_rpc" if="desktop"/>
 	<haxelib name="tjson" />
-	<haxelib name="spine-hx" />
 
 	<haxedef name="openflPos" />
 	<haxedef name="hscriptPos" />
