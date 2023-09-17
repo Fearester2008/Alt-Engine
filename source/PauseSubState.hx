@@ -176,7 +176,7 @@ class PauseSubState extends MusicBeatSubstate
 		{
 	    elapsedTime++;
 		}
-		timeTest = TimeUtil.startTimer(((elapsedTime / 12) / 2.2));
+		timeTest = TimeUtil.startTimer(((elapsedTime) / 60));
 		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "Paused - " + PlayState.SONG.song + " Elapsed: " + timeTest);
 
 		if (pauseMusic.volume < 0.7)
@@ -187,7 +187,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
-		var accepted = controls.ACCEPT;
+		var accepted = #if !android controls.ACCEPT; #else _virtualpad.buttonA.justPressed; #end
 
 		if (upP)
 		{
@@ -296,10 +296,9 @@ class PauseSubState extends MusicBeatSubstate
 		}
 		else
 		{
-			MusicBeatState.resetState();
+			MusicBeatState.resetState(true);
 		}
 	}
-
 	override function destroy()
 	{
 		if (!goToOptions)
@@ -406,7 +405,7 @@ class PauseSubState extends MusicBeatSubstate
 					practiceText.visible = PlayState.instance.practiceMode;
 				case "Restart Song": 
 					elapsedTime = 0;
-					restartSong();
+					restartSong(true);
 				case "Leave Charting Mode":
 					elapsedTime = 0;
 					restartSong();
