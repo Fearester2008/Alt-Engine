@@ -229,7 +229,7 @@ class PauseSubState extends MusicBeatSubstate
 				}
 		}
             
-		if (accepted && (cantUnpause <= 0))
+		if (accepted && (cantUnpause <= 0 || ClientPrefs.controllerMode == #if android true #else false #end))
 		{
 		    for(item in grpMenuShit.members)
 			{
