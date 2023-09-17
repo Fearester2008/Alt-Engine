@@ -296,7 +296,7 @@ class PauseSubState extends MusicBeatSubstate
 		}
 		else
 		{
-			MusicBeatState.resetState(true);
+			MusicBeatState.resetState();
 		}
 	}
 	override function destroy()
