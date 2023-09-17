@@ -187,7 +187,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
-		var accepted = #if !android controls.ACCEPT; #else _virtualpad.buttonA.justPressed; #end
+		var accepted = controls.ACCEPT;
 
 		if (upP)
 		{
@@ -229,7 +229,7 @@ class PauseSubState extends MusicBeatSubstate
 				}
 		}
             
-		if (accepted && (cantUnpause <= 0 || !ClientPrefs.controllerMode))
+		if (accepted && (cantUnpause <= 0))
 		{
 		    for(item in grpMenuShit.members)
 			{
