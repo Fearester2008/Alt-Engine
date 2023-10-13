@@ -191,6 +191,7 @@ class PlayState extends MusicBeatState
 	public var goodsPercent:Float = 0;
 	public var badsPercent:Float = 0;
 	public var shitsPercent:Float = 0;
+	public var totals:Int = 0;
 
 	private var generatedMusic:Bool = false;
 	public var endingSong:Bool = false;
@@ -1167,22 +1168,23 @@ class PlayState extends MusicBeatState
 		add(iconP2);
 		reloadHealthBarColors();
 
-        judgementCounter = new FlxText(20, 0, 1280, "", 22);
+        judgementCounter = new FlxText(20, 0, 0, '', 20);
 		judgementCounter.setFormat(Paths.font("vcr-rus.ttf"), 20, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		judgementCounter.borderSize = 2;
-		judgementCounter.borderQuality = 2;
 		judgementCounter.scrollFactor.set();
-		judgementCounter.screenCenter(Y);
 		judgementCounter.visible = ClientPrefs.judgementCounter || !ClientPrefs.hideHud;
-		judgementCounter.text = 'Sicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nShits: ${shits}\nMisses: ${songMisses}';
+		judgementCounter.cameras = [camHUD];
+		judgementCounter.screenCenter(Y);
+		judgementCounter.text = 'Sicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nShits: ${shits}\nTotal hit: ${totals}\nCombo: ${combo}';
 		if(ClientPrefs.judgementCounter)
 		{
-		add(judgementCounter);
-	    }
-		if (ClientPrefs.judgementCounterType == 'Percent')
-		{
-		    judgementCounter.text = 'Sick: ${HelperFunctions.truncateFloat(sicksPercent * 100, 2)}%\nGood: ${HelperFunctions.truncateFloat(goodsPercent * 100, 2)}%\nBad: ${HelperFunctions.truncateFloat(badsPercent * 100, 2)}%\nShit: ${HelperFunctions.truncateFloat(shitsPercent * 100, 2)}%';
+			add(judgementCounter);
 		}
+
+		if (judgementCounter != null)
+			judgementCounter.text = 'Sicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nShits: ${shits}\nTotal Hits: ${totals}\nCombo: ${combo}';
+
+		if (ClientPrefs.judgementCounterType == 'Percent')
+		    judgementCounter.text = 'Sick: ${HelperFunctions.truncateFloat(sicksPercent * 100, 2)}%\nGood: ${HelperFunctions.truncateFloat(goodsPercent * 100, 2)}%\nBad: ${HelperFunctions.truncateFloat(badsPercent * 100, 2)}%\nShit: ${HelperFunctions.truncateFloat(shitsPercent * 100, 2)}%';
 
 		switch(ClientPrefs.timeBarVisual)
 		{
@@ -2153,11 +2155,11 @@ class PlayState extends MusicBeatState
 		{
 			if(ClientPrefs.language == 'English')
 			{
-				judgementCounter.text = 'Hits: ${noteHit}\nSicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nShits: ${shits}\nMisses: ${songMisses}';
+				judgementCounter.text = 'Sicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nShits: ${shits}\nTotal hit: ${totals}\nCombo: ${combo}';
 			}
 			else
 			{
-				judgementCounter.text = 'Попадания: ${noteHit}\nБольные: ${sicks}\nХорошие: ${goods}\nПлохие: ${bads}\nДерьмовые: ${shits}\nПромахи: ${songMisses}';
+				judgementCounter.text = 'Больные: ${sicks}\nХорошие: ${goods}\nПлохие: ${bads}\nДерьмовые: ${shits}\nВсего попаданий: ${totals}\nКомбо: ${combo}';
 			}
 		}
 	    }
