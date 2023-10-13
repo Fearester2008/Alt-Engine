@@ -61,6 +61,7 @@ jobs:
           haxelib set flixel 4.11.0
           haxelib set flixel-addons 2.11.0
           haxelib set hxCodec 2.5.1
+          haxelib set hxcpp 4.3.7
       - name: Compile
         run: haxelib run lime build windows --app-version="4.0.0-${{ github.run_id}}"
       - name: Publish Artifact

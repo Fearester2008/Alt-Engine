@@ -30,7 +30,6 @@ import DialogueBoxPsych;
 import flixel.FlxCamera;
 import flixel.group.FlxSpriteGroup;
 import lime.system.Clipboard;
-import Alphabet;
 #if sys
 import sys.io.File;
 #end
@@ -506,7 +505,7 @@ class DialogueCharacterEditorState extends MusicBeatState
 	var lastTab:String = 'Character';
 	var transitioning:Bool = false;
 	override function update(elapsed:Float) {
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Dialogue Character Editor Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Dialogue Character Editor Menu.");
 
 		MusicBeatState.camBeat = FlxG.camera;
 		if(transitioning) {

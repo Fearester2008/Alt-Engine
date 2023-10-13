@@ -277,7 +277,7 @@ class MenuCharacterEditorState extends MusicBeatState
 	}
 
 	override function update(elapsed:Float) {
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Menu Character Editor Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Menu Character Editor Menu.");
 
 		var blockInput:Bool = false;
 		for (inputText in blockPressWhileTypingOn) {

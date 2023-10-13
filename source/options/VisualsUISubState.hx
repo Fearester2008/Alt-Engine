@@ -1,8 +1,5 @@
 package options;
 
-#if desktop
-import Discord.DiscordClient;
-#end
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -23,7 +20,6 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
-import Controls;
 
 using StringTools;
 
@@ -57,15 +53,9 @@ class VisualsUISubState extends BaseOptionsMenu
 			'string',
 			'Time Left',
 			['Time Left', 'Time Elapsed', 'Song Name', 'Disabled', 'Time Length', 'Song Percentage', 'Time Length Percent']);
-		addOption(option);
-		var option:Option = new Option('Time Bar Style:',
-			"What should the Time Bar style?",
-			'Каким должен быть стиль бара таймера?',
-			'timeBarVisual',
-			'string',
-			'Alt New',
-	['Psych', 'Alt New', 'Alt Old'/*, 'Song Name'*/]);
-		addOption(option);
+			if(ClientPrefs.hudStyle != 'Better Alt HUD')
+			addOption(option);
+
         var option:Option = new Option('Language: ',
 			"What should be the language?",
 			'Каким должен быть язык?',
@@ -74,6 +64,7 @@ class VisualsUISubState extends BaseOptionsMenu
 			'English',
 			['English', 'Russian']);
 		addOption(option);
+
 		var option:Option = new Option('Flashing Lights',
 			"Uncheck this if you're sensitive to flashing lights!",
 			'Уберите это если вы чувствительны к вспышкам экрана!',
@@ -110,8 +101,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		option.changeValue = 0.1;
 		option.decimals = 1;
 		addOption(option);
-		
-		
+				
 		var option:Option = new Option('FPS Counter',
 			'If unchecked, hides FPS Counter.',
 			'Если флажок не установлен, прячет счётчик кадров.',
@@ -129,13 +119,42 @@ class VisualsUISubState extends BaseOptionsMenu
 		'OG FPS',
 		['FPS ALT', 'System', 'OG FPS', 'PE FPS']);
 	    addOption(option);
+
+		var option:Option = new Option('HUD Style:',
+		"What should be HUD?",
+		'Каким должен быть интерфейс?',
+		'hudStyle',
+		'string',
+		'Vanila',
+		['Vanila', 'Alt Engine', 'Psych Engine', 'Better Alt HUD', 'Kade Engine']);
+	    addOption(option);
+
+		var option:Option = new Option('Toggle Volume Keys',
+			'If unchecked, volume keys has not been actived.',
+			'Если флажок не установлен, клавиши громкости не будут активны.',
+			'enableToggleVolume',
+			'bool',
+			true);
+		addOption(option);
+		option.onChange = toggleKey;
+
+		var option:Option = new Option('Winning Icons',
+			'If unchecked, icons not be have winning animations.',
+			'Если флажок не установлен, иконки не будут иметь победные анимации.',
+			'winIcon',
+			'bool',
+			true); //thanks by Stefan2008 for part code
+		addOption(option);
+
+		#if desktop
 		var option:Option = new Option('Use DiscordRPC',
 		'If unchecked, hides "Playing Box" in Discord.',
 		'Если флажок не установлен, прячет "Бокс с вашей игрой" в Дискорд.',
 		'showDiscordActivity',
 		'bool',
 		true);
-	addOption(option);
+		addOption(option);
+		#end
 		super();
 	}
 
@@ -143,5 +162,8 @@ class VisualsUISubState extends BaseOptionsMenu
 	{
 		if(Main.fpsVar != null)
 			Main.fpsVar.visible = ClientPrefs.showFPS;
+	}
+	function toggleKey() {
+			ClientPrefs.toggleVolumeKeys(ClientPrefs.enableToggleVolume);
 	}
 }

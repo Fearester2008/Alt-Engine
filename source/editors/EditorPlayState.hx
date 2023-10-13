@@ -335,7 +335,7 @@ class EditorPlayState extends MusicBeatState
 	public var noteKillOffset:Float = 350;
 	public var spawnTime:Float = 2000;
 	override function update(elapsed:Float) {
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Test Song Chart Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Test Song Chart Menu.");
 
 		if (FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justReleased.BACK #end)
 		{

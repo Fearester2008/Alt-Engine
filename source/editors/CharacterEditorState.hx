@@ -1098,7 +1098,7 @@ class CharacterEditorState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Character Editor Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Character Editor Menu.");
 
 		MusicBeatState.camBeat = FlxG.camera;
 		if(char.animationsArray[curAnim] != null) {

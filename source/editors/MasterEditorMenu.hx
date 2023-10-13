@@ -93,7 +93,7 @@ class MasterEditorMenu extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Mod Editors Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Mod Editors Menu.");
 
 		if (controls.UI_UP_P)
 		{

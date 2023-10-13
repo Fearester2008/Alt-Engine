@@ -1,9 +1,5 @@
 package options;
 
-import utils.*;
-#if desktop
-import Discord.DiscordClient;
-#end
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -24,8 +20,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
-import text.*;
-import Controls;
+import backend.text.*;
 
 using StringTools;
 
@@ -90,9 +85,8 @@ class OptionsState extends MusicBeatState
 
 		for (i in 0...options.length)
 		{
-			var optionText:FlixText = new FlixText(0, 0, options[i], 45, FlxColor.WHITE, LEFT);
-			optionText.y += (110 * (i - (options.length / 2))) + 50;
-			optionText.isMenuItem = true;
+			var optionText:FlixText = new FlixText(0, 0, options[i], 60, FlxColor.WHITE, LEFT);
+			optionText.y += (150 * (i - (options.length / 2))) + 50;
 			grpOptions.add(optionText);
 		}
 
@@ -118,7 +112,7 @@ class OptionsState extends MusicBeatState
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Options Menu.");
+		AppUtil.setAppData(VersionStuff.appName, VersionStuff.altEngineVersion + VersionStuff.stage, "In The Options Menu.");
 
 		if (controls.UI_UP_P) {
 			changeSelection(-1);

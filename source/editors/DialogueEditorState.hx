@@ -28,7 +28,6 @@ import flash.net.FileFilter;
 import haxe.Json;
 import DialogueBoxPsych;
 import lime.system.Clipboard;
-import Alphabet;
 #if sys
 import sys.io.File;
 #end
@@ -322,7 +321,7 @@ class DialogueEditorState extends MusicBeatState
 	var blockPressWhileTypingOn:Array<FlxUIInputText> = [];
 	var transitioning:Bool = false;
 	override function update(elapsed:Float) {
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Dialogue Editor Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Dialogue Editor Menu.");
 
 		if(transitioning) {
 			super.update(elapsed);

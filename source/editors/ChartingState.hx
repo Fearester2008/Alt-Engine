@@ -612,7 +612,10 @@ class ChartingState extends MusicBeatState
 		
 		
 		var skin = PlayState.SONG.arrowSkin;
-		if(skin == null) skin = '';
+		if(skin == null)
+		{
+			skin = 'NOTE_assets';
+		}
 		noteSkinInputText = new FlxUIInputText(player2DropDown.x, player2DropDown.y + 50, 150, skin, 8);
 		noteSkinInputText.focusGained = () -> FlxG.stage.window.textInputEnabled = true;
 		blockPressWhileTypingOn.push(noteSkinInputText);
@@ -1547,7 +1550,7 @@ class ChartingState extends MusicBeatState
 	var colorSine:Float = 0;
 	override function update(elapsed:Float)
 	{
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Chart Editor.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Chart Editor.");
 
 		curStep = recalculateSteps();
 

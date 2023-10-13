@@ -1,11 +1,5 @@
 package options;
 
-import utils.*;
-
-import flixel.addons.transition.FlxTransitionableState;
-#if desktop
-import Discord.DiscordClient;
-#end
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -26,7 +20,6 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
-import Controls;
 
 using StringTools;
 
@@ -92,7 +85,7 @@ class NotesSubState extends MusicBeatSubstate
 		add(hsbText);
 
 		#if android
-		addVirtualPad(FULL, A_B_C);
+		addVirtualPad(UP_DOWN, A_B_C);
 		#end
 		changeSelection();
 	}
@@ -100,7 +93,7 @@ class NotesSubState extends MusicBeatSubstate
 	var changingNote:Bool = false;
 	override function update(elapsed:Float) {
 
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Note Editor Menu.");
+		AppUtil.setAppData(VersionStuff.appName, VersionStuff.altEngineVersion + VersionStuff.stage, "In The Note Editor Menu.");
 
 		if(changingNote) {
 			if(holdTime < 0.5) {
@@ -182,12 +175,7 @@ class NotesSubState extends MusicBeatSubstate
 
 		if (controls.BACK || (changingNote && controls.ACCEPT)) {
 			if(!changingNote) {
-				#if android
-				FlxTransitionableState.skipNextTransOut = true;
-				FlxG.resetState();
-				#else
 				close();
-				#end
 			} else {
 				changeSelection();
 			}

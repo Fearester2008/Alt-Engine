@@ -1,8 +1,5 @@
 package options;
 
-#if desktop
-import Discord.DiscordClient;
-#end
 import flash.text.TextField;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -24,7 +21,6 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
-import Controls;
 import openfl.Lib;
 
 using StringTools;
@@ -45,6 +41,8 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 			false); //Default value
 		addOption(option);
 
+		if(ClientPrefs.framerate >= 60 && !ClientPrefs.lowQuality)
+		{
 		var option:Option = new Option('Anti-Aliasing',
 			'If unchecked, disables anti-aliasing, increases performance\nat the cost of sharper visuals.',
 			'Если флажок не установлен, отключается сглаживание и увеличивается производительность ценой более четких эффектов.',
@@ -53,7 +51,9 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 			true);
 		option.onChange = onChangeAntiAliasing; //Changing onChange is only needed if you want to make a special interaction after it changes the value
 		addOption(option);
-
+		}
+		if(ClientPrefs.framerate >= 90 && !ClientPrefs.lowQuality)
+		{
 		var option:Option = new Option('Shaders', //Name
 			'If unchecked, disables shaders.\nIt\'s used for some visual effects, and also CPU intensive for weaker PCs.', //Description
 			'Если флажок не установлен, это использует некоторые визуальные эффекты, и также интенсивно для слабых ПК.',
@@ -61,6 +61,7 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 			'bool', //Variable type
 			true); //Default value
 		addOption(option);
+		}
 
 		#if !html5 //Apparently other framerates isn't correctly supported on Browser? Probably it has some V-Sync shit enabled by default, idk
 		var option:Option = new Option('Framerate',
@@ -84,7 +85,7 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 		 'screenRes',
 		 'string',
 		 '1280x720',
-		 ['640x360', '852x480','960x540','1280x720','2560x1440','1960x1080', '3840x2160', '7680x4320']);
+		 ['640x360', '852x480','960x540','1280x720', '1960x1080', '2560x1440', '3840x2160', '7680x4320']);
 		addOption(option);
 		option.onChange = onChangeResolution;
 		#end

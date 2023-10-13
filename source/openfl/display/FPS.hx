@@ -9,7 +9,6 @@ import flixel.math.FlxMath;
 import openfl.display._internal.stats.Context3DStats;
 import openfl.display._internal.stats.DrawCallContext;
 #end
-import Highscore;
 #if flash
 import openfl.Lib;
 #end
@@ -125,7 +124,7 @@ class FPS extends TextField
 			text = "FPS: " + '[' + currentFPS + '] ';
 			text += "\nMemory: " + ${CoolUtil.getInterval(memoryMegas)};
 			text += "\nMemory Peak: " + ${CoolUtil.getInterval(memoryMegas)};
-			text += "\nAlt Engine version: " + VersionStuff.altEngineVersion;
+			text += "\nAlt Engine version: " + VersionStuff.altEngineVersion + VersionStuff.stage;
 			text += "\nOperating system: " + '${lime.system.System.platformLabel}';
             }
 			textColor = 0xFF03069C;

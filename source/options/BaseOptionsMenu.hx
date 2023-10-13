@@ -1,10 +1,7 @@
 package options;
-import flixel.addons.transition.FlxTransitionableState;
-import utils.*;
 
-#if desktop
-import Discord.DiscordClient;
-#end
+import flixel.addons.transition.FlxTransitionableState;
+
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -25,8 +22,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
-import Controls;
-
+import objects.CheckboxThingie;
 using StringTools;
 
 class BaseOptionsMenu extends MusicBeatSubstate
@@ -49,7 +45,9 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	{
 		super();
 
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The " + title + " Menu.");
+		ClientPrefs.saveSettings();
+		
+		AppUtil.setAppData(VersionStuff.appName, VersionStuff.altEngineVersion + VersionStuff.stage, "In The " + title + " Menu.");
 
 		if(title == null) title = 'Options';
 		if(rpcTitle == null) rpcTitle = 'Options Menu';
@@ -97,6 +95,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			/*optionText.forceX = 300;
 			optionText.yMult = 90;*/
 			optionText.targetY = i;
+			optionText.isMenuItem = true;
 			grpOptions.add(optionText);
 
 			if(optionsArray[i].type == 'bool') {

@@ -434,7 +434,7 @@ class WeekEditorState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 
-		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion, "In The Week Editor Menu.");
+		AppUtil.setAppData("FNF' Alt Engine", VersionStuff.altEngineVersion + VersionStuff.stage, "In The Week Editor Menu.");
 
 		if(loadedWeek != null) {
 			weekFile = loadedWeek;

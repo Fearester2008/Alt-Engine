@@ -1,8 +1,5 @@
 package options;
 
-#if desktop
-import Discord.DiscordClient;
-#end
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -23,7 +20,6 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
-import Controls;
 
 using StringTools;
 
@@ -108,34 +104,15 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			['Alt', 'Psych']);
 		addOption(option);
 
-		var option:Option = new Option('Beat Type: ',
-		"What should be a zoom?",
-		'Каким должен быть режим масштаба?',
-		'beatType',
+		var option:Option = new Option('Camera Mode: ',
+		"What should be the camera mode?",
+		'Каким должен быть режим камеры?',
+		'beatMode',
 		'string',
-		'1/16',
-		['1/2', '1/4', '1/16']);
-	addOption(option);
-	var option:Option = new Option('Camera Mode: ',
-	"What should be the camera mode?",
-	'Каким должен быть режим камеры?',
-	'beatMode',
-	'string',
-	'Both camera',
-	['Both camera', 'HUD camera', 'Game camera']);
-addOption(option);
-var option:Option = new Option('Camera Mult:',
-			'How much much or slow should be a cameras?',
-			'Насколько сильно или слабо камеры будут масштабироваться?',
-			'camSpeed',
-			'float',
-			1);
-		option.scrollSpeed = 1.6;
-		option.minValue = 0.1;
-		option.maxValue = 5;
-		option.changeValue = 0.1;
-		option.decimals = 1;
+		'Both camera',
+		['Both camera', 'HUD camera', 'Game camera']);
 		addOption(option);
+
 		var option:Option = new Option('Judgement Counter Type: ',
 		"What should be the judgement counter?",
 		'Каким должен быть счётчик суждений?',
@@ -143,15 +120,17 @@ var option:Option = new Option('Camera Mult:',
 		'string',
 		'Counter',
 		['Counter', 'Percent']);
-	addOption(option);
+		if(ClientPrefs.judgementCounter)
+		addOption(option);
 
-	var option:Option = new Option('Judgement Counter ',
+		var option:Option = new Option('Judgement Counter ',
 			"If checked, Judgement counter should be visible.",
 			"Если флажок установлен, счетчик суждений должен быть видимым?",
 			'judgementCounter',
 			'bool',
 			true);
 		addOption(option);
+
 		var option:Option = new Option('Results Screen ',
 			"If checked, Results should be visible.",
 			"Если флажок установлен, результаты должен быть видны.",
