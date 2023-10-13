@@ -373,7 +373,6 @@ class PlayState extends MusicBeatState
 	public var average:Float = 0;
 	public var healthDisplayP1:String;
 	public var healthDisplayP2:String;
-	public var totals:Int = 0;
 
 	var judgementBG:FlxSprite;
 	var songNameText:FlxText;
@@ -2942,7 +2941,7 @@ class PlayState extends MusicBeatState
 							if(daNoteData > 1) //Up and Right
 							{
 								sustainNote.x += FlxG.width / 2 + 25;
-								}
+							}
 						}
 					}
 				}
@@ -2958,15 +2957,13 @@ class PlayState extends MusicBeatState
 					{
 						swagNote.x += FlxG.width / 2 + 25;
 					}
-					}
+				}
 
 				if(!noteTypeMap.exists(swagNote.noteType)) {
 					noteTypeMap.set(swagNote.noteType, true);
 				}
 			}
 			daBeats += 1;
-		
-				
 		}
 		for (event in songData.events) //Event Notes
 		{
@@ -2989,8 +2986,6 @@ class PlayState extends MusicBeatState
 
 		unspawnNotes.sort(sortByTime);
 		generatedMusic = true;
-
-		trace(totals);
 	}
 
 	function eventPushed(event:EventNote) {
