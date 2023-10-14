@@ -13,7 +13,7 @@ import flixel.util.FlxGradient;
 import flixel.FlxState;
 import flixel.FlxCamera;
 import flixel.FlxBasic;
-
+import backend.Controls;
 #if android
 import flixel.input.actions.FlxActionInput;
 import android.AndroidControls.AndroidControls;
@@ -101,8 +101,11 @@ class MusicBeatState extends FlxUIState
 	
 	override function destroy() {
 		#if android
+		if(controls != null)
+		{
 		controls.removeFlxInput(trackedinputsNOTES);
 		controls.removeFlxInput(trackedinputsUI);
+		}
 		#end
 
 		super.destroy();
