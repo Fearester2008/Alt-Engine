@@ -44,8 +44,6 @@ class FreeplayState extends MusicBeatState
 	var rateTxt:FlxText;
 	var timeBar:FlxBar;
 
-	var songsLoadedTxt:FlxText;
-
 	var lerpScore:Int = 0;
 	var lerpRating:Float = 0;
 	var intendedScore:Int = 0;

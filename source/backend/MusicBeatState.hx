@@ -16,7 +16,7 @@ import flixel.FlxBasic;
 
 #if android
 import flixel.input.actions.FlxActionInput;
-import android.AndroidControls;
+import android.AndroidControls.AndroidControls;
 import android.FlxVirtualPad;
 #end
 
@@ -56,11 +56,8 @@ class MusicBeatState extends FlxUIState
 
 	#if android
 	public function removeVirtualPad() {
-		if (trackedinputsUI != [])
-			controls.removeFlxInput(trackedinputsUI);
-
-		if (_virtualpad != null)
-			remove(_virtualpad);
+		controls.removeFlxInput(trackedinputsUI);
+		remove(_virtualpad);
 	}
 	#end
 
@@ -95,40 +92,20 @@ class MusicBeatState extends FlxUIState
 
 	#if android
         public function addPadCamera() {
-		if (_virtualpad != null) {
-			var camControls = new flixel.FlxCamera();
-			FlxG.cameras.add(camControls, false);
-			camControls.bgColor.alpha = 0;
-			_virtualpad.cameras = [camControls];
-		}
+		var camcontrol = new flixel.FlxCamera();
+		camcontrol.bgColor.alpha = 0;
+		FlxG.cameras.add(camcontrol, false);
+		_virtualpad.cameras = [camcontrol];
 	}
 	#end
 	
-	override function destroy()
-	{
+	override function destroy() {
 		#if android
-		if (trackedinputsNOTES != [])
-			controls.removeFlxInput(trackedinputsNOTES);
-
-		if (trackedinputsUI != [])
-			controls.removeFlxInput(trackedinputsUI);
+		controls.removeFlxInput(trackedinputsNOTES);
+		controls.removeFlxInput(trackedinputsUI);
 		#end
-			
+
 		super.destroy();
-
-		#if android
-		if (_virtualpad != null)
-		{
-			_virtualpad = FlxDestroyUtil.destroy(_virtualpad);
-			_virtualpad = null;
-		}
-
-		if (androidc != null)
-		{
-			androidc = FlxDestroyUtil.destroy(androidc);
-			androidc = null;
-		}
-		#end
 	}
 
 	override function create()
