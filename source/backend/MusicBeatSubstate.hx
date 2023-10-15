@@ -34,23 +34,17 @@ class MusicBeatSubstate extends FlxSubState
 	var _virtualpad:FlxVirtualPad;
 	var trackedinputsUI:Array<FlxActionInput> = [];
 
-	public function addVirtualPad(DPad:FlxDPadMode, Action:FlxActionMode)
-	{
-		_virtualpad = new FlxVirtualPad(DPad, Action);
+        public function addVirtualPad(?DPad:FlxDPadMode, ?Action:FlxActionMode) {
+		_virtualpad = new FlxVirtualPad(DPad, Action, 0.75, ClientPrefs.globalAntialiasing);
 		add(_virtualpad);
-
 		controls.setVirtualPadUI(_virtualpad, DPad, Action);
 		trackedinputsUI = controls.trackedinputsUI;
 		controls.trackedinputsUI = [];
 	}
 
-	public function removeVirtualPad()
-	{
-		if (trackedinputsUI != [])
-			controls.removeFlxInput(trackedinputsUI);
-
-		if (virtualPad != null)
-			remove(_virtualpad);
+	public function removeVirtualPad() {
+		controls.removeFlxInput(trackedinputsUI);
+		remove(_virtualpad);
 	}
 
 	public function addPadCamera()
@@ -66,19 +60,20 @@ class MusicBeatSubstate extends FlxSubState
 	#end
 	override function destroy() {
                 #if android
-		if (trackedinputsUI != [])
-			controls.removeFlxInput(trackedinputsUI);
-		#end
-
-		super.destroy();
-
-		#if android
 		if (_virtualpad != null)
 		{
 			_virtualpad = FlxDestroyUtil.destroy(_virtualpad);
 			_virtualpad = null;
 		}
+
+		if (androidc != null)
+		{
+			androidc = FlxDestroyUtil.destroy(androidc);
+			androidc = null;
+		}
 		#end
+
+		super.destroy();
 	}
 
 	override function update(elapsed:Float)
