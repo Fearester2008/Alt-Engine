@@ -65,12 +65,6 @@ class MusicBeatSubstate extends FlxSubState
 			_virtualpad = FlxDestroyUtil.destroy(_virtualpad);
 			_virtualpad = null;
 		}
-
-		if (androidc != null)
-		{
-			androidc = FlxDestroyUtil.destroy(androidc);
-			androidc = null;
-		}
 		#end
 
 		super.destroy();
