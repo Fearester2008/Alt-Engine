@@ -31,13 +31,13 @@ class MusicBeatSubstate extends FlxSubState
 		return PlayerSettings.player1.controls;
 
 	#if android
-	var virtualPad:FlxVirtualPad;
+	var _virtualpad:FlxVirtualPad;
 	var trackedinputsUI:Array<FlxActionInput> = [];
 
 	public function addVirtualPad(DPad:FlxDPadMode, Action:FlxActionMode)
 	{
-		virtualPad = new FlxVirtualPad(DPad, Action);
-		add(virtualPad);
+		_virtualpad = new FlxVirtualPad(DPad, Action);
+		add(_virtualpad);
 
 		controls.setVirtualPadUI(virtualPad, DPad, Action);
 		trackedinputsUI = controls.trackedinputsUI;
@@ -50,17 +50,17 @@ class MusicBeatSubstate extends FlxSubState
 			controls.removeFlxInput(trackedinputsUI);
 
 		if (virtualPad != null)
-			remove(virtualPad);
+			remove(_virtualpad);
 	}
 
 	public function addPadCamera()
 	{
-		if (virtualPad != null)
+		if (_virtualpad != null)
 		{
 			var camControls = new flixel.FlxCamera();
 			FlxG.cameras.add(camControls, false);
 			camControls.bgColor.alpha = 0;
-			virtualPad.cameras = [camControls];
+			_virtualpad.cameras = [camControls];
 		}
 	}
 	#end
@@ -75,10 +75,10 @@ class MusicBeatSubstate extends FlxSubState
 		super.destroy();
 
 		#if android
-		if (virtualPad != null)
+		if (_virtualpad != null)
 		{
-			virtualPad = FlxDestroyUtil.destroy(virtualPad);
-			virtualPad = null;
+			_virtualpad = FlxDestroyUtil.destroy(virtualPad);
+			_virtualpad = null;
 		}
 		#end
 	}
