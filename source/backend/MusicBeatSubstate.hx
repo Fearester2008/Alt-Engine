@@ -39,7 +39,7 @@ class MusicBeatSubstate extends FlxSubState
 		_virtualpad = new FlxVirtualPad(DPad, Action);
 		add(_virtualpad);
 
-		controls.setVirtualPadUI(virtualPad, DPad, Action);
+		controls.setVirtualPadUI(_virtualpad, DPad, Action);
 		trackedinputsUI = controls.trackedinputsUI;
 		controls.trackedinputsUI = [];
 	}
@@ -49,7 +49,7 @@ class MusicBeatSubstate extends FlxSubState
 		if (trackedinputsUI != [])
 			controls.removeFlxInput(trackedinputsUI);
 
-		if (virtualPad != null)
+		if (_virtualpad != null)
 			remove(_virtualpad);
 	}
 
@@ -77,7 +77,7 @@ class MusicBeatSubstate extends FlxSubState
 		#if android
 		if (_virtualpad != null)
 		{
-			_virtualpad = FlxDestroyUtil.destroy(virtualPad);
+			_virtualpad = FlxDestroyUtil.destroy(_virtualpad);
 			_virtualpad = null;
 		}
 		#end
