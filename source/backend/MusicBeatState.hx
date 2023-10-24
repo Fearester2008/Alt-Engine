@@ -141,8 +141,7 @@ class MusicBeatState extends FlxUIState
 	public static var camBeat:FlxCamera;
 
 	override function create() {
-	override function create()
-		{
+	{
 			super.create();
 	
 			if (!FlxTransitionableState.skipNextTransOut)
@@ -160,7 +159,7 @@ class MusicBeatState extends FlxUIState
 				FlxTransitionableState.skipNextTransOut = false;
 			}
 			timePassedOnState = 0;
-		}	
+	}
 
 	public static var timePassedOnState:Float = 0;
 	override function update(elapsed:Float)
@@ -188,7 +187,8 @@ class MusicBeatState extends FlxUIState
 
 		if(FlxG.save.data != null) FlxG.save.data.fullscreen = FlxG.fullscreen;
 
-		if(FlxG.keys.justPressed.F11) FlxG.fullscreen = !FlxG.fullscreen;
+		if(FlxG.keys.justPressed.F11)
+		FlxG.fullscreen = !FlxG.fullscreen;
 
 		super.update(elapsed);
 	}
@@ -301,4 +301,4 @@ class MusicBeatState extends FlxUIState
 		if(PlayState.SONG != null && PlayState.SONG.notes[curSection] != null) val = PlayState.SONG.notes[curSection].sectionBeats;
 		return val == null ? 4 : val;
 	}
-}
+	}
