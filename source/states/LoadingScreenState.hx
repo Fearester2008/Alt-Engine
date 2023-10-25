@@ -63,9 +63,9 @@ class LoadingScreenState extends MusicBeatState
 
         funkay = new FlxSprite(0, 0).loadGraphic(Paths.image('menuDesat'));
 		funkay.updateHitbox();
-		funkay.color = 0xFFFF6600;
+		funkay.color = 0xFF00FF6A;
 		funkay.antialiasing = ClientPrefs.globalAntialiasing;
-		//add(funkay);
+		add(funkay);
 		funkay.scrollFactor.set();
 		funkay.screenCenter();
 
