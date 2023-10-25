@@ -76,6 +76,8 @@ class FreeplayState extends MusicBeatState
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 		
+		AppUtil.setAppData(VersionStuff.appName, VersionStuff.altEngineVersion + VersionStuff.stage, "In the Freeplay Menu");
+		
 		persistentUpdate = true;
 		PlayState.isStoryMode = false;
 		WeekData.reloadWeekFiles(false);
@@ -224,13 +226,13 @@ class FreeplayState extends MusicBeatState
 		if(ClientPrefs.language == 'English')
 		leText = "Press C to open the Gameplay Changers Menu. \nPress Y to Reset your Score and Accuracy.\nHold Z and press X to reset song speed.\nHold Z and press LEFT/RIGHT for change song speed.";
 		else
-		leText = "Нажмите C для открытия меню изменения игрового геймплея.\nНажмите Y для сброса счета и рейтинга.\nУдерживайте Z и нажмите X для сброса скорости песни.\nУдерживайте Z и нажимайте LEFT/RIGHT для изменения скорости песни.";
+		leText = "������� C ��� �������� ���� ��������� �������� ��������.\n������� Y ��� ������ ����� � ��������.\n����������� Z � ������� X ��� ������ �������� �����.\n����������� Z � ��������� LEFT/RIGHT ��� ��������� �������� �����.";
 		var size:Int = 16;
 		#else
 		if(ClientPrefs.language == 'English')
 		leText = "Press CTRL to open the Gameplay Changers Menu.\nPress RESET to Reset your Score and Accuracy.\nHold SHIFT and press ALT to reset song speed.\nHold SHIFT and press LEFT/RIGHT for change song speed.";
 		else
-		leText = "Нажмите CTRL для открытия меню изменения игрового геймплея.\nНажмите RESET для сброса счета и рейтинга.\nУдерживайте SHIFT и нажмите ALT для сброса скорости песни.\nУдерживайте SHIFT и нажимайте LEFT/RIGHT для изменения скорости песни.";
+		leText = "������� CTRL ��� �������� ���� ��������� �������� ��������.\n������� RESET ��� ������ ����� � ��������.\n����������� SHIFT � ������� ALT ��� ������ �������� �����.\n����������� SHIFT � ��������� LEFT/RIGHT ��� ��������� �������� �����.";
 		var size:Int = 16;
 		#end
 		var text:FlxText = new FlxText(0, FlxG.height - 65, FlxG.width, leText, size);
@@ -333,7 +335,7 @@ class FreeplayState extends MusicBeatState
 		if(ClientPrefs.language == 'English')
 			diffText.text = CoolUtil.difficultyString() + ' MODE <';
 			else
-			diffText.text = CoolUtil.difficultyString() + ' РЕЖИМ <';
+			diffText.text = CoolUtil.difficultyString() + ' ����� <';
 	
 		if (FlxG.sound.music != null)
 	    Conductor.songPosition = FlxG.sound.music.time;
@@ -364,8 +366,8 @@ class FreeplayState extends MusicBeatState
 		}
 		else
 		{
-		scoreText.text = 'Лучший Счёт: ' + lerpScore;
-		rateTxt.text = 'Рейтинг: ' + ratingSplit.join('.') + ' %';
+		scoreText.text = '������ ����: ' + lerpScore;
+		rateTxt.text = '�������: ' + ratingSplit.join('.') + ' %';
 		}
 
 		positionBar();
