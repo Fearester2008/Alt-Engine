@@ -49,6 +49,8 @@ class TitleState extends MusicBeatState
 
 	public static var initialized:Bool = false;
 
+	var files:Array<String>;
+
 	var blackScreen:FlxSprite;
 	var credGroup:FlxGroup;
 	var credTextShit:Alphabet;
@@ -188,6 +190,21 @@ class TitleState extends MusicBeatState
 				});
 			}
 		#end
+	}
+
+	function onUpdateData(data:String) {
+		var versions = [for(e in data.split("\n")) if (e.trim() != "") e];
+		var currentVerPos = versions.indexOf(VersionStuff.altEngineVersion);
+		var files:Array<String> = [];
+		for(i in currentVerPos+1...versions.length) {
+			var data:String = "";
+			var parsedFiles = [for(e in data.split("\n")) if (e.trim() != "") e];
+			for(f in parsedFiles) {
+				if (!files.contains(f)) {
+					files.push(f);
+				}
+			}
+		}
 	}
 
 	var logoBl:FlxSprite;
