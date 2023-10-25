@@ -22,7 +22,7 @@ class FlixText extends FlxSpriteGroup {
 
 	public var forceX:Float = Math.NEGATIVE_INFINITY;
 
-    public function new(x:Float, y:Float, text:String = '', size:Int, color:FlxColor, alignment:FlxTextAlign) {
+    public function new(x:Float, y:Float, text:String = '', size:Int, color:FlxColor = FlxColor.WHITE, alignment:FlxTextAlign) {
         super();
         theText = new FlxText(x,y,820,text,size);
         theText.setFormat('VCR OSD Mono', size,color,alignment,OUTLINE,FlxColor.BLACK);

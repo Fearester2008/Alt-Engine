@@ -2,6 +2,7 @@ package backend.utils;
 
 import lime.app.Application;
 import flixel.util.FlxColor;
+import lime.graphics.Image;
 
 using StringTools;
 
@@ -29,10 +30,50 @@ class AppUtil {
            return;
 
         }
-        public static function setAppVersion(version:String)
+        public static function setAppVersion(version:String, stage:String = '')
          {
-            Application.current.window.title = "FNF' Alt Engine v" + version;
+            if (version == VersionStuff.altEngineVersion + VersionStuff.stage)
+            {
+                version = VersionStuff.altEngineVersion;
+                stage = VersionStuff.stage;
+            }
+            else
+            {
+                var ver:String = VersionStuff.altEngineVersion;
+                var stageBuild:String = VersionStuff.stage;
+                ver = version;
+                stageBuild = stage;
+            }
             return;
-
          }
+         public static function setAppIcon(path:String = 'mods/images/', icon:String = 'iconOG')
+            {
+                #if !android
+                #if MODS_ALLOWED
+                var iconPath:String = 'mods/images/';
+                #else
+                var iconPath:String = 'assets/images/';
+                #end
+                var iconImage:String = 'iconOG';
+    
+                if(iconImage == 'iconOG' || iconImage == null)
+                {
+                    iconImage = icon;
+                }
+    
+                #if MODS_ALLOWED
+                if(iconPath == 'mods/images/' || iconPath == null)
+                    {
+                        iconPath = path;
+                    }
+                #else
+                if(iconPath == 'assets/images/' || iconPath == null)
+                {
+                    iconPath = path;
+                }
+                #end
+    
+                return Application.current.window.setIcon(Image.fromFile(path + icon + '.png'));
+                #end
+            }
 }

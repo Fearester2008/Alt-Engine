@@ -1,8 +1,5 @@
 package states;
 
-#if desktop
-import sys.thread.Thread;
-#end
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -128,7 +125,6 @@ class TitleState extends MusicBeatState
 		FlxG.save.bind('funkin' , CoolUtil.getSavePath());
 
 		ClientPrefs.loadPrefs();
-
 		Highscore.load();
 
 		// IGNORE THIS!!!
@@ -470,10 +466,6 @@ class TitleState extends MusicBeatState
 
 				transitioning = true;
 				// FlxG.sound.music.stop();
-
-				MainMenuState.firstStart = true;
-				MainMenuState.finishedAnim = true;
-	
 
 				new FlxTimer().start(0.8, function(tmr:FlxTimer)
 				{

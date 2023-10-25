@@ -5,6 +5,9 @@ import openfl.events.Event;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import flixel.math.FlxMath;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+
 #if gl_stats
 import openfl.display._internal.stats.Context3DStats;
 import openfl.display._internal.stats.DrawCallContext;
@@ -26,6 +29,8 @@ import openfl.system.System;
 @:noDebug
 #end
 
+var tmp:Bitmap;
+
 class FPS extends TextField
 {
 	/**
@@ -42,6 +47,7 @@ class FPS extends TextField
 	@:noCompletion private var cacheCount:Int;
 	@:noCompletion private var currentTime:Float;
 	@:noCompletion private var times:Array<Float>;
+	public var colorStr:Dynamic;
 
 	public function new(x:Float = 10, y:Float = 10, color:Int = 0x000000)
 	{
@@ -49,11 +55,10 @@ class FPS extends TextField
 
 		this.x = x;
 		this.y = y;
-
+		colorStr = color;
 		currentFPS = 0;
 		selectable = false;
 		mouseEnabled = false;
-		defaultTextFormat = new TextFormat("_sans", 14, color);
 		autoSize = LEFT;
 		multiline = true;
 		text = "FPS: ";
@@ -95,52 +100,67 @@ class FPS extends TextField
 			var memoryMegas:Float = 0;
 			
 			var fpsPercent:Float = 0;
+
+		switch(ClientPrefs.sysInfo)
+		{
+			case 'OG FPS':
+			defaultTextFormat = new TextFormat("_sans", 10, colorStr);
+			case 'PE FPS':
+			defaultTextFormat = new TextFormat("_sans", 14, colorStr);
+			default:
+			defaultTextFormat = new TextFormat("VCR OSD Mono", 13, colorStr);
+		}
 		    
 			memoryMegas = checkMemory();
             fpsPercent = HelperFunctions.truncateFloat((currentFPS / framerate) * 100,2);
 		    if(memoryMegas >= maxMemory)
 				maxMemory = memoryMegas;
 
-			if(ClientPrefs.sysInfo == 'System' && ClientPrefs.showFPS)
+			var fpsType:String = ClientPrefs.sysInfo;
+
+			if(ClientPrefs.showFPS)
 			{
-			text = "FPS: " + currentFPS + " / " + framerate + " [ " + fpsPercent + " % ]";
-			text += "\nMemory: " + ${CoolUtil.getInterval(memoryMegas)};
-			text += "\nMemory Peak: " + ${CoolUtil.getInterval(maxMemory)};
-			text += "\nOperating system: " + '${lime.system.System.platformLabel}';
-            }
-			if(ClientPrefs.sysInfo == 'OG FPS' && ClientPrefs.showFPS)
+			switch(fpsType)
 			{
-			  text = "FPS: " + currentFPS;
+				case 'System':
+				text = "Framerate: " + currentFPS + " / " + framerate + " - " + fpsPercent + "%";
+				text += "\nMemory: " + ${CoolUtil.getInterval(memoryMegas)};
+				text += "\nMemory Peak: " + ${CoolUtil.getInterval(maxMemory)};
+				text += "\nOperating system: " + '${lime.system.System.platformLabel}';
+
+				case 'OG FPS':
+				text = "FPS: " + currentFPS;
+
+				case 'PE FPS':
+				text = "FPS: " + currentFPS;
+				#if openfl
+				text += "\nMemory: " +  ${CoolUtil.getInterval(memoryMegas)};
+				#end
+
+				case 'FPS ALT':
+				text = "Framerate: " + currentFPS + " / " + framerate + " - " + fpsPercent + "%";
+				text += "\nMemory: " + ${CoolUtil.getInterval(memoryMegas)};
+				text += "\nMemory Peak: " + ${CoolUtil.getInterval(maxMemory)};
+				text += "\nAlt Engine version: " + VersionStuff.altEngineVersion + VersionStuff.stage;
 			}
-			if(ClientPrefs.sysInfo == 'PE FPS' && ClientPrefs.showFPS)
+		}
+			if(currentFPS > 0)
 			{
-			  text = "FPS: " + currentFPS;
-			  #if openfl
-			  text += "\nMemory: " +  ${CoolUtil.getInterval(memoryMegas)};
-			  #end
+			textColor = 0xFFFFFFFF;
 			}
-			if(ClientPrefs.sysInfo == 'FPS ALT' && ClientPrefs.showFPS)
-			{
-			text = "FPS: " + '[' + currentFPS + '] ';
-			text += "\nMemory: " + ${CoolUtil.getInterval(memoryMegas)};
-			text += "\nMemory Peak: " + ${CoolUtil.getInterval(memoryMegas)};
-			text += "\nAlt Engine version: " + VersionStuff.altEngineVersion + VersionStuff.stage;
-			text += "\nOperating system: " + '${lime.system.System.platformLabel}';
-            }
-			textColor = 0xFF03069C;
-			if (memoryMegas > 3000)
+			if (currentFPS < framerate / 4)
 			{
 				textColor = 0xFF830101;
 			}
-			if (memoryMegas > 2000)
+			if (currentFPS < framerate / 3)
 				{
 				textColor = 0xFFA14E00;
 				}
-			if (memoryMegas > 1000)
+			if (currentFPS < framerate / 2)
 				{
 				textColor = 0xFFB1C406;
 				}
-			if (memoryMegas > 500)
+			if (currentFPS < framerate)
 				{
 				textColor = 0xFF1A8F03;
 				}

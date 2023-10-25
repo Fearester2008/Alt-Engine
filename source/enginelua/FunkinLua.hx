@@ -276,6 +276,9 @@ class FunkinLua {
 			}
 		});
 
+		Lua_helper.add_callback(lua, "setAppIcon", function(path:String, image:String) {
+			AppUtil.setAppIcon(path, image);
+		});
 		Lua_helper.add_callback(lua, "getAppData", function() {
 			AppUtil.getAppData();
 		});

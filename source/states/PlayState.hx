@@ -4130,6 +4130,19 @@ class PlayState extends MusicBeatState
 								who.color = FlxColor.WHITE;
 							}
 							phillyStreet.color = FlxColor.WHITE;
+							switch(hud)
+							{
+								case 'Better Alt HUD':
+									for (icons in [iconP1New, iconP2New])
+									{
+										icons.color = FlxColor.WHITE;
+									}
+								default:
+									for (icon in [iconP1, iconP2])
+										{
+											icon.color = FlxColor.WHITE;
+										}
+							}
 						}
 
 					case 1: //turn on
@@ -4167,6 +4180,20 @@ class PlayState extends MusicBeatState
 						{
 							who.color = charColor;
 						}
+						switch(hud)
+						{
+							case 'Better Alt HUD':
+								for (icons in [iconP1New, iconP2New])
+								{
+									icons.color = charColor;
+								}
+							default:
+								for (icon in [iconP1, iconP2])
+									{
+										icon.color = charColor;
+									}
+						}
+						
 						phillyGlowParticles.forEachAlive(function(particle:PhillyGlow.PhillyGlowParticle)
 						{
 							particle.color = color;
@@ -5858,11 +5885,11 @@ class PlayState extends MusicBeatState
         {
             if(ClientPrefs.iconBop == 'Psych')
             {
-		    i.scale.set(1.35, 1.35);
+		    i.scale.set(1.4, 1.4);
             }
             if(ClientPrefs.iconBop == 'Alt')
             {
-                i.scale.set(1.1,1.1);
+                i.scale.set(1.2,1.2);
             }
         }
 		}
@@ -5872,11 +5899,11 @@ class PlayState extends MusicBeatState
 		{
 		if(ClientPrefs.iconBop == 'Psych')
 		{
-			i.scale.set(1.065, 1.065);
+			i.scale.set(1.4, 1.4);
 		}
 		if(ClientPrefs.iconBop == 'Alt')
 		{
-			i.scale.set(1.1,1.1);
+			i.scale.set(1.2,1.2);
 		}
 		}
 		}

@@ -13,6 +13,14 @@ import backend.VersionStuff;
 import backend.Highscore;
 import backend.HelperFunctions;
 
+import options.*;
+import options.format.ControlsOptions;
+import options.format.GameplayOptions;
+import options.format.GraphicsOptions;
+import options.format.JudgementOptions;
+import options.format.NoteOptions;
+import options.format.VisualOptions;
+
 //states
 import states.*;
 import states.editors.*;

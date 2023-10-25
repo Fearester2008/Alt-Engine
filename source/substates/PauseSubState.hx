@@ -434,13 +434,13 @@ class PauseSubState extends MusicBeatSubstate
 					elapsedTime = 0;
 					MusicBeatState.switchState(new states.editors.ChartingState());
 					PlayState.chartingMode = true;
-				case "Options":
+				/*case "Options":
 					elapsedTime = 0;
 						PlayState.seenCutscene = true;
 						options.OptionsState.fromPlayState = true;
 						MusicBeatState.switchState(new options.OptionsState());
 						FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song));
-						FlxG.sound.music.fadeIn(2, 0, 1);
+						FlxG.sound.music.fadeIn(2, 0, 1);*/
 				case "Exit to menu":
 					elapsedTime = 0;
 					PlayState.deathCounter = 0;

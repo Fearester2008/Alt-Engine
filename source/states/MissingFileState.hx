@@ -20,7 +20,7 @@ class MissingFileMessage extends MusicBeatSubstate
 		bg.alpha = 0.7;
 		add(bg);
 
-		var bigText:Alphabet = new Alphabet(0, 150, headerText, true, false);
+		var bigText:Alphabet = new Alphabet(0, 550, headerText, true, false);
 		bigText.screenCenter(X);
 		add(bigText);
 
