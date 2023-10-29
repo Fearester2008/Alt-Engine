@@ -3,8 +3,7 @@
 
 [![Builds Status](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/WindowsMain.yml/badge.svg)](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/WindowsMain.yml)
 
-[![GitHub Releases](https://img.shields.io/badge/github/downloads/Fearester2008/FNF-Alt-Engine)](https://github.com/Fearester2008/FNF-Alt-Engine/releases)
-
+[![GitHub Releases](https://img.shields.io/github/downloads/Fearester2008/FNF-Alt-Engine)](https://github.com/Fearester2008/FNF-Alt-Engine/releases)
 
 Used and coded on: [Psych Engine](https://gamebanana.com/mods/309789).
 
