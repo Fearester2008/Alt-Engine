@@ -224,15 +224,15 @@ class FreeplayState extends MusicBeatState
 		var leText:String;
 		#if android
 		if(ClientPrefs.language == 'English')
-		leText = "Press C to open the Gameplay Changers Menu. \nPress Y to Reset your Score and Accuracy.\nHold Z and press X to reset song speed.\nHold Z and press LEFT/RIGHT for change song speed.";
+		leText = "Press C to open the Gameplay Changers Menu. \nPress Y to Reset your Score and Accuracy.\nHold Z and press X to reset song speed.\nHold Z and press LEFT/RIGHT for change song speed. Press X for listen or stop song.";
 		else
-		leText = "������� C ��� �������� ���� ��������� �������� ��������.\n������� Y ��� ������ ����� � ��������.\n����������� Z � ������� X ��� ������ �������� �����.\n����������� Z � ��������� LEFT/RIGHT ��� ��������� �������� �����.";
+		leText = "Нажмите C для открытия меню изменения игрового геймплея.\nНажмите Y для сброса счета и рейтинга.\nУдерживайте Z и нажмите X для сброса скорости песни.\nУдерживайте Z и нажимайте LEFT/RIGHT для изменения скорости песни. Нажмите X для прослушивания или остановки песни.";
 		var size:Int = 16;
 		#else
 		if(ClientPrefs.language == 'English')
-		leText = "Press CTRL to open the Gameplay Changers Menu.\nPress RESET to Reset your Score and Accuracy.\nHold SHIFT and press ALT to reset song speed.\nHold SHIFT and press LEFT/RIGHT for change song speed.";
+		leText = "Press CTRL to open the Gameplay Changers Menu.\nPress RESET to Reset your Score and Accuracy.\nHold SHIFT and press ALT to reset song speed.\nHold SHIFT and press LEFT/RIGHT for change song speed. Press P for listen or stop song.";
 		else
-		leText = "������� CTRL ��� �������� ���� ��������� �������� ��������.\n������� RESET ��� ������ ����� � ��������.\n����������� SHIFT � ������� ALT ��� ������ �������� �����.\n����������� SHIFT � ��������� LEFT/RIGHT ��� ��������� �������� �����.";
+		leText = "Нажмите CTRL для открытия меню изменения игрового геймплея.\nНажмите RESET для сброса счета и рейтинга.\nУдерживайте SHIFT и нажмите ALT для сброса скорости песни.\nУдерживайте SHIFT и нажимайте LEFT/RIGHT для изменения скорости песни. Нажмите P для прослушивания или остановки песни.";
 		var size:Int = 16;
 		#end
 		var text:FlxText = new FlxText(0, FlxG.height - 65, FlxG.width, leText, size);
@@ -260,7 +260,12 @@ class FreeplayState extends MusicBeatState
 	}
 	function start()
 	{
+		if(songPlay)
 		FlxG.sound.music.fadeIn(1.2, 0, 1);
+		else {
+		FlxG.sound.music.fadeOut(0, 1.2);
+		FlxG.sound.playMusic(Paths.music('freakyMenu', 1));
+		}
 	}
 	public function addSong(songName:String, weekNum:Int, songCharacter:String, color:Int)
 	{
@@ -335,8 +340,8 @@ class FreeplayState extends MusicBeatState
 		if(ClientPrefs.language == 'English')
 			diffText.text = CoolUtil.difficultyString() + ' MODE <';
 			else
-			diffText.text = CoolUtil.difficultyString() + ' ����� <';
-	
+			diffText.text = CoolUtil.difficultyString() + ' РЕЖИМ <';
+
 		if (FlxG.sound.music != null)
 	    Conductor.songPosition = FlxG.sound.music.time;
 
@@ -360,15 +365,15 @@ class FreeplayState extends MusicBeatState
 		}
 
 		if(ClientPrefs.language == 'English')
-		{
-		scoreText.text = 'Best Score: ' + lerpScore;
-		rateTxt.text = 'Rating: ' + ratingSplit.join('.') + ' %';
-		}
-		else
-		{
-		scoreText.text = '������ ����: ' + lerpScore;
-		rateTxt.text = '�������: ' + ratingSplit.join('.') + ' %';
-		}
+			{
+			scoreText.text = 'Best Score: ' + lerpScore;
+			rateTxt.text = 'Rating: ' + ratingSplit.join('.') + ' %';
+			}
+			else
+			{
+			scoreText.text = 'Лучший Счёт: ' + lerpScore;
+			rateTxt.text = 'Рейтинг: ' + ratingSplit.join('.') + ' %';
+			}
 
 		positionBar();
 
@@ -468,7 +473,7 @@ class FreeplayState extends MusicBeatState
 			openSubState(new substates.GameplayChangersSubstate());
 			substates.GameplayChangersSubstate.fromFreeplay = true;
 		}
-		if(FlxG.keys.justPressed.P)
+		if(FlxG.keys.justPressed.P #if android || _virtualpad.buttonX.justPressed #end)
 			{
 			if(instPlaying != curSelected)
 			{
@@ -606,6 +611,9 @@ class FreeplayState extends MusicBeatState
 		if(songPlay)
 		{
 			iconOpponentArray[curSelected].scale.set(1.2,1.2);
+		}
+		else {
+			iconOpponentArray[curSelected].scale.set(1,1);
 		}
 	}
 
