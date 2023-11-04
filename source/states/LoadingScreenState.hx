@@ -50,6 +50,13 @@ class LoadingScreenState extends MusicBeatState
     override function create()
     {
         
+        Paths.clearStoredMemory(); 
+		Paths.clearUnusedMemory();
+
+        #if !android
+        LoadingUtil.loading();
+        #end
+
         FlxG.mouse.visible = true;
 
 		FlxG.worldBounds.set(0,0);
@@ -63,7 +70,7 @@ class LoadingScreenState extends MusicBeatState
 
         funkay = new FlxSprite(0, 0).loadGraphic(Paths.image('menuDesat'));
 		funkay.updateHitbox();
-		funkay.color = 0xFF00FF6A;
+		funkay.color = 0xFF02C553;
 		funkay.antialiasing = ClientPrefs.globalAntialiasing;
 		add(funkay);
 		funkay.scrollFactor.set();

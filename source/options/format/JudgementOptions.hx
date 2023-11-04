@@ -5,7 +5,7 @@ class RatingOffset extends Option
 	public function new(desc:String)
 	{
 		super();
-		description = desc + " (Press R to reset)";
+		description = desc;
 		acceptType = true;
 	}
 
@@ -42,7 +42,7 @@ class SickOffsetOption extends Option
 	public function new(desc:String)
 	{
 		super();
-		description = desc + " (Press R to reset)";
+		description = desc;
 		acceptType = true;
 	}
 
@@ -79,7 +79,7 @@ class GoodOffsetOption extends Option
 	public function new(desc:String)
 	{
 		super();
-		description = desc + " (Press R to reset)";
+		description = desc;
 		acceptType = true;
 	}
 
@@ -116,7 +116,7 @@ class BadOffsetOption extends Option
 	public function new(desc:String)
 	{
 		super();
-		description = desc + " (Press R to reset)";
+		description = desc;
 		acceptType = true;
 	}
 
@@ -153,7 +153,7 @@ class SafeFrames extends Option
 	public function new(desc:String)
 	{
 		super();
-		description = desc + " (Press R to reset)";
+		description = desc;
 		acceptType = true;
 	}
 

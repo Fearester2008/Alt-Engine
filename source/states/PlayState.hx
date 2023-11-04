@@ -114,7 +114,7 @@ class PlayState extends MusicBeatState
 		['Дерьмо', 0.4], //From 20% to 39%
 		['Плохо', 0.5], //From 40% to 49%
 		['Хах.', 0.6], //From 50% to 59%
-		['Мех', 0.69], //From 60% to 68%
+		['Может Быть.', 0.69], //From 60% to 68%
 		['Круто', 0.7], //69%
 		['Хорошо', 0.8], //From 70% to 79%
 		['Великолепно', 0.9], //From 80% to 89%
@@ -1712,8 +1712,8 @@ class PlayState extends MusicBeatState
 				songBarName.scrollFactor.set();
 				add(songBarName);
 
-				ratingBar = new FlxBar(100, (!ClientPrefs.downScroll) ? 15 : 680, LEFT_TO_RIGHT, 750, 19, this, 'ratingPercent', 0, 1);
-				ratingBar.createFilledBar(FlxColor.BLACK, FlxColor.LIME);
+				ratingBar = new FlxBar(0, (!ClientPrefs.downScroll) ? 0 : 700, LEFT_TO_RIGHT, FlxG.width, 10, this, 'ratingPercent', 0, 1);
+				ratingBar.createFilledBar(FlxColor.TRANSPARENT, FlxColor.LIME);
 				ratingBar.numDivisions = 3000;
 				ratingBar.scrollFactor.set();
 				ratingBar.screenCenter(X);
@@ -1968,11 +1968,11 @@ class PlayState extends MusicBeatState
 			FlxColor.fromRGB(boyfriend.healthColorArray[0], boyfriend.healthColorArray[1], boyfriend.healthColorArray[2]));
 			healthBar.updateBar();
 			case 'Better Alt HUD':
-			healthBarP1.createFilledBar(FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]),
+			healthBarP1.createFilledBar(FlxColor.TRANSPARENT,
 			FlxColor.fromRGB(boyfriend.healthColorArray[0], boyfriend.healthColorArray[1], boyfriend.healthColorArray[2]));
 			healthBarP1.updateBar();
 
-			healthBarP2.createFilledBar(FlxColor.fromRGB(boyfriend.healthColorArray[0], boyfriend.healthColorArray[1], boyfriend.healthColorArray[2]),
+			healthBarP2.createFilledBar(FlxColor.TRANSPARENT,
 			FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
 			healthBarP2.updateBar();
 		}

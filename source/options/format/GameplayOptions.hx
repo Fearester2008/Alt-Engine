@@ -39,7 +39,7 @@ class Stacking extends Option
 		super();
 		description = desc;
 	}
-
+ 
 	public override function left():Bool
 	{
 		ClientPrefs.stacking = !ClientPrefs.stacking;
@@ -59,7 +59,7 @@ class Stacking extends Option
 	}
 }
 
-class DownscrollOption extends Option
+class DownScrollOption extends Option
 {
 	public function new(desc:String)
 	{

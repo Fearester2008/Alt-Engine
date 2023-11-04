@@ -419,7 +419,7 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
-		if (FlxG.keys.pressed.SHIFT #if android || _virtualpad.buttonZ.pressed #end)
+		if (FlxG.keys.pressed.SHIFT #if android || _virtualpad.buttonZ.pressed #end && songPlay)
 			{
 				if (controls.UI_LEFT_P)
 				{
@@ -430,7 +430,7 @@ class FreeplayState extends MusicBeatState
 					rate += 0.05;
 				}
 	
-				if (FlxG.keys.justPressed.ALT #if android || _virtualpad.buttonX.justPressed #end)
+				if (FlxG.keys.justPressed.ALT #if android || _virtualpad.buttonY.justPressed #end)
 				{
 					rate = 1;
 				}
@@ -493,7 +493,6 @@ class FreeplayState extends MusicBeatState
 				start();
 				AppUtil.setAppData(VersionStuff.appName, VersionStuff.altEngineVersion + VersionStuff.stage, "Listening - " + songs[curSelected].songName);
 				}
-				FlxG.sound.play(Paths.sound('confirmMenu'),0.7);
 				instPlaying = curSelected;
 				persistentUpdate = true;
 				persistentDraw = true;
@@ -532,6 +531,7 @@ class FreeplayState extends MusicBeatState
 
 			try
 				{
+					FlxG.sound.play(Paths.sound('confirmMenu'),0.7);
 					PlayState.SONG = Song.loadFromJson(poop, songLowercase);
 					PlayState.isStoryMode = false;
 					PlayState.storyDifficulty = curDifficulty;

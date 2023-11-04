@@ -47,7 +47,8 @@ class Paths
 		'weeks',
 		'fonts',
 		'scripts',
-		'jsons'
+		'jsons',
+		'custom_types'
 	];
 	#end
 

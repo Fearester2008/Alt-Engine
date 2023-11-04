@@ -145,8 +145,26 @@ class OptionsMenu extends MusicBeatSubstate
 				new HudStyle("What should be HUD?"),
 				new ToggleVolumeKeys("If unchecked, volume keys has not been actived."),
 				new WinningIcons("If unchecked, icons not be have winning animations."),
-				new DiscordRPC("If unchecked, hides \"Playing Box\" in Discord."),
-				new RatingOffset("Changes how late/early you have to hit for a \"Sick!\"\nHigher values mean you have to hit later."),
+				new DiscordRPC("If unchecked, hides \"Playing Box\" in Discord.")
+			]),
+			new OptionCata(50, 105, "Gameplay", [
+				new ControllerMode("Check this if you want to play with a controller instead of using your keyboard."),
+				new Stacking("if checked, ratings and numbers sprites will be stacking, and memory will be much loading."),
+				new DownScrollOption("If checked, notes go Down instead of Up, simple enough."), 
+				new MiddleScrollOption("If checked, your notes get centered."),
+				new OpponentStrumsOption("If unchecked, opponent notes get hidden."),
+				new GhostTappingOption("If checked, you won't get misses from pressing keys while there are no notes able to be hit."),
+				new BlurNotes("If checked, your notes going to be lighting. [WITH BOTPLAY OR WHEN OPPONENT GOING TO BE ON NOTES!]."),
+				new NoReset("If checked, pressing Reset won't do anything."),
+				new IconBop("What should be the icon bop?"),
+				new CameraBop("What should be the camera mode?"),
+				new JudgementCounter("If checked, Judgement counter should be visible."),
+				new JudgementCounterType("What should be the judgement counter?"),
+				new ResultsScreen("If checked, Results should be visible."),
+				new HitSoundOption("Funny notes does \"Tick!\" when you hit them."),
+			]),
+			new OptionCata(345, 105, "Judgements", [
+				new RatingOffset("Changes how late/early you have to hit for a \"Sick!\" Higher values mean you have to hit later."),
 				new SickOffsetOption("Changes the amount of time you have for hitting a \"Sick!\" in milliseconds."),
 				new GoodOffsetOption("Changes the amount of time you have for hitting a \"Good\" in milliseconds."),
 				new BadOffsetOption("Changes the amount of time you have for hitting a \"Bad\" in milliseconds."),
@@ -207,8 +225,6 @@ class OptionsMenu extends MusicBeatSubstate
 
 		for (i in 0...options.length)
 		{
-			if (i >= 4)
-				continue;
 			var cat = options[i];
 			add(cat);
 			add(cat.titleObject);
@@ -493,7 +509,6 @@ class OptionsMenu extends MusicBeatSubstate
 						}
 
 						if (selectedOptionIndex != 0
-							&& selectedOptionIndex != options[selectedCatIndex].options.length - 1
 							&& options[selectedCatIndex].options.length > 6)
 						{
 							if (selectedOptionIndex >= (options[selectedCatIndex].options.length - 1) / 2)
@@ -502,7 +517,6 @@ class OptionsMenu extends MusicBeatSubstate
 									i.y -= 46;
 								}
 						}
-
 						selectOption(options[selectedCatIndex].options[selectedOptionIndex]);
 					}
 					else if (up)

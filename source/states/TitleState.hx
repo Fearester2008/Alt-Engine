@@ -80,17 +80,12 @@ class TitleState extends MusicBeatState
 	{
 
 		#if android
+		LoadingUtil.loading();
 		FlxG.android.preventDefaultKeys = [BACK];
 		#end
 
-		Paths.clearStoredMemory();
+		Paths.clearStoredMemory(); 
 		Paths.clearUnusedMemory();
-
-		#if LUA_ALLOWED
-		Paths.pushGlobalMods();
-		#end
-		// Just to load a mod on start up if ya got one. For mods that change the menu music and bg
-		WeekData.loadTheFirstEnabledMod();
 
 		//trace(path, FileSystem.exists(path));
 
@@ -109,25 +104,12 @@ class TitleState extends MusicBeatState
 		}
 		#end*/
 
-		FlxG.game.focusLostFramerate = 60;
-		FlxG.sound.muteKeys = muteKeys;
-		FlxG.sound.volumeDownKeys = volumeDownKeys;
-		FlxG.sound.volumeUpKeys = volumeUpKeys;
-		FlxG.keys.preventDefaultKeys = [TAB];
-
-		PlayerSettings.init();
-
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
 		// DEBUG BULLSHIT
 
 		swagShader = new ColorSwap();
 		super.create();
-
-		FlxG.save.bind('funkin' , CoolUtil.getSavePath());
-
-		ClientPrefs.loadPrefs();
-		Highscore.load();
 
 		// IGNORE THIS!!!
 		titleJSON = Json.parse(Paths.getTextFromFile('images/gfDanceTitle.json'));
