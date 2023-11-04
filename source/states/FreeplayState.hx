@@ -264,7 +264,7 @@ class FreeplayState extends MusicBeatState
 		FlxG.sound.music.fadeIn(1.2, 0, 1);
 		else {
 		FlxG.sound.music.fadeOut(0, 1.2);
-		FlxG.sound.playMusic(Paths.music('freakyMenu', 1));
+		FlxG.sound.playMusic(Paths.music('freakyMenu'), 1);
 		}
 	}
 	public function addSong(songName:String, weekNum:Int, songCharacter:String, color:Int)
@@ -493,6 +493,7 @@ class FreeplayState extends MusicBeatState
 				start();
 				AppUtil.setAppData(VersionStuff.appName, VersionStuff.altEngineVersion + VersionStuff.stage, "Listening - " + songs[curSelected].songName);
 				}
+				FlxG.sound.play(Paths.sound('confirmMenu'),0.7);
 				instPlaying = curSelected;
 				persistentUpdate = true;
 				persistentDraw = true;
