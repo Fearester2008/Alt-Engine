@@ -27,7 +27,7 @@ class MissingFileSubState extends MusicBeatSubstate
 	var canDoShit:Bool = false;
 	override function update(elapsed:Float)
 	{
-		if (FlxG.keys.justPressed.SPACE && canDoShit #if android _virtualpad.buttonA.justPressed #end){
+		if (FlxG.keys.justPressed.SPACE && canDoShit #if android || _virtualpad.buttonA.justPressed #end){
             MusicBeatState.switchState(new states.FreeplayState());
         }
 		super.update(elapsed);
