@@ -84,7 +84,7 @@ class CreditsState extends MusicBeatState
             ['Rom4chek' , 'rom4chek' , ' Coder and helper of Alt Engine', 'Кодер и помощник в Alt Engine', 'https://youtube.com/@Rom4chek', '00FF00'],
             ['Joalor64' , 'joalor64' , 'Coder of Alt Engine' , 'Кодер в Alt Engine' , 'https://github.com/Joalor64GH' , '8EFF8E'],
             ['Daniel', 'daniel' , 'Musican in Main Menu of Alt Engine', 'Музыкант в главном меню в Alt Engine' , 'https://youtube.com/@0_Daniel_0' , 'FFFF00'],
-			['Sussy Sam', 'sam', 'Musican in Main Menu of Alt Engine', 'Музыкант в главном меню в Alt Engine', '', '5C0000'],
+			['Sussy Sam', 'sam', 'Musican in Main Menu of Alt Engine', 'Музыкант в главном меню в Alt Engine', 'https://youtube.com/@sussysam6789?si=gNcNiZo_TyDmo_cy', '5C0000'],
 			['TheLeerName', 'leer' , 'Helper and collaborator of Alt Engine', 'Помощник и коллаборатор в Alt Engine' , 'https://github.com/TheLeerName' , '8EFF91'],
 			[''],
 			['Psych Engine Android Team'],
