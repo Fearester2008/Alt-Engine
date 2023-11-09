@@ -3,7 +3,7 @@
 
 [![Builds Status](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/WindowsMain.yml/badge.svg)](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/WindowsMain.yml)
 
-[![Builds Status](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/WindowsMain.yml/badge.svg)](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/main.yml)
+[![Builds Status](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/main.yml/badge.svg)](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/main.yml)
 
 [![GitHub Releases](https://img.shields.io/github/downloads/Fearester2008/FNF-Alt-Engine/total?style=plastic)](https://github.com/Fearester2008/FNF-Alt-Engine/releases)
 
