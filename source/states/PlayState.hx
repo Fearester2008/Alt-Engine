@@ -1712,7 +1712,7 @@ class PlayState extends MusicBeatState
 				songBarName.scrollFactor.set();
 				add(songBarName);
 
-				ratingBar = new FlxBar(0, (!ClientPrefs.downScroll) ? 0 : 700, LEFT_TO_RIGHT, FlxG.width, 10, this, 'ratingPercent', 0, 1);
+				ratingBar = new FlxBar(0, (!ClientPrefs.downScroll) ? 0 : FlxG.height - 10, LEFT_TO_RIGHT, FlxG.width, 10, this, 'ratingPercent', 0, 1);
 				ratingBar.createFilledBar(FlxColor.TRANSPARENT, FlxColor.LIME);
 				ratingBar.numDivisions = 3000;
 				ratingBar.scrollFactor.set();
@@ -2698,7 +2698,6 @@ class PlayState extends MusicBeatState
 									+ 'Дерьмово: ${HelperFunctions.truncateFloat(shitsPercent * 100, 2)}%\n'
 									+ 'Промазано: ${HelperFunctions.truncateFloat(missesPercent * 100, 2)}%\n';							
 									}
-									}
 								}
 							}
 							else
@@ -2716,6 +2715,7 @@ class PlayState extends MusicBeatState
 
 		callOnLuas('onUpdateScore', [miss]);
 	}
+}
 	public function scoreZoom(bad:Bool = false)
 		{
 			switch(hud)
@@ -3449,9 +3449,6 @@ class PlayState extends MusicBeatState
 		{
 			openChartEditor();
 		}
-
-		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
-		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
 		switch(hud)
 		{
 			case 'Psych Engine' | 'Alt Engine' | 'Vanila':
@@ -3514,27 +3511,27 @@ class PlayState extends MusicBeatState
 		if (health > 2)
 			health = 2;
 
-		switch (iconP1.animation.numFrames)
+		switch (iconP1.animation.frames)
 		{
 		case 3:
 		if (healthBar.percent < 20)
-		iconP1.animation.curAnim.curFrame = 1;
+			iconP1.animation.curAnim.curFrame = 1;
 		else if (healthBar.percent > 80 && iconP1.hasWinningIcon)
-		iconP1.animation.curAnim.curFrame = 2;
+			iconP1.animation.curAnim.curFrame = 2;
 		else
-		iconP1.animation.curAnim.curFrame = 0;
+			iconP1.animation.curAnim.curFrame = 0;
 
 		case 2:
 		if (healthBar.percent < 20)
-		iconP1.animation.curAnim.curFrame = 1;
+			iconP1.animation.curAnim.curFrame = 1;
 		else
-		iconP1.animation.curAnim.curFrame = 0;
+			iconP1.animation.curAnim.curFrame = 0;
 
 		case 1:
-		iconP1.animation.curAnim.curFrame = 0;
+			iconP1.animation.curAnim.curFrame = 0;
 		}
 
-		switch (iconP2.animation.numFrames)
+		switch (iconP2.animation.frames)
 		{
 			case 3:
 				if (healthBar.percent > 80)
@@ -3550,7 +3547,6 @@ class PlayState extends MusicBeatState
 					iconP2.animation.curAnim.curFrame = 0;
 			case 1:
 					iconP2.animation.curAnim.curFrame = 0;
-
 		}
 		}
 		else
@@ -3565,41 +3561,41 @@ class PlayState extends MusicBeatState
 			else if(healthP2 <= 0)
 				healthP2 = 0;
 		
-			switch (iconP1New.animation.numFrames)
+			switch (iconP1New.animation.frames)
 			{
 			case 3:
-			if (healthBarP1.percent < 20 && healthBarP2.percent > 80)
-			iconP1New.animation.curAnim.curFrame = 1;
-			else if (healthBarP1.percent > 80 && healthBarP2.percent < 20 && iconP1New.hasWinningIcon)
-			iconP1New.animation.curAnim.curFrame = 2;
+			if (healthBarP1.percent < 20)
+				iconP1New.animation.curAnim.curFrame = 1;
+			else if (healthBarP1.percent > 80 && iconP1New.hasWinningIcon)
+				iconP1New.animation.curAnim.curFrame = 2;
 			else
-			iconP1New.animation.curAnim.curFrame = 0;
+				iconP1New.animation.curAnim.curFrame = 0;
 	
 			case 2:
-			if (healthBarP1.percent < 20 && healthBarP2.percent > 80)
-			iconP1New.animation.curAnim.curFrame = 1;
+			if (healthBarP1.percent < 20)
+				iconP1New.animation.curAnim.curFrame = 1;
 			else
-			iconP1New.animation.curAnim.curFrame = 0;
-	
+				iconP1New.animation.curAnim.curFrame = 0;
+
 			case 1:
-			iconP1New.animation.curAnim.curFrame = 0;
+				iconP1New.animation.curAnim.curFrame = 0;
 			}
 
-			switch(iconP2New.animation.numFrames){
+			switch(iconP2New.animation.frames){
 				case 3:
-					if (healthBarP2.percent < 20 && healthBarP1.percent > 80)
-					iconP2New.animation.curAnim.curFrame = 1;
-					else if (healthBarP2.percent > 80 && healthBarP1.percent < 20 && iconP2New.hasWinningIcon)
+					if (healthBarP2.percent < 20)
+						iconP2New.animation.curAnim.curFrame = 1;
+					else if (healthBarP2.percent > 80 && iconP2New.hasWinningIcon)
 						iconP2New.animation.curAnim.curFrame = 2;
 					else 
 						iconP2New.animation.curAnim.curFrame = 0;
 				case 2:
-					if (healthBarP2.percent < 20 && healthBarP1.percent > 80)
+					if (healthBarP2.percent < 20)
 						iconP2New.animation.curAnim.curFrame = 1;
 					else 
 						iconP2New.animation.curAnim.curFrame = 0;
 				case 1:
-					iconP2New.animation.curAnim.curFrame = 0;
+						iconP2New.animation.curAnim.curFrame = 0;
 			}
 
 		}
@@ -3712,10 +3708,6 @@ class PlayState extends MusicBeatState
 			camNOTES.zoom = FlxMath.lerp(1, camNOTES.zoom, CoolUtil.boundTo(1 - (elapsed * 6.125 * camZoomingDecay * playbackRate), 0, 1));
 		}
 
-		FlxG.watch.addQuick("secShit", curSection);
-		FlxG.watch.addQuick("beatShit", curBeat);
-		FlxG.watch.addQuick("stepShit", curStep);
-
 		// RESET = Quick Game Over Screen
 		if (!ClientPrefs.noReset && controls.RESET && canReset && !inCutscene && startedCountdown && !endingSong)
 		{
@@ -3730,8 +3722,14 @@ class PlayState extends MusicBeatState
 			healthP2 = 2;
 			}
 		}
-		doDeathCheck();
-
+		switch(hud)
+		{
+		case 'Better Alt HUD':
+		doDeathCheckNew();
+		default:
+		doDeathCheckOld();
+		}
+		
 		if (unspawnNotes[0] != null)
 		{
 			var time:Float = spawnTime;
@@ -3956,8 +3954,45 @@ class PlayState extends MusicBeatState
 	}
 
 	public var isDead:Bool = false; //Don't mess with this on Lua!!!
-	function doDeathCheck(?skipHealthCheck:Bool = false) {
-		if (((skipHealthCheck && instakillOnMiss) || health <= 0 || healthP1 <= 0 || healthP2 >= 2) && !practiceMode && !isDead)
+	function doDeathCheckNew(?skipHealthCheck:Bool = false) {
+		if (((skipHealthCheck && instakillOnMiss) || (healthP1 <= 0 || healthP2 >= 2)) && !practiceMode && !isDead)
+		{
+			var ret:Dynamic = callOnLuas('onGameOver', [], false);
+			if(ret != FunkinLua.Function_Stop) {
+				boyfriend.stunned = true;
+				deathCounter++;
+
+				paused = true;
+
+				vocals.stop();
+				FlxG.sound.music.stop();
+
+				persistentUpdate = false;
+				persistentDraw = false;
+				for (tween in modchartTweens) {
+					tween.active = true;
+				}
+				for (timer in modchartTimers) {
+					timer.active = true;
+				}
+				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x - boyfriend.positionArray[0], boyfriend.getScreenPosition().y - boyfriend.positionArray[1], camFollowPos.x, camFollowPos.y));
+
+				// MusicBeatState.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+				AppUtil.setAppData(VersionStuff.appName, VersionStuff.altEngineVersion + VersionStuff.stage, "Game Over - " + PlayState.SONG.song + " In " + modeText);
+
+				#if desktop
+				// Game Over doesn't get his own variable because it's only used here
+				DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")", (hud != 'Better Alt HUD') ? iconP2.getCharacter() : iconP2New.getCharacter());
+				#end
+				isDead = true;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function doDeathCheckOld(?skipHealthCheck:Bool = false) {
+		if (((skipHealthCheck && instakillOnMiss) || health <= 0) && !practiceMode && !isDead)
 		{
 			var ret:Dynamic = callOnLuas('onGameOver', [], false);
 			if(ret != FunkinLua.Function_Stop) {
@@ -4788,7 +4823,7 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			if(doDeathCheck()) {
+			if(doDeathCheckOld() || doDeathCheckNew()) {
 				return;
 			}
 		}
@@ -5029,7 +5064,7 @@ class PlayState extends MusicBeatState
 		if(!cpuControlled)
 		{
 		rating.loadGraphic(Paths.image(pixelShitPart1 + daRating.image + pixelShitPart2));
-		rating.cameras = [camHUD];
+		rating.cameras = [camNOTES];
 		rating.screenCenter();
 		rating.x = coolText.x - 40;
 		rating.y -= 60;
@@ -5093,7 +5128,7 @@ class PlayState extends MusicBeatState
 		for (i in seperatedScore)
 		{
 			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'num' + Std.int(i) + pixelShitPart2));
-			numScore.cameras = [camHUD];
+			numScore.cameras = [camNOTES];
 			numScore.screenCenter();
 			numScore.x = coolText.x + (43 * daLoop) - 90;
 			numScore.y += 80;
@@ -5368,7 +5403,13 @@ class PlayState extends MusicBeatState
 		if(instakillOnMiss)
 		{
 			vocals.volume = 0;
-			doDeathCheck(true);
+			switch(hud)
+			{
+				case 'Better Alt HUD':
+					doDeathCheckNew(true);
+				default:
+					doDeathCheckOld(true);
+			}
 		}
 
 		//For testing purposes
@@ -5410,7 +5451,13 @@ class PlayState extends MusicBeatState
 			if(instakillOnMiss)
 			{
 				vocals.volume = 0;
-				doDeathCheck(true);
+				switch(hud)
+				{
+					case 'Better Alt HUD':
+						doDeathCheckNew(true);
+					default:
+						doDeathCheckOld(true);
+				}
 			}
 
 			if (combo > 5 && gf != null && gf.animOffsets.exists('sad'))

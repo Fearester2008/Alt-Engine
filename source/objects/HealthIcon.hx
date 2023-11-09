@@ -9,15 +9,15 @@ class HealthIcon extends FlxSprite
 	public var sprTracker:FlxSprite;
 	private var isOldIcon:Bool = false;
 	public var isPlayer:Bool = false;
-	public var hasWinningIcon:Bool;
+	public var hasWinningIcon:Bool = true;
 	private var char:String = '';
 
-	public function new(char:String = 'bf', isPlayer:Bool = false, ?allowGPU:Bool = true)
+	public function new(char:String = 'bf', isPlayer:Bool = false)
 	{
 		super();
 		isOldIcon = (char == 'bf-old');
 		this.isPlayer = isPlayer;
-		changeIcon(char, allowGPU);
+		changeIcon(char);
 		scrollFactor.set();
 	}
 
@@ -35,7 +35,7 @@ class HealthIcon extends FlxSprite
 	}
 
 	private var iconOffsets:Array<Float> = [0, 0, 0];
-	public function changeIcon(char:String, ?allowGPU:Bool = true) {
+	public function changeIcon(char:String) {
 		if(this.char != char) {
 			var name:String = 'icons/' + char;
 			if(!Paths.fileExists('images/' + name + '.png', IMAGE)) name = 'icons/icon-' + char; //Older versions of psych engine's support
@@ -45,13 +45,11 @@ class HealthIcon extends FlxSprite
 			loadGraphic(file); //Load stupidly first for getting the file size
 			var width2 = width;
 			if (width == 450 && hasWinningIcon) {
-				hasWinningIcon = true;
 				loadGraphic(file, true, Math.floor(width / 3), Math.floor(height)); //Then load it fr // winning icons go br
 				iconOffsets[0] = (width - 150) / 3;
 				iconOffsets[1] = (width - 150) / 3;
 				iconOffsets[2] = (width - 150) / 3;
 			} else {
-				hasWinningIcon = false;
 				loadGraphic(file, true, Math.floor(width / 2), Math.floor(height)); //Then load it fr // winning icons go br
 				iconOffsets[0] = (width - 150) / 2;
 				iconOffsets[1] = (width - 150) / 2;
@@ -59,10 +57,8 @@ class HealthIcon extends FlxSprite
 			
 			updateHitbox();
 			if (width2 == 450 && hasWinningIcon) {
-				hasWinningIcon = true;
 				animation.add(char, [0, 1, 2], 0, false, isPlayer);
 			} else {
-				hasWinningIcon = false;
 				animation.add(char, [0, 1], 0, false, isPlayer);
 			}
 			animation.play(char);

@@ -178,7 +178,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			FlxG.sound.play(Paths.music(endSoundName));
 			new FlxTimer().start(0.7, function(tmr:FlxTimer)
 			{
-				MusicBeatState.resetState();
+				MusicBeatState.resetState(true);
 			});
 			PlayState.instance.callOnLuas('onGameOverConfirm', [true]);
 		}

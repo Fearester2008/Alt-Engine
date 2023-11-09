@@ -232,17 +232,17 @@ class LoadingScreenState extends MusicBeatState
         {   
             if(!inPlayState)
             {
-            loadTxt.text = "Loading... " + percent + "% " + done + " / " + total;
+            loadTxt.text = "Loading Game... " + percent + "% " + done + " / " + total;
             progress = done / total;
             }
             else
             {
                 loadTxt.text = "Loading... " + percent + "% ";
-                progress += FlxG.random.float(0.0004, 0.002);
+                progress += FlxG.random.float(0.004, 0.01);
             }
         }
     }
-    
+
     function goToState()
     {
         if (inPlayState)
