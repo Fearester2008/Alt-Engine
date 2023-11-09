@@ -3,7 +3,9 @@
 
 [![Builds Status](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/WindowsMain.yml/badge.svg)](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/WindowsMain.yml)
 
-[![GitHub Releases](https://img.shields.io/github/downloads/Fearester2008/FNF-Alt-Engine/total?color=000000?labelColor=ffff00)](https://github.com/Fearester2008/FNF-Alt-Engine/releases)
+[![Builds Status](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/WindowsMain.yml/badge.svg)](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/main.yml)
+
+[![GitHub Releases](https://img.shields.io/github/downloads/Fearester2008/FNF-Alt-Engine/total?style=plastic)](https://github.com/Fearester2008/FNF-Alt-Engine/releases)
 
 Used and coded on: [Psych Engine](https://gamebanana.com/mods/309789).
 
@@ -20,7 +22,7 @@ Used and coded on: [Psych Engine](https://gamebanana.com/mods/309789).
 | ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/joalor64.png) | [Joalor64](https://github.com/Joalor64GH) | Fourth Programmer and Helper of Alt Engine.
 | ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/leer.png) | [TheLeerName](https://github.com/TheLeerName) | Fifth Programmer and Helper of Alt Engine.
 | ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/daniel.png) | [Daniel](https://youtube.com/@0_Daniel_0) | Composer of Alt Engine.
-
+| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/sam.png) | [Sussy Sam](https://youtube.com/@sussysam6789?si=gNcNiZo_TyDmo_cy) | Second Composer of Alt Engine.
 ## Psych Engine Credits:
 | Avatar | Username | Involvement |
 | ------ | -------- | ----------- |
