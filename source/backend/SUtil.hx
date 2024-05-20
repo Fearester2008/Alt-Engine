@@ -1,58 +1,42 @@
 package backend;
 
-#if android
-import android.content.Context;
-import android.widget.Toast;
-import android.os.Environment;
-import android.Permissions;
-#end
-import haxe.io.Path;
-import haxe.CallStack;
-import lime.app.Application;
 import lime.system.System as LimeSystem;
-import openfl.utils.Assets as OpenflAssets;
-import lime.utils.Log as LimeLogger;
-import openfl.events.UncaughtErrorEvent;
-import openfl.Lib;
-
-using StringTools;
-
-enum StorageType
-{
-	//DATA;
-    EXTERNAL;
-	EXTERNAL_DATA;
-	EXTERNAL_OBB;
-    MEDIA;
-}
+import haxe.io.Path;
+import haxe.Exception;
+#if android
+import android.Tools;
+import android.callback.CallBack;
+#end
 
 /**
- * ...
+ * A storage class for mobile.
  * @author Mihai Alexandru (M.A. Jigsaw)
  */
 class SUtil
 {
-	/**
-	 * This returns the external storage path that the game will use by the type.
-	 */
-	public static function getStorageDirectory(type:StorageType = #if EXTERNAL EXTERNAL #elseif OBB EXTERNAL_OBB #elseif MEDIA MEDIA #else EXTERNAL_DATA #end):String
+	#if sys
+	// root directory, used for handling the saved storage type and path
+	public static final rootDir:String = LimeSystem.applicationStorageDirectory;
+
+	#if android
+	// returns the selected directory from SAF directory picker for CUSTOM
+	public static var selectedDir(get, never):Null<String>;
+	#end
+
+	public static function getStorageDirectory(?force:Bool = false):String
 	{
 		var daPath:String = '';
-
 		#if android
-		switch (type)
+		if (!FileSystem.exists(rootDir + 'storagetype.txt'))
+			File.saveContent(rootDir + 'storagetype.txt', ClientPrefs.data.storageType);
+		var curStorageType:String = File.getContent(rootDir + 'storagetype.txt');
+		if(curStorageType == "CUSTOM" && selectedDir == null)
 		{
-			//case DATA:
-				//daPath = Context.getFilesDir();
-			case EXTERNAL_DATA:
-				daPath = Context.getExternalFilesDir(null);
-			case EXTERNAL_OBB:
-				daPath = Context.getObbDir();
-            case EXTERNAL:
-				daPath = Environment.getExternalStorageDirectory() + '/.' + Application.current.meta.get('file');
-			case MEDIA:
-				daPath = Environment.getExternalStorageDirectory() + '/Android/media/' + Application.current.meta.get('packageName');
+			initSAFCallback();
+			Tools.openDirectoryPicker(5);
 		}
+		daPath = force ? StorageType.fromStrForce(curStorageType) : StorageType.fromStr(curStorageType);
+		daPath = Path.addTrailingSlash(daPath);
 		#elseif ios
 		daPath = LimeSystem.documentsDirectory;
 		#end
@@ -60,121 +44,6 @@ class SUtil
 		return daPath;
 	}
 
-	/**
-	 * A simple function that checks for game files/folders.
-	 */
-	/*public static function checkFiles():Void
-	{
-		#if mobile
-		if (!FileSystem.exists('assets') && !FileSystem.exists('mods'))
-		{
-			Lib.application.window.alert("Whoops, seems like you didn't extract the files from the .APK!\nPlease copy the files from the .APK to\n"
-				+ Sys.getCwd(), 'Error!');
-			LimeSystem.exit(1);
-		}
-		else if ((FileSystem.exists('assets') && !FileSystem.isDirectory('assets'))
-			&& (FileSystem.exists('mods') && !FileSystem.isDirectory('mods')))
-		{
-			Lib.application.window.alert("Why did you create two files called assets and mods instead of copying the folders from the .APK?, expect a crash.",
-				'Error!');
-			LimeSystem.exit(1);
-		}
-		else
-		{
-			if (!FileSystem.exists('assets'))
-			{
-				Lib.application.window.alert("Whoops, seems like you didn't extract the assets/assets folder from the .APK!\nPlease copy the assets/assets folder from the .APK to\n"
-					+ Sys.getCwd(),
-					'Error!');
-				LimeSystem.exit(1);
-			}
-			else if (FileSystem.exists('assets') && !FileSystem.isDirectory('assets'))
-			{
-				Lib.application.window.alert("Why did you create a file called assets instead of copying the assets directory from the .APK?, expect a crash.",
-					'Error!');
-				LimeSystem.exit(1);
-			}
-
-			if (!FileSystem.exists('mods'))
-			{
-				Lib.application.window.alert("Whoops, seems like you didn't extract the assets/mods folder from the .APK!\nPlease copy the assets/mods folder from the .APK to\n"
-					+ Sys.getCwd(),
-					'Error!');
-				LimeSystem.exit(1);
-			}
-			else if (FileSystem.exists('mods') && !FileSystem.isDirectory('mods'))
-			{
-				Lib.application.window.alert("Why did you create a file called mods instead of copying the mods directory from the .APK?, expect a crash.",
-					'Error!');
-				LimeSystem.exit(1);
-			}
-		}
-		#end
-	}*/
-
-	/**
-	 * Uncaught error handler, original made by: Sqirra-RNG and YoshiCrafter29
-	 */
-	public static function uncaughtErrorHandler():Void
-	{
-		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onError);
-	}
-
-	private static function onError(error:UncaughtErrorEvent):Void
-	{
-		final log:Array<String> = [error.error];
-
-		for (item in CallStack.exceptionStack(true))
-		{
-			switch (item)
-			{
-				case CFunction:
-					log.push('C Function');
-				case Module(m):
-					log.push('Module [$m]');
-				case FilePos(s, file, line, column):
-					log.push('$file [line $line]');
-				case Method(classname, method):
-					log.push('$classname [method $method]');
-				case LocalFunction(name):
-					log.push('Local Function [$name]');
-			}
-		}
-
-		final msg:String = log.join('\n');
-
-		#if sys
-		try
-		{
-			if (!FileSystem.exists('logs'))
-				FileSystem.createDirectory('logs');
-
-			File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '.txt', msg + '\n');
-		}
-		catch (e:Dynamic)
-		{
-			#if (android && debug)
-			Toast.makeText("Error!\nCouldn't save the crash dump because:\n" + e, Toast.LENGTH_LONG);
-			#else
-			LimeLogger.println("Error!\nCouldn't save the crash dump because:\n" + e);
-			#end
-		}
-		#end
-
-		LimeLogger.println(msg);
-		Lib.application.window.alert(msg, 'Error!');
-
-		#if DISCORD_ALLOWED
-		DiscordClient.shutdown();
-		#end
-
-		LimeSystem.exit(1);
-	}
-
-	/**
-	 * This is mostly a fork of https://github.com/openfl/hxp/blob/master/src/hxp/System.hx#L595
-	 */
-	#if sys
 	public static function mkDirs(directory:String):Void
 	{
 		var total:String = '';
@@ -194,14 +63,19 @@ class SUtil
 
 				total += part;
 
-				if (!FileSystem.exists(total))
-					FileSystem.createDirectory(total);
+				try
+				{
+					if (!FileSystem.exists(total))
+						FileSystem.createDirectory(total);
+				}
+				catch (e:Exception)
+					trace('Error while creating folder. (${e.message}');
 			}
 		}
 	}
 
 	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json',
-			fileData:String = 'you forgot to add something in your code lol'):Void
+			fileData:String = 'You forgor to add somethin\' in yo code :3'):Void
 	{
 		try
 		{
@@ -209,53 +83,157 @@ class SUtil
 				FileSystem.createDirectory('saves');
 
 			File.saveContent('saves/' + fileName + fileExtension, fileData);
-			Lib.application.window.alert(fileName + " file has been saved", "Success!");
+			showPopUp(fileName + " file has been saved.", "Success!");
 		}
-		catch (e:Dynamic)
-		{
-			#if (android && debug)
-			Toast.makeText("Error!\nClouldn't save the file because:\n" + e, Toast.LENGTH_LONG);
-			#else
-			LimeLogger.println("Error!\nClouldn't save the file because:\n" + e);
-			#end
-		}
+		catch (e:Exception)
+			trace('File couldn\'t be saved. (${e.message})');
 	}
 
-	public static function copyContent(copyPath:String, savePath:String):Void
+	#if android
+	public static function doPermissionsShit():Void
 	{
-		try {
-			if (!FileSystem.exists(savePath) && OpenflAssets.exists(copyPath))
+		if (!AndroidPermissions.getGrantedPermissions().contains('android.permission.READ_EXTERNAL_STORAGE')
+			&& !AndroidPermissions.getGrantedPermissions().contains('android.permission.WRITE_EXTERNAL_STORAGE'))
+		{
+			AndroidPermissions.requestPermission('READ_EXTERNAL_STORAGE');
+			AndroidPermissions.requestPermission('WRITE_EXTERNAL_STORAGE');
+			showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress Ok to see what happens',
+				'Notice!');
+			if (!AndroidEnvironment.isExternalStorageManager())
+				AndroidSettings.requestSetting('MANAGE_APP_ALL_FILES_ACCESS_PERMISSION');
+		}
+		else
+		{
+			try
 			{
-				if (!FileSystem.exists(Path.directory(savePath)))
-					mkDirs(Path.directory(savePath));
-				if(copyPath.endsWith('.otf') || copyPath.endsWith('.ttf'))
-					File.saveBytes(savePath, cast OpenflAssets.getFont(copyPath));
-				else if(copyPath.endsWith('.txt'))
-					File.saveBytes(savePath, cast OpenflAssets.getText(copyPath));
-				else
-					File.saveBytes(savePath, OpenflAssets.getBytes(copyPath));
+				if (!FileSystem.exists(SUtil.getStorageDirectory()))
+					FileSystem.createDirectory(SUtil.getStorageDirectory());
+			}
+			catch (e:Dynamic)
+			{
+				showPopUp('Please create folder to\n' + SUtil.getStorageDirectory(true) + '\nPress OK to close the game', 'Error!');
+				LimeSystem.exit(1);
 			}
 		}
-		catch (e:Dynamic)
+	}
+
+	public static function checkExternalPaths(?splitStorage = false):Array<String> {
+		var process = new Process('grep -o "/storage/....-...." /proc/mounts | paste -sd \',\'');
+		var paths:String = process.stdout.readAll().toString();
+		if (splitStorage) paths = paths.replace('/storage/', '');
+		return paths.split(',');
+	}
+
+	public static function getExternalDirectory(external:String):String {
+		var daPath:String = '';
+		for (path in checkExternalPaths())
+			if (path.contains(external)) daPath = path;
+
+		daPath = haxe.io.Path.addTrailingSlash(daPath.endsWith("\n") ? daPath.substr(0, daPath.length - 1) : daPath);
+		return daPath;
+	}
+	
+	public static function initSAFCallback():Void
+	{
+		CallBack.init();
+		CallBack.onActivityResult.add((data:Dynamic) -> {
+			if(data == null) throw new Exception('Failed to retrive the activity data.');
+			// default request code for SAF directory picker is 5
+			if(data.requestCode == 5)
+			{
+				var uri:String = data.uri;
+
+				if(uri == null) throw new Exception('Failed to retrive the activity Uri.');
+
+				// allows access for the path
+				Tools.registerUriAccess(uri);
+
+				var path:String = Path.addTrailingSlash(Tools.getUriPath(uri));
+				
+				// clear the prev
+				var saveFilePath = rootDir + 'curCWD.txt';
+				if(FileSystem.exists(saveFilePath))
+					FileSystem.deleteFile(saveFilePath);
+
+				// saves the selected directory
+				File.saveContent(saveFilePath, path);
+			}
+		}, true); // true is to make this function execute only once
+	}
+
+	@:noCompletion
+	public static function get_selectedDir():Null<String>
+	{
+		var saveFilePath = rootDir + 'curCWD.txt';
+		if(!FileSystem.exists(saveFilePath)) return null;
+		return File.getContent(saveFilePath);
+	}
+	#end
+	#end
+	public static function showPopUp(message:String, title:String):Void
+	{
+		#if (!ios || !iphonesim)
+		try
 		{
-			#if (android && debug)
-			Toast.makeText('Error!\nClouldn\'t copy the $copyPath because:\n' + e, Toast.LENGTH_LONG);
-			#else
-			LimeLogger.println('Error!\nClouldn\'t copy the $copyPath because:\n' + e);
-			#end
+			trace('$title - $message');
+			lime.app.Application.current.window.alert(message, title);
+		}
+		catch (e:Dynamic)
+			trace('$title - $message');
+		#else
+		trace('$title - $message');
+		#end
+	}
+}
+
+#if android
+@:runtimeValue
+enum abstract StorageType(String) from String to String
+{
+	final forcedPath = '/storage/emulated/0/';
+	final packageNameLocal = 'com.shadowmario.psychengine';
+	final fileLocal = 'PsychEngine';
+
+	var EXTERNAL_DATA = "EXTERNAL_DATA";
+	var EXTERNAL_OBB = "EXTERNAL_OBB";
+	var EXTERNAL_MEDIA = "EXTERNAL_MEDIA";
+	var EXTERNAL = "EXTERNAL";
+	var CUSTOM = "CUSTOM";
+
+	public static function fromStr(str:String):StorageType
+	{
+		final EXTERNAL_DATA = AndroidContext.getExternalFilesDir();
+		final EXTERNAL_OBB = AndroidContext.getObbDir();
+		final EXTERNAL_MEDIA = AndroidEnvironment.getExternalStorageDirectory() + '/Android/media/' + lime.app.Application.current.meta.get('packageName');
+		final EXTERNAL = AndroidEnvironment.getExternalStorageDirectory() + '/.' + lime.app.Application.current.meta.get('file');
+
+		return switch (str)
+		{
+			case "EXTERNAL_DATA": EXTERNAL_DATA;
+			case "EXTERNAL_OBB": EXTERNAL_OBB;
+			case "EXTERNAL_MEDIA": EXTERNAL_MEDIA;
+			case "EXTERNAL": EXTERNAL;
+			case "CUSTOM": SUtil.selectedDir;
+			default: SUtil.getExternalDirectory(str) + '.' + fileLocal;
 		}
 	}
 
-	#end
-	#if android
-	public static function doPermissionsShit(){
-		if(!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE) || !Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE)) {
-			if(!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE))
-				Permissions.requestPermission(Permissions.READ_EXTERNAL_STORAGE);
-			if(!Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE))
-				Permissions.requestPermission(Permissions.WRITE_EXTERNAL_STORAGE);
-			FlxG.stage.window.alert('Please Make Sure You Accepted The Permissions To Be Able To Run The Game', '');
+	public static function fromStrForce(str:String):StorageType
+	{
+		final EXTERNAL_DATA = forcedPath + 'Android/data/' + packageNameLocal + '/files';
+		final EXTERNAL_OBB = forcedPath + 'Android/obb/' + packageNameLocal;
+		final EXTERNAL_MEDIA = forcedPath + 'Android/media/' + packageNameLocal;
+		final EXTERNAL = forcedPath + '.' + fileLocal;
+
+		return switch (str)
+		{
+			case "EXTERNAL_DATA": EXTERNAL_DATA;
+			case "EXTERNAL_OBB": EXTERNAL_OBB;
+			case "EXTERNAL_MEDIA": EXTERNAL_MEDIA;
+			case "EXTERNAL": EXTERNAL;
+			case "CUSTOM": SUtil.selectedDir;
+			default: SUtil.getExternalDirectory(str) + '.' + fileLocal;
 		}
 	}
-	#end
 }
+#end
