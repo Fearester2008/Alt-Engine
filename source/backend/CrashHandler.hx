@@ -75,7 +75,7 @@ class CrashHandler
 			trace('Couldn\'t save error message. (${e.message})');
 		#end
 
-		mobile.backend.SUtil.showPopUp('$m\n$stackLabel', "Error!");
+		backend.SUtil.showPopUp('$m\n$stackLabel', "Error!");
 
 		#if html5
 		if (flixel.FlxG.sound.music != null)
