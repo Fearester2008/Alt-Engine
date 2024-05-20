@@ -99,6 +99,10 @@ import states.TitleState;
 	public var splittedAmplitude:Bool = true;
 	public var npsEnabled:Bool = false;
 	public var amplitudeVisible:Bool = true;
+
+	#if android
+	public var storageType:String = "CUSTOM";
+	#end
 }
 
 class ClientPrefs {
