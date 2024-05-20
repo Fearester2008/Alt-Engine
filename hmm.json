@@ -2,7 +2,7 @@
   "dependencies": [
     {
       "name": "lime",
-      "type": "git",
+      "type": "haxelib",
       "version": "8.0.2"
     },
     {
@@ -32,17 +32,17 @@
     },
     {
       "name": "hxcpp",
-      "type": "git",
+      "type": "haxelib",
       "version": "4.2.1"
     },
     {
       "name": "hxCodec",
-      "type": "git",
+      "type": "haxelib",
       "version": "3.0.2"
     },
     {
       "name": "hxvlc",
-      "type": "git",
+      "type": "haxelib",
       "version": "1.5.0"
     },
     {
