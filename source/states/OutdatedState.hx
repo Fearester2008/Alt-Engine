@@ -1,49 +1,42 @@
-/*package states;
-
-import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.FlxSubState;
-import flixel.text.FlxText;
-import flixel.util.FlxColor;
-import flixel.effects.FlxFlicker;
-import lime.app.Application;
-import flixel.addons.transition.FlxTransitionableState;
-import flixel.tweens.FlxTween;
-import flixel.util.FlxTimer;
+package states;
 
 class OutdatedState extends MusicBeatState
 {
 	public static var leftState:Bool = false;
 
 	var warnText:FlxText;
-
-	var files:Array<String> = [];
-	var ver:String;
-
-	public function new(files:Array<String>, ver:String) {
-		this.files = files;
-		this.ver = ver;
-		super();
-	}
-
 	override function create()
 	{
 		super.create();
+		AppUtil.setAppData(AppController.appName, AppController.altEngineVersion + AppController.stage, "Have Update!");
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuBG'));
+		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(bg);
 
-		warnText = new FlxText(0, 0, FlxG.width,
-			"Sup bro, looks like you're running an   \n
-			outdated version of Alt Engine (" + VersionStuff.altEngineVersion + VersionStuff.stage + "),\n
-			please update to " + VersionStuff.updateVersion + "!\n
+		var guh:String;
+
+		if (controls.mobileC) {
+			guh = "Sup kiddo, looks like you're running an   \n
+			outdated version of Psych Engine (" + AppController.altEngineVersion + "),\n
+			please update to " + AppController.updateVersion + "!\n
+			Press B to proceed anyway.\n
+			\n
+			Thank you for using the Port!";
+		} else {
+			guh = "Sup bro, looks like you're running an   \n
+			outdated version of Psych Engine (" + AppController.altEngineVersion + "),\n
+			please update to " + AppController.updateVersion + "!\n
 			Press ESCAPE to proceed anyway.\n
 			\n
-			Thank you for using the Engine!",
-			32);
+			Thank you for using the Port!";
+		}
+
+		warnText = new FlxText(0, 0, FlxG.width, guh, 32);
 		warnText.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
 		warnText.screenCenter(Y);
 		add(warnText);
+
+		addVirtualPad(NONE, A_B);
 	}
 
 	override function update(elapsed:Float)
@@ -51,7 +44,7 @@ class OutdatedState extends MusicBeatState
 		if(!leftState) {
 			if (controls.ACCEPT) {
 				leftState = true;
-				MusicBeatState.switchState(new UpdateState(files));
+				CoolUtil.browserLoad("https://github.com/Fearester2008/Alt-Engine/releases");
 			}
 			else if(controls.BACK) {
 				leftState = true;
@@ -70,4 +63,3 @@ class OutdatedState extends MusicBeatState
 		super.update(elapsed);
 	}
 }
-*/

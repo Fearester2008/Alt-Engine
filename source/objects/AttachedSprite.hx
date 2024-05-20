@@ -1,9 +1,5 @@
 package objects;
 
-import flixel.FlxSprite;
-
-using StringTools;
-
 class AttachedSprite extends FlxSprite
 {
 	public var sprTracker:FlxSprite;
@@ -26,7 +22,7 @@ class AttachedSprite extends FlxSprite
 		} else if(file != null) {
 			loadGraphic(Paths.image(file));
 		}
-		antialiasing = ClientPrefs.globalAntialiasing;
+		antialiasing = ClientPrefs.data.antialiasing;
 		scrollFactor.set();
 	}
 
@@ -47,5 +43,10 @@ class AttachedSprite extends FlxSprite
 			if(copyVisible) 
 				visible = sprTracker.visible;
 		}
+	}
+
+	override function destroy(){
+		sprTracker = FlxDestroyUtil.destroy(sprTracker);
+		super.destroy();
 	}
 }

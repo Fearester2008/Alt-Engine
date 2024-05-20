@@ -1,48 +1,117 @@
-# Friday Night Funkin': Alt Engine
-![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/images/Alt-Engine.png)
+# Friday Night Funkin' - Psych Engine Mobile
 
-[![Builds Status](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/WindowsMain.yml/badge.svg)](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/WindowsMain.yml)
+Engine originally used on [Mind Games Mod](https://gamebanana.com/mods/301107), intended to be a fix for the vanilla version's many issues while keeping the casual play aspect of it. Also aiming to be an easier alternative to newbie coders.
 
-[![Builds Status](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/main.yml/badge.svg)](https://github.com/Fearester2008/FNF-Alt-Engine/actions/workflows/main.yml)
+## Installation:
 
-[![GitHub Releases](https://img.shields.io/github/downloads/Fearester2008/FNF-Alt-Engine/total?style=plastic)](https://github.com/Fearester2008/FNF-Alt-Engine/releases)
+Refer to [the Build Instructions](./BUILDING.md)
 
-Used and coded on: [Psych Engine](https://gamebanana.com/mods/309789).
+## Customization:
 
-<details>
-  <summary><h2>Credits</h2></summary>
+if you wish to disable things like *Lua Scripts* or *Video Cutscenes*, you can read over to `Project.xml`
 
-## Alt Engine Credits:
+inside `Project.xml`, you will find several variables to customize Psych Engine to your liking
 
-| Avatar | Username | Involvement |
-| ------ | -------- | ----------- |
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/fearester.png) | [Fearester2008](https://www.youtube.com/@fearester1282) | Main Programmer of Alt Engine.
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/stefan.png) | [Stefan2008](https://www.youtube.com/channel/UC9Nwf21GbaEm_h0Ka9gxZjQ) | Second Programmer and Helper of Alt Engine.
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/rom4chek.png) | [Rom4chek](https://youtube.com/@Rom4chek) | Third Programmer and Helper of Alt Engine.
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/joalor64.png) | [Joalor64](https://github.com/Joalor64GH) | Fourth Programmer and Helper of Alt Engine.
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/leer.png) | [TheLeerName](https://github.com/TheLeerName) | Fifth Programmer and Helper of Alt Engine.
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/daniel.png) | [Daniel](https://youtube.com/@0_Daniel_0) | Composer of Alt Engine.
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/sam.png) | [Sussy Sam](https://youtube.com/@sussysam6789?si=gNcNiZo_TyDmo_cy) | Second Composer of Alt Engine.
-## Psych Engine Credits:
-| Avatar | Username | Involvement |
-| ------ | -------- | ----------- |
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/shadowmario.png) | [Shadow Mario](https://twitter.com/Shadow_Mario_) | Main Psych Engine Programmer.
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/river.png) | [RiverOaken](https://twitter.com/RiverOaken) | Main Artist of Psych Engine.
+to start you off, disabling Videos should be simple, simply Delete the line `"VIDEOS_ALLOWED"` or comment it out by wrapping the line in XML-like comments, like this `<!-- YOUR_LINE_HERE -->`
 
-## Former Engine members:
-| Avatar | Username | Involvement |
-| ------ | -------- | ----------- |
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/bb.png) | [bb-panzu](https://twitter.com/bbsub3) | Ex-Programmer of Psych Engine.
+same goes for *Lua Scripts*, comment out or delete the line with `LUA_ALLOWED`, this and other customization options are all available within the `Project.xml` file
 
-## Engine Contributors:
-| Avatar | Username | Involvement |
-| ------ | -------- | ----------- |
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/flicky.png) | [iFlicky](https://twitter.com/flicky_i) | Composer of Psync and Tea Time. Made the Dialogue Sounds.
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/mastereric.png) | [EliteMasterEric](https://twitter.com/EliteMasterEric) | Runtime Shaders support.
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/proxy.png) | [PolybiusProxy](https://twitter.com/polybiusproxy) | .MP4 Video Loader Library (hxCodec).
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/sqirra.png) | [SqirraRNG](https://twitter.com/gedehari) | Crash Handler and Base code for Chart Editor's Waveform.
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/kade.png) | [Kade Dev](https://twitter.com/kade0912) | Fixed some cool stuff on Chart Editor and other PRs.
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/keoiki.png) | [Keoiki](https://twitter.com/Keoiki_) | Note Splash Animations.
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/nebula.png) | [Nebula the Zorua](https://twitter.com/Nebula_Zorua) | LUA JIT Fork and some Lua reworks.
-| ![](https://raw.githubusercontent.com/Fearester2008/FNF-Alt-Engine/main/assets/preload/images/credits/smokey.png) | [Smokey](https://twitter.com/Smokey_5_) | Sprite Atlas Support.
-</details>
+## Mobile Credits:
+* Lily - Head Porter
+* Karim - Assistant Porter/Helper #1
+* Hoovy - Helper #2
+
+### Mobile Special Thanks
+* Mihai Alexandru - Author of mobile controls and also his new storage stuff and FlxRuntimeShader is used here
+* FutureDorito - iOS Helper/Implement
+
+## Psych Credits:
+* Shadow Mario - Programmer
+* Riveren - Artist
+
+### Psych Special Thanks
+* bbpanzu - Ex-Programmer
+* Yoshubs - Ex-Programmer
+* SqirraRNG - Crash Handler and Base code for Chart Editor's Waveform
+* KadeDev - Fixed some cool stuff on Chart Editor and other PRs
+* iFlicky - Composer of Psync and Tea Time, also made the Dialogue Sounds
+* PolybiusProxy - .MP4 Video Loader Library (hxCodec)
+* Keoiki - Note Splash Animations
+* Smokey - Sprite Atlas Support
+* Nebula the Zorua - some Lua reworks
+* superpowers04 - LUA JIT Fork
+_____________________________________
+
+# Features
+
+## Attractive animated dialogue boxes:
+
+![](https://user-images.githubusercontent.com/44785097/127706669-71cd5cdb-5c2a-4ecc-871b-98a276ae8070.gif)
+
+
+## Mod Support
+* Probably one of the main points of this engine, you can code in .lua files outside of the source code, making your own weeks without even messing with the source!
+* Comes with a Mod Organizing/Disabling Menu.
+
+
+## Atleast one change to every week:
+### Week 1:
+  * New Dad Left sing sprite
+  * Unused stage lights are now used
+  * Dad Battle has a spotlight effect for the breakdown
+### Week 2:
+  * Both BF and Skid & Pump does "Hey!" animations
+  * Thunders does a quick light flash and zooms the camera in slightly
+  * Added a quick transition/cutscene to Monster
+### Week 3:
+  * BF does "Hey!" during Philly Nice
+  * Blammed has a cool new colors flash during that sick part of the song
+### Week 4:
+  * Better hair physics for Mom/Boyfriend (Maybe even slightly better than Week 7's :eyes:)
+  * Henchmen die during all songs. Yeah :(
+### Week 5:
+  * Bottom Boppers and GF does "Hey!" animations during Cocoa and Eggnog
+  * On Winter Horrorland, GF bops her head slower in some parts of the song.
+### Week 6:
+  * On Thorns, the HUD is hidden during the cutscene
+  * Also there's the Background girls being spooky during the "Hey!" parts of the Instrumental
+
+## Cool new Chart Editor changes and countless bug fixes
+![](https://github.com/ShadowMario/FNF-PsychEngine/blob/main/docs/img/chart.png?raw=true)
+* You can now chart "Event" notes, which are bookmarks that trigger specific actions that usually were hardcoded on the vanilla version of the game.
+* Your song's BPM can now have decimal values
+* You can manually adjust a Note's strum time if you're really going for milisecond precision
+* You can change a note's type on the Editor, it comes with five example types:
+  * Alt Animation: Forces an alt animation to play, useful for songs like Ugh/Stress
+  * Hey: Forces a "Hey" animation instead of the base Sing animation, if Boyfriend hits this note, Girlfriend will do a "Hey!" too.
+  * Hurt Notes: If Boyfriend hits this note, he plays a miss animation and loses some health.
+  * GF Sing: Rather than the character hitting the note and singing, Girlfriend sings instead.
+  * No Animation: Character just hits the note, no animation plays.
+
+## Multiple editors to assist you in making your own Mod
+![Screenshot_3](https://user-images.githubusercontent.com/44785097/144629914-1fe55999-2f18-4cc1-bc70-afe616d74ae5.png)
+* Working both for Source code modding and Downloaded builds!
+
+## Story mode menu rework:
+![](https://i.imgur.com/UB2EKpV.png)
+* Added a different BG to every song (less Tutorial)
+* All menu characters are now in individual spritesheets, makes modding it easier.
+
+## Credits menu
+![Screenshot_1](https://user-images.githubusercontent.com/44785097/144632635-f263fb22-b879-4d6b-96d6-865e9562b907.png)
+* You can add a head icon, name, description and a Redirect link for when the player presses Enter while the item is currently selected.
+
+## Awards/Achievements
+* The engine comes with 16 example achievements that you can mess with and learn how it works (Check Achievements.hx and search for "checkForAchievement" on PlayState.hx)
+
+## Options menu:
+* You can change Note colors, Delay and Combo Offset, Controls and Preferences there.
+ * On Preferences you can toggle Downscroll, Middlescroll, Anti-Aliasing, Framerate, Low Quality, Note Splashes, Flashing Lights, etc.
+
+## Other gameplay features:
+* When the enemy hits a note, their strum note also glows.
+* Lag doesn't impact the camera movement and player icon scaling anymore.
+* Some stuff based on Week 7's changes has been put in (Background colors on Freeplay, Note splashes)
+* You can reset your Score on Freeplay/Story Mode by pressing Reset button.
+* You can listen to a song or adjust Scroll Speed/Damage taken/etc. on Freeplay by pressing Space.
+* You can enable "Combo Stacking" in Gameplay Options. This causes the combo sprites to just be one sprite with an animation rather than sprites spawning each note hit.

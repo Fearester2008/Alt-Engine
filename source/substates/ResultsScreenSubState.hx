@@ -6,7 +6,7 @@ import flixel.FlxSubState;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.input.keyboard.FlxKey;
-import flixel.system.FlxSound;
+#if(flixel <= "5.3.0") import flixel.system.FlxSound; #else import flixel.sound.FlxSound; #end
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -21,9 +21,9 @@ class ResultsScreenSubState extends MusicBeatSubstate {
 	var songNameText:FlxText;
 	var difficultyNameTxt:FlxText;
 	var judgementCounterTxt:FlxText;
-	var pressEnterTxt:FlxText;
-	var pressEnterTxtSine:Float = 0;
-	var hits:Int = PlayState.instance.noteHit;
+	var tipTxt:FlxText;
+	var tipTxtSine:Float = 0;
+	var hits:Int = PlayState.instance.songHits;
 	var cpuControl:Bool = PlayState.instance.cpuControlled;
 
 	public var iconPlayer1:HealthIcon;
@@ -31,125 +31,68 @@ class ResultsScreenSubState extends MusicBeatSubstate {
 
 	public function new(daResults:Array<Int>, campaignScore:Int, songMisses:Int, ratingPercent:Float) {
 		super();
-
 		background = new FlxSprite(-80).makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
 		background.scrollFactor.set();
 		background.updateHitbox();
 		background.screenCenter();
 		background.alpha = 0;
-		background.antialiasing = ClientPrefs.globalAntialiasing;
+		background.antialiasing = ClientPrefs.data.antialiasing;
 		add(background);
-		if(ClientPrefs.language == 'Russian')
-		{
-		resultsText = new FlxText(5, 0, 0, 'РЕЗУЛЬТАТЫ', 72);	
-		}
-		else
-		{
+
 		resultsText = new FlxText(5, 0, 0, 'RESULTS', 72);
-		}
 		resultsText.scrollFactor.set();
-		resultsText.setFormat(Paths.font("vcr-rus.ttf"), 48, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		resultsText.setFormat(Paths.font("vcr.ttf"), 48, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		resultsText.updateHitbox();
 		add(resultsText);
 
 		results = new FlxText(5, resultsText.height, FlxG.width, '', 48);
-		if(ClientPrefs.language == 'Russian')
-		{
-	    results.text = 'Больные: ' + daResults[0] + '\nХорошие: ' + daResults[1] + '\nПлохие: ' + daResults[2] + '\nДерьмовые: ' + daResults[3];
-		}
-		else
-		{
-		results.text = 'Sicks: ' + daResults[0] + '\nGoods: ' + daResults[1] + '\nBads: ' + daResults[2] + '\nFreaks: ' + daResults[3];
-		}
+		results.text = 'Sicks: ' + daResults[0] + '\nGoods: ' + daResults[1] + '\nBads: ' + daResults[2] + '\nShits: ' + daResults[3];
 		results.scrollFactor.set();
-		results.setFormat(Paths.font("vcr-rus.ttf"), 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		results.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		results.updateHitbox();
 		add(results);
 
 		songNameText = new FlxText(FlxG.width , 5, 0, '', 32);
-		if(ClientPrefs.language == 'Russian')
-	    {
-			songNameText.text = "Песня: " + PlayState.SONG.song;
-		}
-		else
-		{
 		songNameText.text = "Song: " + PlayState.SONG.song;
-		}
 		songNameText.scrollFactor.set();
-		songNameText.setFormat(Paths.font("vcr-rus.ttf"), 32, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		songNameText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		songNameText.updateHitbox();
 		
 		add(songNameText);
 
 		difficultyNameTxt = new FlxText(700, 29, 0, '', 24);
-		if(ClientPrefs.language == 'Russian')
-		{
-		difficultyNameTxt.text = "Сложность: " + CoolUtil.difficultyString();
-		}
-		else
-		{
-		difficultyNameTxt.text = "Difficulty: " + CoolUtil.difficultyString();
-		}
+		difficultyNameTxt.text = "Difficulty: " + Difficulty.getString();
 		difficultyNameTxt.scrollFactor.set();
-		difficultyNameTxt.setFormat(Paths.font('vcr-rus.ttf'), 32, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		difficultyNameTxt.setFormat(Paths.font('vcr.ttf'), 32, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		difficultyNameTxt.updateHitbox();
 		add(difficultyNameTxt);
 
 		judgementCounterTxt = new FlxText(0, 450, FlxG.width, '', 86);
-		if(ClientPrefs.language == 'Russian')
-		{
-		if(hits == 0 && cpuControl)
-		{
-		judgementCounterTxt.text = 'Счёт: 0\nПромахи: 0\nАккуратность: 0%';	
-		}
-		else
-		{
-		judgementCounterTxt.text = 'Счёт: ' + campaignScore + '\nПромахи: ' + songMisses + '\nАккуратность: ' + ratingPercent + '%';	
-		}
-	    }
-		else
-		{
+		
 		if(hits == 0 && cpuControl) 
 		{
 			judgementCounterTxt.text = 'Score: 0\nMisses: 0\nAccuracy: 0%';	
-
 		}
 		else
 		{
 		judgementCounterTxt.text = 'Score: ' + campaignScore + '\nMisses: ' + songMisses + '\nAccuracy: ' + ratingPercent + '%';
-
-		}
 		}
 		judgementCounterTxt.scrollFactor.set();
-		judgementCounterTxt.setFormat(Paths.font("vcr-rus.ttf"), 36, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		judgementCounterTxt.setFormat(Paths.font("vcr.ttf"), 36, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		judgementCounterTxt.updateHitbox();
 		judgementCounterTxt.screenCenter(X);
 		add(judgementCounterTxt);
 
 		#if android
-		if(ClientPrefs.language == 'Russian')
-		{
-		pressEnterTxt = new FlxText(0, 650, FlxG.width, "[Нажмите B button чтобы продолжить]", 32);
-		}
-		else
-		{
-		pressEnterTxt = new FlxText(0, 650, FlxG.width, "[Tap on B button to continue]", 32);
-		}
+		tipTxt = new FlxText(0, 650, FlxG.width, "[Tap on B button to continue]\n[Tap on A button to restart song]", 32);
 		#else
-		if(ClientPrefs.language == 'Russian')
-		{
-			pressEnterTxt = new FlxText(400, 650, FlxG.width, "[Нажмите ENTER чтобы продолжить]", 32);
-		}
-		else
-		{
-		pressEnterTxt = new FlxText(400, 650, FlxG.width, "[Press ENTER to continue]", 32);
-		}
+		tipTxt = new FlxText(400, 650, FlxG.width, "[Press ACCEPT to continue]\n[Press R to restart song]", 32);
 		#end
-		pressEnterTxt.setFormat(Paths.font("vcr-rus.ttf"), 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		pressEnterTxt.scrollFactor.set();
-		pressEnterTxt.screenCenter(X);
-		pressEnterTxt.visible = true;
-		add(pressEnterTxt);
+		tipTxt.setFormat(Paths.font("vcr.ttf"), 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		tipTxt.scrollFactor.set();
+		tipTxt.screenCenter(X);
+		tipTxt.visible = true;
+		add(tipTxt);
 
 		iconPlayer1 = new HealthIcon(PlayState.instance.boyfriend.healthIcon, true);
 		iconPlayer1.setGraphicSize(Std.int(iconPlayer1.width * 1.2));
@@ -168,7 +111,7 @@ class ResultsScreenSubState extends MusicBeatSubstate {
 		judgementCounterTxt.alpha = 0;
 		iconPlayer1.alpha = 0;
 		iconPlayer2.alpha = 0;
-		pressEnterTxt.alpha = 0;
+		tipTxt.alpha = 0;
 
 		iconPlayer1.setPosition(FlxG.width - iconPlayer1.width - 10, FlxG.height - iconPlayer1.height - 15);
 		iconPlayer2.setPosition(10, iconPlayer1.y);
@@ -181,7 +124,7 @@ class ResultsScreenSubState extends MusicBeatSubstate {
 		FlxTween.tween(judgementCounterTxt, {alpha: 1, y: judgementCounterTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.6});
 		FlxTween.tween(iconPlayer1, {alpha: 1, y: FlxG.height - iconPlayer1.height - 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.8});
 		FlxTween.tween(iconPlayer2, {alpha: 1, y: FlxG.height - iconPlayer2.height - 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.8});
-		FlxTween.tween(pressEnterTxt, {alpha: 1}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.10});
+		FlxTween.tween(tipTxt, {alpha: 1}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.10});
 
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 
@@ -192,26 +135,32 @@ class ResultsScreenSubState extends MusicBeatSubstate {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-		AppUtil.setAppData(VersionStuff.appName, VersionStuff.altEngineVersion + VersionStuff.stage, "Results.");
-
+		AppUtil.setAppData(AppController.appName, AppController.altEngineVersion + AppController.stage, "Results: " + PlayState.SONG.song);
 		reloadPositions();
 
-		if (pressEnterTxt.visible) {
-			pressEnterTxtSine += 150 * elapsed;
-			pressEnterTxt.alpha = 1 - Math.sin((Math.PI * pressEnterTxtSine) / 150);
+		if (tipTxt.visible) {
+			tipTxtSine += 150 * elapsed;
+			tipTxt.alpha = 1 - Math.sin((Math.PI * tipTxtSine) / 150);
 		}
 		if(PlayState.instance.boyfriend.healthIcon == null)
 		iconPlayer1.changeIcon('bf');
 
 		if(PlayState.instance.dad.healthIcon == null)
-			iconPlayer2.changeIcon('bf');
+		iconPlayer2.changeIcon('bf');
 		
-		if (controls.ACCEPT #if android || _virtualpad.buttonB.justPressed #end) {
+		if(PlayState.finishedSong)
+		{
+		if ((controls.ACCEPT #if android || virtualPad.buttonB.justPressed #end)) {
 			if (PlayState.isStoryMode)
 				MusicBeatState.switchState(new StoryMenuState());
 			else
 				MusicBeatState.switchState(new FreeplayState());
 			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+		}
+		if(FlxG.keys.justPressed.R #if android || virtualPad.buttonA.justPressed #end)
+		{
+			PauseSubState.restartSong();
+		}
 		}
 	}
 	private function reloadPositions()

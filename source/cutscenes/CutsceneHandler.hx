@@ -1,19 +1,6 @@
 package cutscenes;
 
-import flixel.FlxCamera;
-import flixel.FlxG;
 import flixel.FlxBasic;
-import flixel.FlxObject;
-import flixel.FlxSprite;
-import flixel.graphics.atlas.FlxAtlas;
-import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.system.FlxSound;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
-import flixel.util.FlxTimer;
-import flixel.group.FlxSpriteGroup;
-import animateatlas.AtlasFrameMaker;
 import flixel.util.FlxSort;
 
 class CutsceneHandler extends FlxBasic
@@ -61,8 +48,8 @@ class CutsceneHandler extends FlxBasic
 
 			for (spr in objects)
 			{
-				spr.kill();
 				PlayState.instance.remove(spr);
+				spr.kill();
 				spr.destroy();
 			}
 			
@@ -74,7 +61,7 @@ class CutsceneHandler extends FlxBasic
 		while(timedEvents.length > 0 && timedEvents[0][0] <= cutsceneTime)
 		{
 			timedEvents[0][1]();
-			timedEvents.splice(0, 1);
+			timedEvents.shift();
 		}
 	}
 
@@ -92,5 +79,10 @@ class CutsceneHandler extends FlxBasic
 	function sortByTime(Obj1:Array<Dynamic>, Obj2:Array<Dynamic>):Int
 	{
 		return FlxSort.byValues(FlxSort.ASCENDING, Obj1[0], Obj2[0]);
+	}
+
+	override function destroy(){
+		active = false;
+		super.destroy();
 	}
 }

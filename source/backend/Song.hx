@@ -1,16 +1,9 @@
 package backend;
 
-import backend.Section.SwagSection;
 import haxe.Json;
-import haxe.format.JsonParser;
-import lime.utils.Assets;
+import openfl.utils.Assets;
 
-#if sys
-import sys.io.File;
-import sys.FileSystem;
-#end
-
-using StringTools;
+import backend.Section;
 
 typedef SwagSong =
 {
@@ -25,11 +18,18 @@ typedef SwagSong =
 	var player2:String;
 	var gfVersion:String;
 	var stage:String;
-
-	var arrowSkin:String;
-	var splashSkin:String;
-	var validScore:Bool;
 	var ?composer:String;
+	var ?songPostfix:String;
+
+	@:optional var gameOverChar:String;
+	@:optional var gameOverSound:String;
+	@:optional var gameOverLoop:String;
+	@:optional var gameOverEnd:String;
+	
+	@:optional var disableNoteRGB:Bool;
+
+	@:optional var arrowSkin:String;
+	@:optional var splashSkin:String;
 }
 
 class Song
@@ -41,12 +41,18 @@ class Song
 	public var needsVoices:Bool = true;
 	public var arrowSkin:String;
 	public var splashSkin:String;
+	public var gameOverChar:String;
+	public var gameOverSound:String;
+	public var gameOverLoop:String;
+	public var gameOverEnd:String;
+	public var disableNoteRGB:Bool = false;
 	public var speed:Float = 1;
 	public var stage:String;
 	public var player1:String = 'bf';
 	public var player2:String = 'dad';
 	public var gfVersion:String = 'gf';
-    public var composer:String = null;
+	public var composer:String = null;
+	public var songPostfix:String = null;
 
 	private static function onLoadJson(songJson:Dynamic) // Convert old charts to newest format
 	{
@@ -102,11 +108,14 @@ class Song
 		#end
 
 		if(rawJson == null) {
+			var path:String = Paths.json(formattedFolder + '/' + formattedSong);
+
 			#if sys
-			rawJson = File.getContent(SUtil.getPath() + Paths.json(formattedFolder + '/' + formattedSong)).trim();
-			#else
-			rawJson = Assets.getText(Paths.json(formattedFolder + '/' + formattedSong)).trim();
+			if(FileSystem.exists(path))
+				rawJson = File.getContent(path).trim();
+			else
 			#end
+				rawJson = Assets.getText(Paths.json(formattedFolder + '/' + formattedSong)).trim();
 		}
 
 		while (!rawJson.endsWith("}"))
@@ -139,8 +148,6 @@ class Song
 
 	public static function parseJSONshit(rawJson:String):SwagSong
 	{
-		var swagShit:SwagSong = cast Json.parse(rawJson).song;
-		swagShit.validScore = true;
-		return swagShit;
+		return cast Json.parse(rawJson).song;
 	}
 }

@@ -1,14 +1,7 @@
 package objects;
 
-import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
-#if MODS_ALLOWED
-import sys.io.File;
-import sys.FileSystem;
-#end
 import openfl.utils.Assets;
 import haxe.Json;
-import haxe.format.JsonParser;
 
 typedef MenuCharacterFile = {
 	var image:String;
@@ -29,6 +22,7 @@ class MenuCharacter extends FlxSprite
 	{
 		super(x);
 
+		antialiasing = ClientPrefs.data.antialiasing;
 		changeCharacter(character);
 	}
 
@@ -37,7 +31,6 @@ class MenuCharacter extends FlxSprite
 		if(character == this.character) return;
 
 		this.character = character;
-		antialiasing = ClientPrefs.globalAntialiasing;
 		visible = true;
 
 		var dontPlayAnim:Bool = false;
@@ -56,18 +49,18 @@ class MenuCharacter extends FlxSprite
 				#if MODS_ALLOWED
 				var path:String = Paths.modFolders(characterPath);
 				if (!FileSystem.exists(path)) {
-					path = SUtil.getPath() + Paths.getPreloadPath(characterPath);
+					path = Paths.getSharedPath(characterPath);
 				}
 
 				if(!FileSystem.exists(path)) {
-					path = SUtil.getPath() + Paths.getPreloadPath('images/menucharacters/' + DEFAULT_CHARACTER + '.json');
+					path = Paths.getSharedPath('images/menucharacters/' + DEFAULT_CHARACTER + '.json');
 				}
 				rawJson = File.getContent(path);
 
 				#else
-				var path:String = Paths.getPreloadPath(characterPath);
+				var path:String = Paths.getSharedPath(characterPath);
 				if(!Assets.exists(path)) {
-					path = Paths.getPreloadPath('images/menucharacters/' + DEFAULT_CHARACTER + '.json');
+					path = Paths.getSharedPath('images/menucharacters/' + DEFAULT_CHARACTER + '.json');
 				}
 				rawJson = Assets.getText(path);
 				#end
@@ -95,3 +88,4 @@ class MenuCharacter extends FlxSprite
 		}
 	}
 }
+

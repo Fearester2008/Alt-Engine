@@ -1,12 +1,11 @@
 package substates;
+
 import flixel.*;
 import flixel.FlxSubState;
 import flixel.addons.ui.FlxUIButton;
 import flixel.addons.ui.FlxUIPopup;
-import flixel.text.FlxText;
 import flixel.ui.FlxButton;
-import flixel.util.FlxColor;
-import flixel.util.FlxTimer;
+
 import openfl.display.BitmapData;
 import openfl.geom.Rectangle;
 
@@ -41,10 +40,9 @@ class Prompt extends MusicBeatSubstate
 		
 		if (option1 != null) op1 = option1;
 		if (option2 != null) op2 = option2;
-		buttonAccept = new FlxButton(473.3, 450, op1, function(){if(okc != null)okc();
-		close();} );
-		buttonNo = new FlxButton(633.3,450,op2,function(){if(cancelc != null)cancelc();
-		close();});
+		buttonAccept = new FlxButton(473.3, 450, op1, function(){if(okc != null)okc();close();controls.isInSubstate = false;} );
+		buttonNo = new FlxButton(633.3,450,op2,function(){if(cancelc != null)cancelc();close();controls.isInSubstate = false;});
+                controls.isInSubstate = true;
 		super();	
 	}
 	
@@ -93,11 +91,44 @@ class Prompt extends MusicBeatSubstate
 		textshit.scrollFactor.set();
 		}
 	}
-	
+	/*
 	override public function update(elapsed:Float):Void 
 	{
-		AppUtil.setAppData(VersionStuff.appName, VersionStuff.altEngineVersion + VersionStuff.stage, "In The Prompt Menu.");
+		super.update(elapsed);
+		
+		
+		
+		if (!goAnyway){
+			
+			
+			
+		if (controls.UI_LEFT_P || controls.UI_RIGHT_P){
+			if (selected == 0){
+				selected = 1;
+			}else{
+				selected = 0;
+			}
+			FlxG.sound.play(Paths.sound('scrollMenu'));
+			//buttons.animation.play('but' + selected);
+		}
+		buttonAccept.color.brightness = 0.5;
+		buttonNo.color.brightness = 0.5;
+		if (selected == 0 ) buttonAccept.color.brightness = 0.9;
+		if (selected == 1 ) buttonNo.color.brightness = 0.9;
+		if (controls.ACCEPT ){
+			if (selected == 0){
+				FlxG.sound.play(Paths.sound('confirmMenu'));
+				if(okc != null)okc();
+			}else{
+				FlxG.sound.play(Paths.sound('cancelMenu'));
+				if(cancelc != null)cancelc();
+			}
+			close();
+		}
+		
+		}
 	}
+	*/
 	
 	function makeSelectorGraphic(panel:FlxSprite,w,h,color:FlxColor)
 	{

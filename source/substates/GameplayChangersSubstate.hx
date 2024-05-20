@@ -1,37 +1,11 @@
 package substates;
 
-import flixel.FlxCamera;
-import flash.text.TextField;
-import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.addons.display.FlxGridOverlay;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.addons.transition.FlxTransitionableState;
-import flixel.math.FlxMath;
-import flixel.text.FlxText;
-import flixel.util.FlxColor;
-import lime.utils.Assets;
-import flixel.FlxSubState;
-import flash.text.TextField;
-import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.util.FlxSave;
-import haxe.Json;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
-import flixel.util.FlxTimer;
-import flixel.input.keyboard.FlxKey;
-import flixel.util.FlxColor;
-import flixel.graphics.FlxGraphic;
+import objects.AttachedText;
 import objects.CheckboxThingie;
-
-using StringTools;
+import flixel.addons.transition.FlxTransitionableState;
 
 class GameplayChangersSubstate extends MusicBeatSubstate
 {
-	public static var fromFreeplay:Bool = false;
-	public static var fromStory:Bool = false;
-
 	private var curOption:GameplayOption = null;
 	private var curSelected:Int = 0;
 	private var optionsArray:Array<Dynamic> = [];
@@ -62,6 +36,17 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		}
 		optionsArray.push(option);
 
+		#if FLX_PITCH
+		var option:GameplayOption = new GameplayOption('Playback Rate', 'songspeed', 'float', 1);
+		option.scrollSpeed = 1;
+		option.minValue = 0.5;
+		option.maxValue = 3.0;
+		option.changeValue = 0.05;
+		option.displayFormat = '%vX';
+		option.decimals = 2;
+		optionsArray.push(option);
+		#end
+
 		var option:GameplayOption = new GameplayOption('Health Gain Multiplier', 'healthgain', 'float', 1);
 		option.scrollSpeed = 2.5;
 		option.minValue = 0;
@@ -78,15 +63,9 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		option.displayFormat = '%vX';
 		optionsArray.push(option);
 
-		var option:GameplayOption = new GameplayOption('Instakill on Miss', 'instakill', 'bool', false);
-		optionsArray.push(option);
-
-		var option:GameplayOption = new GameplayOption('Practice Mode', 'practice', 'bool', false);
-		optionsArray.push(option);
-
-		var option:GameplayOption = new GameplayOption('Botplay', 'botplay', 'bool', false);
-		optionsArray.push(option);
-
+		optionsArray.push(new GameplayOption('Instakill on Miss', 'instakill', 'bool', false));
+		optionsArray.push(new GameplayOption('Practice Mode', 'practice', 'bool', false));
+		optionsArray.push(new GameplayOption('Botplay', 'botplay', 'bool', false));
 	}
 
 	public function getOptionByName(name:String)
@@ -100,21 +79,15 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		return null;
 	}
 
-	override function create()
+	public function new()
 	{
-		super.create();
-		
-		var camera:FlxCamera;
-		camera = new FlxCamera();
-        var bg:FlxSprite;
+                controls.isInSubstate = true;
 
-		FlxG.cameras.reset(camera);
+		super();
 
-		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		bg.color = FlxColor.fromRGB(FlxG.random.int(0, 255), FlxG.random.int(0, 255), FlxG.random.int(0, 255));
-		bg.antialiasing = ClientPrefs.globalAntialiasing;
+		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		bg.alpha = 0.6;
 		add(bg);
-		bg.screenCenter();
 
 		// avoids lagspikes while scrolling through menus!
 		grpOptions = new FlxTypedGroup<Alphabet>();
@@ -132,24 +105,23 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		{
 			var optionText:Alphabet = new Alphabet(200, 360, optionsArray[i].name, true);
 			optionText.isMenuItem = true;
-			optionText.scaleX = 0.8;
-			optionText.scaleY = 0.8;
+			optionText.setScale(0.8);
 			optionText.targetY = i;
 			grpOptions.add(optionText);
 
 			if(optionsArray[i].type == 'bool') {
-				optionText.x += 110;
-				optionText.startPosition.x += 110;
+				optionText.x += 90;
+				optionText.startPosition.x += 90;
 				optionText.snapToPosition();
 				var checkbox:CheckboxThingie = new CheckboxThingie(optionText.x - 105, optionText.y, optionsArray[i].getValue() == true);
 				checkbox.sprTracker = optionText;
-				checkbox.offsetX -= 32;
-				checkbox.offsetY = -120;
+				checkbox.offsetX -= 20;
+				checkbox.offsetY = -52;
 				checkbox.ID = i;
 				checkboxGroup.add(checkbox);
 			} else {
 				optionText.snapToPosition();
-				var valueText:AttachedText = new AttachedText(Std.string(optionsArray[i].getValue()), optionText.width, -72, true, 0.8);
+				var valueText:AttachedText = new AttachedText(Std.string(optionsArray[i].getValue()), optionText.width + 40, 0, true, 0.8);
 				valueText.sprTracker = optionText;
 				valueText.copyAlpha = true;
 				valueText.ID = i;
@@ -159,13 +131,11 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			updateTextFrom(optionsArray[i]);
 		}
 
+		addVirtualPad(LEFT_FULL, A_B_C);
+		addVirtualPadCamera(false);
+
 		changeSelection();
 		reloadCheckboxes();
-
-		#if android
-		addVirtualPad(FULL, A_B_C);
-		addPadCamera();
-		#end
 	}
 
 	var nextAccept:Int = 5;
@@ -173,7 +143,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 	var holdValue:Float = 0;
 	override function update(elapsed:Float)
 	{
-		AppUtil.setAppData(VersionStuff.appName, VersionStuff.altEngineVersion + VersionStuff.stage, "In The Gameplay Changers Menu.");
+		AppUtil.setAppData(AppController.appName, AppController.altEngineVersion + AppController.stage, "In Gameplay Settings - " + optionsArray[curSelected].name + ": " + optionsArray[curSelected].getValue());
 
 		if (controls.UI_UP_P)
 		{
@@ -185,22 +155,10 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		}
 
 		if (controls.BACK) {
-			
-			#if android
-			FlxG.resetState();
-			#else
-			close();
-			#end
 			ClientPrefs.saveSettings();
+			close();
+			controls.isInSubstate = false;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
-			if(fromFreeplay)
-			{
-			fromFreeplay = false;
-			}
-			if(fromStory)
-			{
-			fromStory = false;
-			}
 		}
 
 		if(nextAccept <= 0)
@@ -311,7 +269,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 				}
 			}
 
-			if(controls.RESET #if android || _virtualpad.buttonC.justPressed #end)
+			if(controls.RESET || virtualPad.buttonC.justPressed)
 			{
 				for (i in 0...optionsArray.length)
 				{
@@ -345,6 +303,10 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 
 		if(nextAccept > 0) {
 			nextAccept -= 1;
+		}
+		if (virtualPad == null){ //sometimes it dosent add the vpad, hopefully this fixes it
+		addVirtualPad(LEFT_FULL, A_B_C);
+		addVirtualPadCamera(false);
 		}
 		super.update(elapsed);
 	}
@@ -485,11 +447,11 @@ class GameplayOption
 
 	public function getValue():Dynamic
 	{
-		return ClientPrefs.gameplaySettings.get(variable);
+		return ClientPrefs.data.gameplaySettings.get(variable);
 	}
 	public function setValue(value:Dynamic)
 	{
-		ClientPrefs.gameplaySettings.set(variable, value);
+		ClientPrefs.data.gameplaySettings.set(variable, value);
 	}
 
 	public function setChild(child:Alphabet)

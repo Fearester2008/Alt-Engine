@@ -7,40 +7,37 @@ import lime.graphics.Image;
 using StringTools;
 
 class AppUtil {
-
     public static function getAppData():Void
     {
-        var appName:String = VersionStuff.appName;
-        var appVersion:String = VersionStuff.altEngineVersion + VersionStuff.stage;
-        Application.current.window.title = appName + " v" + appVersion;
+        var appName:String = AppController.appName;
+        var appVersion:String = AppController.altEngineVersion + AppController.stage;
+        Application.current.window.title = appName + " v: " + appVersion;
         return;
     }
-    public static function setAppData(appDatasName:String, ?appDatasVersion:String, ?actionStr:String)
+    public static function setAppData(name:String, ?version:String, ?action:String)
         {
-        var appDataName:String = appDatasName;
-        var appDataVersion:String = appDatasVersion;
-        var actionApp:String = actionStr;
-
-        Application.current.window.title = appDataName + ' v' + appDataVersion + " - " + actionApp;
+        if(ClientPrefs.data.customAppTitle)
+        {
+        Application.current.window.title = name + ' v: ' + version + " | " + action;
+        }
+        else 
+        {
+        Application.current.window.title = Application.current.meta.get('name');
+        }
         return;
         }
-        public static function setAppTitle(title:String)
-        {
-           Application.current.window.title = title;
-           return;
 
-        }
         public static function setAppVersion(version:String, stage:String = '')
          {
-            if (version == VersionStuff.altEngineVersion + VersionStuff.stage)
+            if (version == AppController.altEngineVersion + AppController.stage)
             {
-                version = VersionStuff.altEngineVersion;
-                stage = VersionStuff.stage;
+                version = AppController.altEngineVersion;
+                stage = AppController.stage;
             }
             else
             {
-                var ver:String = VersionStuff.altEngineVersion;
-                var stageBuild:String = VersionStuff.stage;
+                var ver:String = AppController.altEngineVersion;
+                var stageBuild:String = AppController.stage;
                 ver = version;
                 stageBuild = stage;
             }

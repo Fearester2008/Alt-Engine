@@ -1,8 +1,5 @@
 package objects;
 
-import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
-
 class CheckboxThingie extends FlxSprite
 {
 	public var sprTracker:FlxSprite;
@@ -13,13 +10,17 @@ class CheckboxThingie extends FlxSprite
 	public function new(x:Float = 0, y:Float = 0, ?checked = false) {
 		super(x, y);
 
+		// why would we need velocity for this
+		moves = false;
+		immovable = true;
+
 		frames = Paths.getSparrowAtlas('checkboxanim');
 		animation.addByPrefix("unchecked", "checkbox0", 24, false);
 		animation.addByPrefix("unchecking", "checkbox anim reverse", 24, false);
 		animation.addByPrefix("checking", "checkbox anim0", 24, false);
 		animation.addByPrefix("checked", "checkbox finish", 24, false);
 
-		antialiasing = ClientPrefs.globalAntialiasing;
+		antialiasing = ClientPrefs.data.antialiasing;
 		setGraphicSize(Std.int(0.9 * width));
 		updateHitbox();
 
@@ -63,5 +64,11 @@ class CheckboxThingie extends FlxSprite
 				animation.play('unchecked', true);
 				offset.set(0, 2);
 		}
+	}
+
+	override function destroy(){
+		active = false;
+		sprTracker = FlxDestroyUtil.destroy(sprTracker);
+		super.destroy();
 	}
 }

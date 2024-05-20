@@ -1,27 +1,14 @@
 package backend;
 
-import flixel.FlxG;
 import flixel.addons.ui.FlxUIState;
-import flixel.math.FlxRect;
-import flixel.util.FlxTimer;
 import flixel.addons.transition.FlxTransitionableState;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
-import flixel.FlxSprite;
-import flixel.util.FlxColor;
-import flixel.util.FlxGradient;
 import flixel.FlxState;
-import flixel.FlxCamera;
-import flixel.FlxBasic;
-
-#if android
-import flixel.input.actions.FlxActionInput;
-import android.AndroidControls.AndroidControls;
-import android.FlxVirtualPad;
-#end
+import backend.PsychCamera;
 
 class MusicBeatState extends FlxUIState
 {
+	public static var instance:MusicBeatState;
+
 	private var curSection:Int = 0;
 	private var stepsToDo:Int = 0;
 
@@ -30,114 +17,137 @@ class MusicBeatState extends FlxUIState
 
 	private var curDecStep:Float = 0;
 	private var curDecBeat:Float = 0;
-	private var controls(get, never):Controls;
-
-	public static var camBeat:FlxCamera;
-
-	inline function get_controls():Controls
-		return PlayerSettings.player1.controls;
-
-	#if android
-	var _virtualpad:FlxVirtualPad;
-	var androidc:AndroidControls;
-	var trackedinputsUI:Array<FlxActionInput> = [];
-	var trackedinputsNOTES:Array<FlxActionInput> = [];
-	#end
-	
-	#if android
-	public function addVirtualPad(?DPad:FlxDPadMode, ?Action:FlxActionMode) {
-		_virtualpad = new FlxVirtualPad(DPad, Action, 0.75, ClientPrefs.globalAntialiasing);
-		add(_virtualpad);
-		controls.setVirtualPadUI(_virtualpad, DPad, Action);
-		trackedinputsUI = controls.trackedinputsUI;
-		controls.trackedinputsUI = [];
+	public var controls(get, never):Controls;
+	private function get_controls()
+	{
+		return Controls.instance;
 	}
-	#end
 
-	#if android
-	public function removeVirtualPad() {
-		controls.removeFlxInput(trackedinputsUI);
-		remove(_virtualpad);
+	public var dpadMode:Map<String, FlxDPadMode>;
+	public var actionMode:Map<String, FlxActionMode>;
+	public var virtualPad:FlxVirtualPad;
+	public var mobileControls:MobileControls;
+	public var camControls:FlxCamera;
+	public var vpadCam:FlxCamera;
+
+	public var notifyCamera:FlxCamera;
+	public var notifyBox:NotifyBox;
+
+	public function addVirtualPad(DPad:FlxDPadMode, Action:FlxActionMode)
+	{
+		virtualPad = new FlxVirtualPad(DPad, Action);
+		virtualPad.alpha = ClientPrefs.data.controlsAlpha;
+		add(virtualPad);
 	}
-	#end
 
-	#if android
-	public function addAndroidControls() {
-		androidc = new AndroidControls();
+	public function removeVirtualPad()
+	{
+		if (virtualPad != null)
+			remove(virtualPad);
+	}
 
-		switch (androidc.mode)
+	public function addMobileControls(DefaultDrawTarget:Bool = true):Void
+	{
+		mobileControls = new MobileControls();
+
+		camControls = new FlxCamera();
+		camControls.bgColor.alpha = 0;
+		FlxG.cameras.add(camControls, DefaultDrawTarget);
+
+		mobileControls.cameras = [camControls];
+		mobileControls.visible = false;
+		mobileControls.alpha = ClientPrefs.data.controlsAlpha;
+		add(mobileControls);
+	}
+
+	public function removeMobileControls()
+	{
+		if (mobileControls != null)
+			remove(mobileControls);
+	}
+
+	public function addVirtualPadCamera(DefaultDrawTarget:Bool = true):Void
+	{
+		if (virtualPad != null)
 		{
-			case VIRTUALPAD_RIGHT | VIRTUALPAD_LEFT | VIRTUALPAD_CUSTOM:
-				controls.setVirtualPadNOTES(androidc.vpad, FULL, NONE);
-			case DUO:
-				controls.setVirtualPadNOTES(androidc.vpad, DUO, NONE);
-			case HITBOX:
-				controls.setNewHitBox(androidc.newhbox);
-			default:
+			vpadCam = new FlxCamera();
+			vpadCam.bgColor.alpha = 0;
+			FlxG.cameras.add(vpadCam, DefaultDrawTarget);
+			virtualPad.cameras = [vpadCam];
+		}
+	}
+
+	override function destroy()
+	{
+		super.destroy();
+
+		if (virtualPad != null)
+		{
+			virtualPad = FlxDestroyUtil.destroy(virtualPad);
+			virtualPad = null;
 		}
 
-		trackedinputsNOTES = controls.trackedinputsNOTES;
-		controls.trackedinputsNOTES = [];
-
-		var camcontrol = new flixel.FlxCamera();
-		FlxG.cameras.add(camcontrol, false);
-		camcontrol.bgColor.alpha = 0;
-		androidc.cameras = [camcontrol];
-
-		androidc.visible = false;
-
-		add(androidc);
-	}
-	#end
-
-	#if android
-        public function addPadCamera() {
-		var camcontrol = new flixel.FlxCamera();
-		camcontrol.bgColor.alpha = 0;
-		FlxG.cameras.add(camcontrol, false);
-		_virtualpad.cameras = [camcontrol];
-	}
-	#end
-	
-	override function destroy() {
-		#if android
-		controls.removeFlxInput(trackedinputsNOTES);
-		controls.removeFlxInput(trackedinputsUI);
-		#end
-
-		super.destroy();
-	}
-
-	override function create()
+		if (mobileControls != null)
 		{
-			super.create();
-	
-			if (!FlxTransitionableState.skipNextTransOut)
-			{
-				var cam:FlxCamera = new FlxCamera();
-				cam.bgColor.alpha = 0;
-				FlxG.cameras.add(cam, false);
-				cam.fade(FlxColor.BLACK, 0.5, true, function()
-				{
-					FlxTransitionableState.skipNextTransOut = false;
-				});
-			}
-			else
-			{
-				FlxTransitionableState.skipNextTransOut = false;
-			}
-		}	
+			mobileControls = FlxDestroyUtil.destroy(mobileControls);
+			mobileControls = null;
+		}
+	}
 
+	var _psychCameraInitialized:Bool = false;
+
+	override function create() {
+		// FlxDPadModes (for Mobile Controls)
+		dpadMode = new Map<String, FlxDPadMode>();
+		dpadMode.set("UP_DOWN", UP_DOWN);
+		dpadMode.set("LEFT_RIGHT", LEFT_RIGHT);
+		dpadMode.set("LEFT_RIGHT", LEFT_RIGHT);
+		dpadMode.set("LEFT_FULL", LEFT_FULL);
+		dpadMode.set("RIGHT_FULL", RIGHT_FULL);
+		dpadMode.set("BOTH", BOTH);
+		dpadMode.set("NONE", NONE);
+
+		actionMode = new Map<String, FlxActionMode>();
+		actionMode.set('A', A);
+		actionMode.set('A_B', A_B);
+		actionMode.set('A_B_C', A_B_C);
+		actionMode.set('A_B_E', A_B_E);
+		actionMode.set('A_B_E', A_B_E);
+		actionMode.set('A_B_C_X_Y', A_B_C_X_Y);
+		actionMode.set('A_B_C_X_Y_Z', A_B_C_X_Y_Z);
+		actionMode.set('A_B_C_D_V_X_Y_Z', A_B_C_D_V_X_Y_Z);
+		instance = this;
+
+		var skip:Bool = FlxTransitionableState.skipNextTransOut;
+		#if MODS_ALLOWED Mods.updatedOnState = false; #end
+
+		super.create();
+
+		if(!skip) {
+			openSubState(new CustomFadeTransition(0.6, true));
+		}
+		FlxTransitionableState.skipNextTransOut = false;
+		timePassedOnState = 0;
+
+		notifyCamera = new FlxCamera();
+		notifyCamera.bgColor.alpha = 0;
+		FlxG.cameras.add(notifyCamera, false);
+
+		notifyBox = new NotifyBox();
+		notifyBox.createBox();
+		notifyBox.cameras = [notifyCamera];
+		add(notifyBox);
+	}
+
+	public static var timePassedOnState:Float = 0;
 	override function update(elapsed:Float)
 	{
 		//everyStep();
 		var oldStep:Int = curStep;
+		timePassedOnState += elapsed;
 
 		updateCurStep();
 		updateBeat();
-
-		if(FlxG.keys.justPressed.F11)
-        	FlxG.fullscreen = !FlxG.fullscreen;
 
 		if (oldStep != curStep)
 		{
@@ -154,6 +164,10 @@ class MusicBeatState extends FlxUIState
 		}
 
 		if(FlxG.save.data != null) FlxG.save.data.fullscreen = FlxG.fullscreen;
+		
+		stagesFunc(function(stage:BaseStage) {
+			stage.update(elapsed);
+		});
 
 		super.update(elapsed);
 	}
@@ -201,80 +215,84 @@ class MusicBeatState extends FlxUIState
 	{
 		var lastChange = Conductor.getBPMFromSeconds(Conductor.songPosition);
 
-		var shit = ((Conductor.songPosition - ClientPrefs.noteOffset) - lastChange.songTime) / lastChange.stepCrochet;
+		var shit = ((Conductor.songPosition - ClientPrefs.data.noteOffset) - lastChange.songTime) / lastChange.stepCrochet;
 		curDecStep = lastChange.stepTime + shit;
 		curStep = lastChange.stepTime + Math.floor(shit);
 	}
 
-	public static function switchState(nextState:FlxState, ?oldTrans:Bool = false)
+	public static function switchState(nextState:FlxState = null) {
+		if(nextState == null) nextState = FlxG.state;
+		if(nextState == FlxG.state)
 		{
-			if(!oldTrans)
-			{
-			if (!FlxTransitionableState.skipNextTransIn)
-			{
-				var cam:FlxCamera = new FlxCamera();
-				cam.bgColor.alpha = 0;
-				FlxG.cameras.add(cam, false);
-				cam.fade(FlxColor.BLACK, 0.5, false, function()
-				{
-					FlxG.switchState(nextState);
-					FlxTransitionableState.skipNextTransIn = false;
-				});
-			}
-			else
-			{
-				FlxG.switchState(nextState);
-				FlxTransitionableState.skipNextTransIn = true;
-			}
-			}
-			else if(oldTrans)
-			{
-				var curState:Dynamic = FlxG.state;
-				var leState:MusicBeatState = curState;
-			if(!FlxTransitionableState.skipNextTransIn) {
-			leState.openSubState(new backend.CustomFadeTransition(0.3, false));
-			if(nextState == FlxG.state) {
-				CustomFadeTransition.finishCallback = function() {
-					FlxG.resetState();
-				};
-				//trace('resetted');
-			} else {
-				CustomFadeTransition.finishCallback = function() {
-					FlxG.switchState(nextState);
-				};
-				//trace('changed state');
-			}
+			resetState();
 			return;
 		}
-		FlxTransitionableState.skipNextTransIn = false;
-		FlxG.switchState(nextState);
-		}
-}
 
-	public static function resetState(?oldTrans:Bool = false) {
-		MusicBeatState.switchState(FlxG.state, oldTrans);
+		if(FlxTransitionableState.skipNextTransIn) FlxG.switchState(nextState);
+		else startTransition(nextState);
+		FlxTransitionableState.skipNextTransIn = false;
 	}
-	
+
+	public static function resetState() {
+		if(FlxTransitionableState.skipNextTransIn) FlxG.resetState();
+		else startTransition();
+		FlxTransitionableState.skipNextTransIn = false;
+	}
+
+	// Custom made Trans in
+	public static function startTransition(nextState:FlxState = null)
+	{
+		if(nextState == null)
+			nextState = FlxG.state;
+
+		FlxG.state.openSubState(new CustomFadeTransition(0.8, false));
+		if(nextState == FlxG.state)
+			CustomFadeTransition.finishCallback = function() FlxG.resetState();
+		else
+			CustomFadeTransition.finishCallback = function() FlxG.switchState(nextState);
+	}
+
 	public static function getState():MusicBeatState {
-		var curState:Dynamic = FlxG.state;
-		var leState:MusicBeatState = curState;
-		return leState;
+		return cast (FlxG.state, MusicBeatState);
 	}
 
 	public function stepHit():Void
 	{
+		stagesFunc(function(stage:BaseStage) {
+			stage.curStep = curStep;
+			stage.curDecStep = curDecStep;
+			stage.stepHit();
+		});
+
 		if (curStep % 4 == 0)
 			beatHit();
 	}
 
+	public var stages:Array<BaseStage> = [];
 	public function beatHit():Void
 	{
 		//trace('Beat: ' + curBeat);
+		stagesFunc(function(stage:BaseStage) {
+			stage.curBeat = curBeat;
+			stage.curDecBeat = curDecBeat;
+			stage.beatHit();
+		});
 	}
 
 	public function sectionHit():Void
 	{
 		//trace('Section: ' + curSection + ', Beat: ' + curBeat + ', Step: ' + curStep);
+		stagesFunc(function(stage:BaseStage) {
+			stage.curSection = curSection;
+			stage.sectionHit();
+		});
+	}
+
+	function stagesFunc(func:BaseStage->Void)
+	{
+		for (stage in stages)
+			if(stage != null && stage.exists && stage.active)
+				func(stage);
 	}
 
 	function getBeatsOnSection()

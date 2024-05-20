@@ -1,29 +1,22 @@
 package states.editors;
 
-import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.addons.display.FlxGridOverlay;
-import flixel.addons.transition.FlxTransitionableState;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.math.FlxMath;
-import flixel.text.FlxText;
-import flixel.util.FlxColor;
-import flixel.system.FlxSound;
-#if MODS_ALLOWED
-import sys.FileSystem;
-#end
+import backend.WeekData;
 
-using StringTools;
+import objects.Character;
+
+import states.MainMenuState;
+import states.FreeplayState;
 
 class MasterEditorMenu extends MusicBeatState
 {
 	var options:Array<String> = [
+		'Chart Editor',
+		'Character Editor',
 		'Week Editor',
 		'Menu Character Editor',
 		'Dialogue Editor',
 		'Dialogue Portrait Editor',
-		'Character Editor',
-		'Chart Editor'
+		'Note Splash Debug'
 	];
 	private var grpTexts:FlxTypedGroup<Alphabet>;
 	private var directories:Array<String> = [null];
@@ -35,7 +28,7 @@ class MasterEditorMenu extends MusicBeatState
 	override function create()
 	{
 		FlxG.camera.bgColor = FlxColor.BLACK;
-		#if desktop
+		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("Editors Main Menu", null);
 		#end
@@ -63,16 +56,16 @@ class MasterEditorMenu extends MusicBeatState
 		add(textBG);
 
 		directoryTxt = new FlxText(textBG.x, textBG.y + 4, FlxG.width, '', 32);
-		directoryTxt.setFormat(Paths.font("vcr-rus.ttf"), 32, FlxColor.WHITE, CENTER);
+		directoryTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
 		directoryTxt.scrollFactor.set();
 		add(directoryTxt);
 		
-		for (folder in Paths.getModDirectories())
+		for (folder in Mods.getModDirectories())
 		{
 			directories.push(folder);
 		}
 
-		var found:Int = directories.indexOf(Paths.currentModDirectory);
+		var found:Int = directories.indexOf(Mods.currentModDirectory);
 		if(found > -1) curDirectory = found;
 		changeDirectory();
 		#end
@@ -80,8 +73,10 @@ class MasterEditorMenu extends MusicBeatState
 
 		FlxG.mouse.visible = false;
 
-		#if android
-		addVirtualPad(FULL, A_B);
+		#if MODS_ALLOWED
+		addVirtualPad(LEFT_FULL, A_B);
+		#else
+		addVirtualPad(UP_DOWN, A_B);
 		#end
 
 		super.create();
@@ -89,7 +84,7 @@ class MasterEditorMenu extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		AppUtil.setAppData(VersionStuff.appName, VersionStuff.altEngineVersion + VersionStuff.stage, "In The Mod Editors Menu.");
+		AppUtil.setAppData(AppController.appName, AppController.altEngineVersion + AppController.stage, "In Master Editor Menu - " + options[curSelected]);
 
 		if (controls.UI_UP_P)
 		{
@@ -118,20 +113,23 @@ class MasterEditorMenu extends MusicBeatState
 		if (controls.ACCEPT)
 		{
 			switch(options[curSelected]) {
+				case 'Chart Editor'://felt it would be cool maybe
+					LoadingState.loadAndSwitchState(new ChartingState(), false);
 				case 'Character Editor':
 					LoadingState.loadAndSwitchState(new CharacterEditorState(Character.DEFAULT_CHARACTER, false));
 				case 'Week Editor':
 					MusicBeatState.switchState(new WeekEditorState());
 				case 'Menu Character Editor':
 					MusicBeatState.switchState(new MenuCharacterEditorState());
-				case 'Dialogue Portrait Editor':
-					LoadingState.loadAndSwitchState(new DialogueCharacterEditorState(), false);
 				case 'Dialogue Editor':
 					LoadingState.loadAndSwitchState(new DialogueEditorState(), false);
-				case 'Chart Editor'://felt it would be cool maybe
-					LoadingState.loadAndSwitchState(new ChartingState(), false);
+				case 'Dialogue Portrait Editor':
+					LoadingState.loadAndSwitchState(new DialogueCharacterEditorState(), false);
+				case 'Note Splash Debug':
+					MusicBeatState.switchState(new NoteSplashDebugState());
 			}
 			FlxG.sound.music.volume = 0;
+			FreeplayState.destroyFreeplayVocals();
 		}
 		
 		var bullShit:Int = 0;
@@ -178,21 +176,11 @@ class MasterEditorMenu extends MusicBeatState
 	
 		WeekData.setDirectoryFromWeek();
 		if(directories[curDirectory] == null || directories[curDirectory].length < 1)
-
-			if(ClientPrefs.language == 'English')
 			directoryTxt.text = '< No Mod Directory Loaded >';
-			else
-			directoryTxt.text = '< Папки модов не загружены >';
-
 		else
 		{
-			Paths.currentModDirectory = directories[curDirectory];
-
-			if(ClientPrefs.language == 'English')
-			directoryTxt.text = '< Loaded Mod Directory: ' + Paths.currentModDirectory + ' >';
-			else
-			directoryTxt.text = '< Загруженная Папка Мода: ' + Paths.currentModDirectory + ' >';
-
+			Mods.currentModDirectory = directories[curDirectory];
+			directoryTxt.text = '< Loaded Mod Directory: ' + Mods.currentModDirectory + ' >';
 		}
 		directoryTxt.text = directoryTxt.text.toUpperCase();
 	}

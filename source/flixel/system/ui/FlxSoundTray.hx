@@ -12,8 +12,8 @@ import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 #if flash
-import flash.text.AntiAliasType;
-import flash.text.GridFitType;
+import openfl.text.AntiAliasType;
+import openfl.text.GridFitType;
 #end
 
 /**
@@ -37,23 +37,12 @@ class FlxSoundTray extends Sprite
 	 */
 	var _bars:Array<Bitmap>;
 
-    /**
-	 * Displays the actual volume as text.
-	 */
-    var _volumeDisplay:TextField;
-
 	/**
 	 * How wide the sound tray background is.
 	 */
 	var _width:Int = 80;
 
 	var _defaultScale:Float = 2.0;
-
-	/**The sound used when increasing the volume.**/
-	//public var volumeSound:String = "flixel/sounds/beep";
-
-	/**Whether or not changing the volume should make noise.**/
-	public var silent:Bool = false;
 
 	/**
 	 * Sets up the "sound tray", the little volume meter that pops down sometimes.
@@ -83,40 +72,20 @@ class FlxSoundTray extends Sprite
 		text.gridFitType = GridFitType.PIXEL;
 		#else
 		#end
-		var dtf:TextFormat = new TextFormat(FlxAssets.FONT_DEFAULT, 8, 0xffffff);
+		var dtf:TextFormat = new TextFormat(FlxAssets.FONT_DEFAULT, 10, 0xffffff);
 		dtf.align = TextFormatAlign.CENTER;
 		text.defaultTextFormat = dtf;
 		addChild(text);
 		text.text = "VOLUME";
-		text.y = 18;
-
-        _volumeDisplay = new TextField();
-		_volumeDisplay.width = tmp.width;
-		_volumeDisplay.height = tmp.height;
-		_volumeDisplay.multiline = true;
-		_volumeDisplay.wordWrap = true;
-		_volumeDisplay.selectable = false;
-
-		#if flash
-		_volumeDisplay.embedFonts = true;
-		_volumeDisplay.antiAliasType = AntiAliasType.NORMAL;
-		_volumeDisplay.gridFitType = GridFitType.PIXEL;
-		#else
-		#end
-		var dtf:TextFormat = new TextFormat(FlxAssets.FONT_DEFAULT, 4, 0xffffff);
-		dtf.align = TextFormatAlign.CENTER;
-		_volumeDisplay.defaultTextFormat = dtf;
-		addChild(_volumeDisplay);
-		_volumeDisplay.text = "%";
-		_volumeDisplay.y = 12;
+		text.y = 16;
 
 		var bx:Int = 10;
-		var by:Int = 12;
+		var by:Int = 14;
 		_bars = new Array();
 
 		for (i in 0...10)
 		{
-			tmp = new Bitmap(new BitmapData(4, 5, true, FlxColor.WHITE));
+			tmp = new Bitmap(new BitmapData(4, i + 1, false, FlxColor.WHITE));
 			tmp.x = bx;
 			tmp.y = by;
 			addChild(tmp);
@@ -130,28 +99,33 @@ class FlxSoundTray extends Sprite
 	}
 
 	/**
-	 * This function just updates the soundtray object.
+	 * This function updates the soundtray object.
 	 */
 	public function update(MS:Float):Void
 	{
-		// Animate stupid sound tray thing
+		// Animate sound tray thing
 		if (_timer > 0)
 		{
-			_timer -= MS / 1000;
+			_timer -= (MS / 1000);
 		}
 		else if (y > -height)
 		{
-			y -= (MS / 1000) * FlxG.height * 2;
+			y -= (MS / 1000) * height * 0.5;
 
 			if (y <= -height)
 			{
 				visible = false;
 				active = false;
 
+				#if FLX_SAVE
 				// Save sound preferences
+				if (FlxG.save.isBound)
+				{
 					FlxG.save.data.mute = FlxG.sound.muted;
 					FlxG.save.data.volume = FlxG.sound.volume;
 					FlxG.save.flush();
+				}
+				#end
 			}
 		}
 	}
@@ -161,14 +135,8 @@ class FlxSoundTray extends Sprite
 	 *
 	 * @param	up Whether the volume is increasing.
 	 */
-	public function show(up:Bool = false, _silent:Bool = false):Void
+	public function show(up:Bool = false):Void
 	{
-		if (!_silent && !silent)
-		{
-			//atleast its better than the ear piercing beep 
-			FlxG.sound.play(Paths.sound('bfBeep'));
-		}
-
 		_timer = 1;
 		y = 0;
 		visible = true;
@@ -191,8 +159,6 @@ class FlxSoundTray extends Sprite
 				_bars[i].alpha = 0.5;
 			}
 		}
-        final vol = Math.round(FlxG.sound.volume*100);
-        _volumeDisplay.text = '$vol%${(FlxG.sound.muted ? ' (MUTE)' : '')}';
 	}
 
 	public function screenCenter():Void

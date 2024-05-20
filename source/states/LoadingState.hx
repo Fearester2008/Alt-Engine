@@ -2,18 +2,15 @@ package states;
 
 import lime.app.Promise;
 import lime.app.Future;
-import flixel.FlxG;
+
 import flixel.FlxState;
-import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.util.FlxTimer;
-import flixel.math.FlxMath;
-import flixel.ui.FlxBar;
 
 import openfl.utils.Assets;
 import lime.utils.Assets as LimeAssets;
 import lime.utils.AssetLibrary;
 import lime.utils.AssetManifest;
+
+import backend.StageData;
 
 import haxe.io.Path;
 
@@ -31,7 +28,7 @@ class LoadingState extends MusicBeatState
 	var stopMusic = false;
 	var directory:String;
 	var callbacks:MultiCallback;
-	var targetfreak:Float = 0;
+	var targetShit:Float = 0;
 
 	function new(target:FlxState, stopMusic:Bool, directory:String)
 	{
@@ -41,25 +38,41 @@ class LoadingState extends MusicBeatState
 		this.directory = directory;
 	}
 
+	var funkay:FlxSprite;
+	var loadBar:FlxSprite;
 	override function create()
-	{	
+	{
+		var bg:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, 0xffcaff4d);
+		bg.antialiasing = ClientPrefs.data.antialiasing;
+		add(bg);
+		funkay = new FlxSprite(0, 0).loadGraphic(Paths.getPath('images/funkay.png', IMAGE));
+		funkay.setGraphicSize(0, FlxG.height);
+		funkay.updateHitbox();
+		add(funkay);
+		funkay.antialiasing = ClientPrefs.data.antialiasing;
+		funkay.scrollFactor.set();
+		funkay.screenCenter();
+
+		loadBar = new FlxSprite(0, FlxG.height - 20).makeGraphic(FlxG.width, 10, 0xffff16d2);
+		loadBar.screenCenter(X);
+		add(loadBar);
+		
 		initSongsManifest().onComplete
 		(
 			function (lib)
 			{
 				callbacks = new MultiCallback(onLoad);
 				var introComplete = callbacks.add("introComplete");
-				/*if (PlayState.SONG != null) {
+				if (PlayState.SONG != null) {
 					checkLoadSong(getSongPath());
 					if (PlayState.SONG.needsVoices)
 						checkLoadSong(getVocalPath());
-				}*/
-				checkLibrary("shared");
+				}
 				if(directory != null && directory.length > 0 && directory != 'shared') {
-					checkLibrary(directory);
+					checkLibrary('week_assets');
 				}
 
-				var fadeTime = 2;
+				var fadeTime = 0.5;
 				FlxG.camera.fade(FlxG.camera.bgColor, fadeTime, true);
 				new FlxTimer().start(fadeTime + MIN_TIME, function(_) introComplete());
 			}
@@ -87,20 +100,27 @@ class LoadingState extends MusicBeatState
 		{
 			@:privateAccess
 			if (!LimeAssets.libraryPaths.exists(library))
-				throw (library + " folder not exist");
+				throw new haxe.Exception("Missing library: " + library);
 
 			var callback = callbacks.add("library:" + library);
 			Assets.loadLibrary(library).onComplete(function (_) { callback(); });
 		}
 	}
-
+	
 	override function update(elapsed:Float)
 	{
-
 		super.update(elapsed);
+		funkay.setGraphicSize(Std.int(0.88 * FlxG.width + 0.9 * (funkay.width - 0.88 * FlxG.width)));
+		funkay.updateHitbox();
+		if(controls.ACCEPT)
+		{
+			funkay.setGraphicSize(Std.int(funkay.width + 60));
+			funkay.updateHitbox();
+		}
 
 		if(callbacks != null) {
-			targetfreak = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
+			targetShit = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
+			loadBar.scale.x += 0.5 * (targetShit - loadBar.scale.x);
 		}
 	}
 	
@@ -141,7 +161,7 @@ class LoadingState extends MusicBeatState
 		#if NO_PRELOAD_ALL
 		var loaded:Bool = false;
 		if (PlayState.SONG != null) {
-			loaded = isSoundLoaded(getSongPath()) && (!PlayState.SONG.needsVoices || isSoundLoaded(getVocalPath())) && isLibraryLoaded("shared") && isLibraryLoaded(directory);
+			loaded = isSoundLoaded(getSongPath()) && (!PlayState.SONG.needsVoices || isSoundLoaded(getVocalPath())) && isLibraryLoaded('week_assets');
 		}
 		
 		if (!loaded)
@@ -156,6 +176,7 @@ class LoadingState extends MusicBeatState
 	#if NO_PRELOAD_ALL
 	static function isSoundLoaded(path:String):Bool
 	{
+		trace(path);
 		return Assets.cache.hasSound(path);
 	}
 	
