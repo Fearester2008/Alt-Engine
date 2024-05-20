@@ -77,14 +77,6 @@ class Main extends Sprite
 		")
 		#end
 
-		#if cpp
-		@:privateAccess
-		untyped __global__.__hxcpp_set_critical_error_handler(SUtil.onError);
-		#elseif hl
-		@:privateAccess
-		Api.setErrorHandler(SUtil.onError);
-		#end
-
 		if (stage != null)
 		{
 			init();
