@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-java@main
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '11'
 
       - name: Setup Haxe
         uses: krdlab/setup-haxe@master
@@ -44,7 +44,7 @@ jobs:
           haxelib run lime config ANDROID_SETUP true
 
       - name: Compile
-        run: haxelib run lime build android -D ${{ matrix.storage-type }} -final
+        run: haxelib run lime build android -D ${{ matrix.storage-type }}
         env:
           cert_pass: nullfunni
           cert_alias_pass: nullfunni
