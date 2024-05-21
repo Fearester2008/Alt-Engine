@@ -49,7 +49,7 @@
     },
     {
       "name": "SScript",
-      "type": "git",
+      "type": "haxelib",
       "version": null
     },
     {
