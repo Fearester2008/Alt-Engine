@@ -272,8 +272,9 @@ class HScript extends SScript
 		#end
 	}
 
-	public function destroy()
+	override public function destroy()
 	{
+		super.destroy();
 		active = false;
 	}
 }
