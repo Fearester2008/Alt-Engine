@@ -50,9 +50,7 @@
     {
       "name": "SScript",
       "type": "git",
-      "dir": null,
-      "ref": "master",
-      "url": "https://github.com/Fearester2008/SScript.git"
+      "version": null
     },
     {
       "name": "hxcpp-debug-server",
