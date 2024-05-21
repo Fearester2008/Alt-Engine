@@ -193,7 +193,7 @@ class HScript extends SScript
 	{
 		#if LUA_ALLOWED
 		Lua_helper.add_callback(funk.lua, "runHaxeCode", function(codeToRun:String, ?varsToBring:Any = null, ?funcToRun:String = null, ?funcArgs:Array<Dynamic> = null):Dynamic {
-			var retVal:TeaCall = null;
+			var retVal:Tea = null;
 			#if (SScript >= "3.0.0")
 			initHaxeModuleCode(funk, codeToRun);
 			if(varsToBring != null)
