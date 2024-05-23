@@ -197,7 +197,7 @@ class CreditsState extends MusicBeatState
 			}
 
 			if(controls.ACCEPT && (creditsStuff[curSelected][3] == null || creditsStuff[curSelected][3].length > 4)) {
-				CoolUtil.browserLoad(creditsStuff[curSelected][3]);
+				CoolUtil.openLink(creditsStuff[curSelected][3]);
 			}
 			if (controls.BACK)
 			{
