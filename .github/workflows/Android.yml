@@ -60,12 +60,11 @@ jobs:
           haxelib --quiet install hxjsonast
           haxelib --quiet install hscript 
           haxelib --quiet install hxdiscord_rpc
-          haxelib --quiet install hxvlc 1.5.0
-          haxelib --quiet git hxCodec 3.0.2
+          haxelib --quiet install hxvlc
+          haxelib --quiet git hxCodec
           haxelib --quiet git SScript https://github.com/Fearester2008/SScript.git
           haxelib --quiet git linc_luajit https://github.com/superpowers04/linc_luajit.git
           haxelib --quiet git extension-androidtools https://github.com/MaysLastPlay77/extension-androidtools
-          haxelib --quiet git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib --quiet git flxanimate https://github.com/ShadowMario/flxanimate.git dev
           haxelib list
       - name: Create Version Tag
