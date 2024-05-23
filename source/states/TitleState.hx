@@ -20,9 +20,6 @@ import shaders.ColorSwap;
 import states.StoryMenuState;
 import states.OutdatedState;
 import states.MainMenuState;
-#if mobile
-import mobile.states.CopyState;
-#end
 
 typedef TitleData =
 {
@@ -91,11 +88,6 @@ class TitleState extends MusicBeatState
             Sys.exit(1);
         }
             #end
-		#end
-
-		#if mobile
-		if(!CopyState.checkExistingFiles() && !ignoreCopy)
-			FlxG.switchState(new CopyState());
 		#end
 
 		Mods.loadTopMod();
