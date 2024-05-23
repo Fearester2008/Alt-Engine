@@ -1,32 +1,14 @@
-
-# This is a basic workflow to help you get started with Actions
-
-name: Android Build
-
-# Controls when the action will run. 
-on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+name: Mobile + Release
+on: workflow_dispatch
 jobs:
-  # This workflow contains a single job called "build"
-
- buildAndroid:
-    name: buildAndroid
+  Android:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@main
 
       - name: Setup Android NDK
-        uses: nttld/setup-ndk@v1
+        uses: nttld/setup-ndk@main
         id: setup-ndk
         with:
           ndk-version: r21e
@@ -34,60 +16,38 @@ jobs:
       - name: Setup Java JDK
         uses: actions/setup-java@main
         with:
-          distribution: 'zulu'
-          java-version: 18
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@main
+          distribution: 'temurin'
+          java-version: '11'
 
       - name: Setup Haxe
-        uses: krdlab/setup-haxe@v1.2.0
+        uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.2.5
+          haxe-version: 4.3.4
 
-      - name: Install Haxelib
+      - name: Install Libraries
         run: |
-          haxelib setup ~/haxelib
-          haxelib install hxcpp 4.2.1 > /dev/null
-          haxelib --quiet install lime 8.0.2
-          haxelib --quiet install openfl 9.3.3
-          haxelib --quiet install flixel 5.6.2
-          haxelib --quiet run lime setup flixel
-          haxelib --quiet install flixel-tools 1.5.1
-          haxelib --quiet install flixel-ui 2.5.0
-          haxelib --quiet install flixel-addons 3.2.2
-          haxelib --quiet install tjson 1.4.0
-          haxelib --quiet install hxjsonast
-          haxelib --quiet install hscript 
-          haxelib --quiet install hxdiscord_rpc
-          haxelib --quiet install hxvlc
-          haxelib --quiet install hxCodec 3.0.2
-          haxelib --quiet git SScript https://github.com/Fearester2008/SScript.git
-          haxelib --quiet git linc_luajit https://github.com/superpowers04/linc_luajit.git
-          haxelib --quiet git extension-androidtools https://github.com/MaysLastPlay77/extension-androidtools
-          haxelib --quiet git flxanimate https://github.com/ShadowMario/flxanimate.git dev
-          haxelib list
-      - name: Create Version Tag
-        run: echo "${{github.run_id}}" > VERSION
+          haxelib install hmm --quiet
+          haxelib run hmm install --quiet
 
-      - name: Setup Lime
+      - name: Configure Android
         run: |
-          haxelib run lime setup -alias -y
           haxelib run lime config ANDROID_SDK $ANDROID_HOME
           haxelib run lime config ANDROID_NDK_ROOT $ANDROID_NDK_HOME
           haxelib run lime config JAVA_HOME $JAVA_HOME
           haxelib run lime config ANDROID_SETUP true
-          haxelib set lime 8.0.2
-          haxelib set openfl 9.3.3
-          haxelib set flixel 5.6.2
-          haxelib set flixel-addons 3.2.2
         env:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Compile
-        run: haxelib run lime build android --app-version="4.0.0-${{ github.run_id}}"
-      - name: Publish Artifact
+        run: haxelib run lime build android
+        env:
+          cert_pass: nullfunni
+          cert_alias_pass: nullfunni
+
+      - name: Upload Artifact
+        if: ${{ success() }}
         uses: actions/upload-artifact@main
         with:
-          name: buildAndroid
-          path: export/release/android/bin/app/build/outputs/apk/debug
+          name: androidBuild
+          path: export/release/android/bin/app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
