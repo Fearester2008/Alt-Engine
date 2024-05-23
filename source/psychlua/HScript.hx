@@ -3,7 +3,7 @@ package psychlua;
 import flixel.FlxObject;
 import flixel.FlxBasic;
 
-#if (HSCRIPT_ALLOWED)
+#if HSCRIPT_ALLOWED
 import tea.SScript;
 import haxe.Exception;
 
