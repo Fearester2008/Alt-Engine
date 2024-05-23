@@ -1,9 +1,12 @@
 package lime.utils;
 
 import openfl.Lib;
+
 #if android
-import android.widget.Toast;
+import android.backend.AndroidDialogsExtend;
 #end
+
+import android.backend.SUtil;
 import haxe.PosInfos;
 import lime.app.Application;
 import lime.system.System;
@@ -37,19 +40,36 @@ class Log
 
 	public static function error(message:Dynamic, ?info:PosInfos):Void
 	{
+	/*
 		if (level >= LogLevel.ERROR)
 		{
+		*/
 			var message:String = "[" + info.className + "] ERROR: " + Std.string(message);
+			
+			//var checkCrash:Bool = true;
+		if (message != '[openfl.display.Shader] ERROR: Unable to initialize the shader program\nLink failed because of invalid fragment shader.'){
+            // if you delete this shader crash will have two log
 
+			if (info.className == 'openfl.display.Shader'){
+			var textfix:Array<String> = message.trim().split('#ifdef GL_ES');
+			
+			message = textfix[0].trim();
+			
+			}
+			/*
 			if (throwErrors)
 			{
+			*/
 				#if sys
 				try
 				{
-					if (!FileSystem.exists('logs'))
-						FileSystem.createDirectory('logs');
+					if (!FileSystem.exists(SUtil.getPath() + 'logs'))
+						FileSystem.createDirectory(SUtil.getPath() + 'logs');
 
-					File.saveContent('logs/'
+					File.saveContent(SUtil.getPath()
+						+ 'logs/'
+						+ Lib.application.meta.get('file')
+						+ '-'
 						+ Date.now().toString().replace(' ', '-').replace(':', "'")
 						+ '.txt',
 						message
@@ -58,16 +78,18 @@ class Log
 				catch (e:Dynamic)
 				{
 					#if (android && debug)
-					Toast.makeText("Error!\nCouldn't save the crash log because:\n" + e, Toast.LENGTH_LONG);
+					var shaderErrorMessage:String = "Error!\nClouldn't save the crash log because:\n";
+					AndroidDialogsExtend.openToastBox(shaderErrorMessage + e, 1);
 					#else
-					println("Error!\nCouldn't save the crash log because:\n" + e);
+					println("Error!\nClouldn't save the crash log because:\n" + e);
 					#end
 				}
 				#end
 
-				println(message);
-				Application.current.window.alert(message, 'Error!');
-				System.exit(1);
+			//	println(message);
+				Application.current.window.alert(message + '\n\nFinded the problem!!! Press OK to close the game', 'Error!');
+				//System.exit(1);
+				/*
 			}
 			else
 			{
@@ -76,7 +98,7 @@ class Log
 				#else
 				println(message);
 				#end
-			}
+			}			*/
 		}
 	}
 
@@ -117,11 +139,11 @@ class Log
 		#if sys
 		Sys.print(Std.string(message));
 		#elseif flash
-		untyped __global__["trace"](Std.string(message));
+		untyped __global__["TraceText.makeTheTraceText"](Std.string(message));
 		#elseif js
 		untyped #if haxe4 js.Syntax.code #else __js__ #end ("console").log(Std.string(message));
 		#else
-		trace(Std.string(message));
+		TraceText.makeTheTraceText(Std.string(message));
 		#end
 	}
 
@@ -130,17 +152,17 @@ class Log
 		#if sys
 		Sys.println(Std.string(message));
 		#elseif flash
-		untyped __global__["trace"](Std.string(message));
+		untyped __global__["TraceText.makeTheTraceText"](Std.string(message));
 		#elseif js
 		untyped #if haxe4 js.Syntax.code #else __js__ #end ("console").log(Std.string(message));
 		#else
-		trace(Std.string(message));
+		TraceText.makeTheTraceText(Std.string(message));
 		#end
 	}
 
 	private static function __init__():Void
 	{
-		#if no_traces
+		#if no_TraceText.makeTheTraceTexts
 		level = NONE;
 		#elseif verbose
 		level = VERBOSE;
