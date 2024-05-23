@@ -14,8 +14,10 @@ import haxe.CallStack;
 import haxe.io.Path;
 import sys.FileSystem;
 import sys.io.File;
-import flash.system.System;
 
+#if flash
+import flash.system.System;
+#end
 /**
  * ...
  * @author: Saw (M.A. Jigsaw)
