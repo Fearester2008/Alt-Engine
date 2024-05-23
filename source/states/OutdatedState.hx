@@ -44,7 +44,7 @@ class OutdatedState extends MusicBeatState
 		if(!leftState) {
 			if (controls.ACCEPT) {
 				leftState = true;
-				CoolUtil.browserLoad("https://github.com/Fearester2008/Alt-Engine/releases");
+				CoolUtil.openLink("https://github.com/Fearester2008/Alt-Engine/releases");
 			}
 			else if(controls.BACK) {
 				leftState = true;
