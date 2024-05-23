@@ -61,7 +61,7 @@ jobs:
           haxelib --quiet install hscript 
           haxelib --quiet install hxdiscord_rpc
           haxelib --quiet install hxvlc
-          haxelib --quiet git hxCodec
+          haxelib --quiet install hxCodec 3.0.2
           haxelib --quiet git SScript https://github.com/Fearester2008/SScript.git
           haxelib --quiet git linc_luajit https://github.com/superpowers04/linc_luajit.git
           haxelib --quiet git extension-androidtools https://github.com/MaysLastPlay77/extension-androidtools
