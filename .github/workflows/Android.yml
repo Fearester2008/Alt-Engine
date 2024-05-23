@@ -1,4 +1,8 @@
-name: Mobile
+
+# This is a basic workflow to help you get started with Actions
+
+name: Android Build
+
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
@@ -9,93 +13,81 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  Android:
+  # This workflow contains a single job called "build"
+
+ buildAndroid:
+    name: buildAndroid
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        storage-type: [EXTERNAL, OBB, DATA, MEDIA]
     steps:
       - name: Checkout
         uses: actions/checkout@main
+
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r21e
 
       - name: Setup Java JDK
         uses: actions/setup-java@main
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: 'zulu'
+          java-version: 18
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@main
 
       - name: Setup Haxe
-        uses: krdlab/setup-haxe@master
+        uses: krdlab/setup-haxe@v1.2.0
         with:
           haxe-version: 4.2.5
 
-      - name: Install Libraries
+      - name: Install Haxelib
         run: |
           haxelib setup ~/haxelib
-          haxelib install hmm --quiet
-          haxelib run hmm install --quiet
+          haxelib install hxcpp 4.2.1 > /dev/null
+          haxelib --quiet install lime 8.0.2
+          haxelib --quiet install openfl 9.3.3
+          haxelib --quiet install flixel 5.6.2
+          haxelib run lime setup flixel
+          haxelib --quiet install flixel-tools 1.5.1
+          haxelib --quiet install flixel-ui 2.5.0
+          haxelib --quiet install flixel-addons 3.0.2
+          haxelib --quiet install tjson 1.4.0
+          haxelib --quiet install hxjsonast
+          haxelib --quiet install hscript 
+          haxelib --quiet install hxdiscord_rpc
+          haxelib --quiet install hxvlc
+          haxelib --quiet git hxCodec https://github.com/JonnycatMeow/hxCodec-old.git
+          haxelib --quiet git SScript https://github.com/Fearester2008/SScript.git
+          haxelib --quiet git linc_luajit https://github.com/Sirox228/linc_luajit
+          haxelib --quiet git extension-androidtools https://github.com/MaysLastPlay77/extension-androidtools
+          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
+          haxelib list
+      - name: Create Version Tag
+        run: echo "${{github.run_id}}" > VERSION
 
-      - name: Configure Android
+      - name: Setup Lime
         run: |
+          haxelib run lime setup -alias -y
           haxelib run lime config ANDROID_SDK $ANDROID_HOME
           haxelib run lime config ANDROID_NDK_ROOT $ANDROID_NDK_HOME
           haxelib run lime config JAVA_HOME $JAVA_HOME
           haxelib run lime config ANDROID_SETUP true
-
-      - name: Compile
-        run: haxelib run lime build android -D ${{ matrix.storage-type }}
+          haxelib set lime 8.0.2
+          haxelib set openfl 9.3.3
+          haxelib set flixel 5.6.2
+          haxelib set flixel-addons 3.0.2
         env:
-          cert_pass: nullfunni
-          cert_alias_pass: nullfunni
-
-      - name: Upload Artifact
-        if: ${{ success() }}
-        uses: actions/upload-artifact@main
-        with:
-          name: androidBuild-${{ matrix.storage-type }}
-          path: export/release/android/bin/app/build/outputs/apk/release/*.apk
-          if-no-files-found: error
-  iOS:
-    runs-on: macos-13
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-
-      - name: Setup Haxe
-        uses: krdlab/setup-haxe@master
-        with:
-          haxe-version: 4.2.5
-
-      - name: Install Libraries
-        run: |
-          haxelib setup ~/haxelib
-          haxelib install hmm --quiet
-          haxelib run hmm install --quiet
-
-      # - name: Install MobileVLCKit Framework
-        # run: |
-          # cd ${{ github.workspace }}/..
-          # wget -q https://download.videolan.org/cocoapods/prod/MobileVLCKit-3.5.1-34408b84-e9eceaed.tar.xz
-          # tar -xf MobileVLCKit-3.5.1-34408b84-e9eceaed.tar.xz
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Compile
-        run: haxelib run lime build ios -D NOVIDEO -final
-
-      # - name: Check Code Signing
-        # run: cd export/release/ios/build/Release-iphoneos && codesign -dv *.app
-
-      - name: Make Ipa
-        run: |
-          cd export/release/ios/build/Release-iphoneos
-          mkdir Payload
-          mv *.app Payload
-          zip -r PsychEngine.ipa Payload
-
-      - name: Upload Artifact
-        if: ${{ success() }}
+        run: haxelib run lime build android --app-version="4.0.0-${{ github.run_id}}"
+      - name: Publish Artifact
         uses: actions/upload-artifact@main
         with:
-          name: iOSBuild
-          path: export/release/ios/build/Release-iphoneos/*.ipa
-          if-no-files-found: error
+          name: buildAndroid
+          path: export/release/android/bin/app/build/outputs/apk/debug
