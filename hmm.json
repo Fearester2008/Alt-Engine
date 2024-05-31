@@ -31,9 +31,19 @@
       "version": "2.5.0"
     },
     {
+      "name": "hscript",
+      "type": "haxelib",
+      "version": "2.5.0"
+    },
+    {
       "name": "hxcpp",
       "type": "haxelib",
       "version": "4.2.1"
+    },
+    {
+      "name": "hxdiscord_rpc",
+      "type": "haxelib",
+      "version": "1.1.1"
     },
     {
       "name": "tjson",
@@ -55,7 +65,9 @@
     {
       "name": "SScript",
       "type": "git",
-      "version": "4.0.1"
+      "dir": null,
+      "ref": "main",
+      "url": "https://github.com/Fearester2008/SScript"
     },
     {
       "name": "hxcpp-debug-server",
