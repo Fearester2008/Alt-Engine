@@ -94,7 +94,7 @@ class Button extends FlxSpriteGroup
 		return newValue;
 	}
 
-	 public function setButtonVisibility(focusVal:Bool)
+	public function setButtonVisibility(focusVal:Bool)
 	{
 		alpha = 1;
 		bg.color = FlxColor.BLACK;
