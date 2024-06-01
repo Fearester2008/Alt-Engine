@@ -153,14 +153,14 @@ class ResultsScreenSubState extends MusicBeatSubstate {
 		
 		if(PlayState.finishedSong)
 		{
-		if ((controls.ACCEPT #if android || MusicBeatState._virtualpad.buttonB.justPressed #end)) {
+		if ((controls.ACCEPT #if android || MusicBeatSubstate._virtualpad.buttonB.justPressed #end)) {
 			if (PlayState.isStoryMode)
 				MusicBeatState.switchState(new StoryMenuState());
 			else
 				MusicBeatState.switchState(new FreeplayState());
 			FlxG.sound.playMusic(Paths.music('freakyMenu'));
 		}
-		if(FlxG.keys.justPressed.R #if android || MusicBeatState._virtualpad.buttonA.justPressed #end)
+		if(FlxG.keys.justPressed.R #if android || MusicBeatSubstate._virtualpad.buttonA.justPressed #end)
 		{
 			PauseSubState.restartSong();
 		}

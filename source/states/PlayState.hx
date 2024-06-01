@@ -401,7 +401,6 @@ class PlayState extends MusicBeatState
 			SONG.stage = StageData.vanillaSongStage(songName);
 		}
 		curStage = SONG.stage;
-		composer = SONG.composer;
 
 		stageData = StageData.getStageFile(curStage);
 		if(stageData == null) { //Stage couldn't be found, create a dummy stage for preventing a crash
@@ -2118,6 +2117,7 @@ class PlayState extends MusicBeatState
 		setOnScripts('curDecBeat', curDecBeat);
 
 		updateIconsAnim(elapsed);
+		composer = SONG.composer;
 
 		if(EnginePreferences.data.hud != 'Vanila')
 		{

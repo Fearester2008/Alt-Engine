@@ -72,8 +72,6 @@ class TitleState extends MusicBeatState
 
 	var titleJSON:TitleData;
 
-	public static var updateVersion:String = '';
-
 	override public function create():Void
 	{
 
@@ -92,14 +90,14 @@ class TitleState extends MusicBeatState
 		#if CHECK_FOR_UPDATES
 		if(EnginePreferences.data.checkForUpdates && !closedState) {
 			trace('checking for update');
-			var http = new haxe.Http("https://raw.githubusercontent.com/ShadowMario/FNF-PsychEngine/main/gitVersion.txt");
+			var http = new haxe.Http("https://raw.githubusercontent.com/Fearester2008/Alt-Engine/main/update.cv");
 
 			http.onData = function (data:String)
 			{
-				updateVersion = data.split('\n')[0].trim();
-				var curVersion:String = MainMenuState.psychEngineVersion.trim();
-				trace('version online: ' + updateVersion + ', your version: ' + curVersion);
-				if(updateVersion != curVersion) {
+				AppController.updateVersion = data.split('\n')[0].trim();
+				var curVersion:String = AppController.altEngineVersion.trim() + AppController.stage.trim();
+				trace('version online: ' + AppController.updateVersion + ', your version: ' + curVersion);
+				if(AppController.updateVersion != curVersion) {
 					trace('versions arent matching!');
 					mustUpdate = true;
 				}
