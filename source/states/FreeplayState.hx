@@ -544,7 +544,10 @@ class FreeplayState extends MusicBeatState
 			removeVirtualPad();
 			#end
 			persistentUpdate = false;
-			openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
+
+			var resetSubState:FlxSubState = new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter);
+			resetSubState.camera = camPlayer;
+			openSubState(resetSubState);
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
 
