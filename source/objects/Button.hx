@@ -60,7 +60,6 @@ class Button extends FlxSpriteGroup
 				_needACheck = false;
 				setButtonVisibility(TouchFunctions.touchOverlapObject(this));
 			}
-		} 
 			#else
 			if(!ignoreCheck && !Controls.instance.controllerMode && FlxG.mouse.justMoved && FlxG.mouse.visible)
 				onFocus = FlxG.mouse.overlaps(this);
@@ -94,7 +93,7 @@ class Button extends FlxSpriteGroup
 		return newValue;
 	}
 
-	function setButtonVisibility(focusVal:Bool)
+	 public function setButtonVisibility(focusVal:Bool)
 	{
 		alpha = 1;
 		bg.color = FlxColor.BLACK;
