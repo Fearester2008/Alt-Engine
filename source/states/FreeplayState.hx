@@ -334,7 +334,7 @@ class FreeplayState extends MusicBeatState
 		positionHighscore();
 
 		var shiftMult:Int = 1;
-        if((FlxG.keys.pressed.SHIFT #if android || virtualPad.buttonZ.pressed #end) && !player.playingMusic) shiftMult = 3;
+        if((FlxG.keys.pressed.SHIFT #if android || MusicBeatState._virtualpad.buttonZ.pressed #end) && !player.playingMusic) shiftMult = 3;
 
 		if (!player.playingMusic)
 		{

@@ -866,7 +866,7 @@ class WeekEditorFreeplayState extends MusicBeatState
 		else 
 		{
 			EnginePreferences.toggleVolumeKeys(true);
-			if(FlxG.keys.justPressed.ESCAPE #if mobile || _virtualpad.buttonB.justPressed #end) {
+			if(FlxG.keys.justPressed.ESCAPE #if mobile || MusicBeatState._virtualpad.buttonB.justPressed #end) {
 				MusicBeatState.switchState(new MasterEditorMenu());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 			}

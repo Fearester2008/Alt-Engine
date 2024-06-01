@@ -52,14 +52,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			'noReset',
 			'bool');
 		addOption(option);
-		#if android
-		var option:Option = new Option('Game Over Vibration',
-			"If checked, your device will vibrate at game over.",
-			'gameOverVibration',
-			'bool');
-		addOption(option);
-		option.onChange = onChangeVibration;
-		#end
+
 		var option:Option = new Option('Light Strums',
 			"If checked, your notes going to be lighting. [WITH BOTPLAY OR WHEN OPPONENT GOING TO BE ON NOTES!].",
 			'lightStrums',
@@ -84,7 +77,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 	"What should be the judgement counter?",
 	'judgementCounter',
 	'string',
-	['Disabled' ,'Counter', 'Percent', 'Complex']);
+	['Disabled' ,'Counter', 'Percent', 'Complex', 'Complex (Reversed)']);
 	addOption(option);
 
 	var option:Option = new Option('Results Screen ',
@@ -176,14 +169,4 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 	function onChangeAutoPause() {
 		FlxG.autoPause = EnginePreferences.data.autoPause;
 	}
-
-	#if android
-	function onChangeVibration()
-	{
-		if(EnginePreferences.data.gameOverVibration)
-		{
-			Haptic.vibrate(0, 500);
-		}
-	}
-	#end
 }

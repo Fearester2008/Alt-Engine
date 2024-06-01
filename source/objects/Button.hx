@@ -1,6 +1,7 @@
 package objects;
 
 import flixel.util.FlxSpriteUtil;
+import backend.TouchFunctions;
 
 class Button extends FlxSpriteGroup
 {

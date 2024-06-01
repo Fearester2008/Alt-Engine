@@ -265,19 +265,19 @@ class MainMenuState extends MusicBeatState
 					}
 			}
 			#if MODS_ALLOWED
-			else if (controls.justPressed('debug_1') #if android || _virtualpad.buttonC.justPressed #end)
+			else if (controls.justPressed('debug_1') #if android || MusicBeatState._virtualpad.buttonC.justPressed #end)
 			{
 				selectedSomethin = true;
 				MusicBeatState.switchState(new MasterEditorMenu());
 			}
-			else if (FlxG.keys.justPressed.M #if android || virtualPad.buttonX.justPressed#end)
+			else if (FlxG.keys.justPressed.M #if android || MusicBeatState._virtualpad.buttonX.justPressed#end)
 			{
 				selectedSomethin = true;
 				MusicBeatState.switchState(new ModsMenuState());
 			}
 			#end
 			#if ACHIEVEMENTS_ALLOWED
-			else if (FlxG.keys.justPressed.A #if android || virtualPad.buttonY.justPressed#end)
+			else if (FlxG.keys.justPressed.A #if android || MusicBeatState._virtualpad.buttonY.justPressed#end)
 			{
 				selectedSomethin = true;
 				MusicBeatState.switchState(new AchievementsMenuState());

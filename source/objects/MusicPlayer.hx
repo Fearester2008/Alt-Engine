@@ -388,7 +388,7 @@ class MusicPlayer extends MusicBeatState
 		}
 		updatePlaybackTxt();
 
-		if (#if mobile instance._virtualpad.buttonC.justPressed || #end instance.controls.RESET)
+		if (#if mobile MusicBeatState._virtualpad.buttonC.justPressed || #end instance.controls.RESET)
 		{
 			playbackRate = 1;
 			setPlaybackRate();
