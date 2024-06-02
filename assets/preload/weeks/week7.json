@@ -44,5 +44,6 @@
 	],
 	"hideStoryMode": false,
 	"weekBefore": "week6",
-	"startUnlocked": true
+	"startUnlocked": true,
+	"music" : "week7"
 }

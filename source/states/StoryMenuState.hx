@@ -41,6 +41,9 @@ class StoryMenuState extends MusicBeatState
 
 	var loadedWeeks:Array<WeekData> = [];
 
+	var synth:FlxSound;
+	var drums:FlxSound;
+
 	override function create()
 	{
 		Paths.clearStoredMemory();
@@ -50,6 +53,13 @@ class StoryMenuState extends MusicBeatState
 		WeekData.reloadWeekFiles(true);
 		if(curWeek >= WeekData.weeksList.length) curWeek = 0;
 		persistentUpdate = persistentDraw = true;
+
+		synth = new FlxSound().loadEmbedded(Paths.music('weeks/synth'),true);
+		drums = new FlxSound();
+		synth.play();
+		FlxG.sound.list.add(drums);
+		FlxG.sound.list.add(synth);
+		FlxG.sound.music.volume = 0;
 
 		scoreText = new FlxText(10, 10, 0, "SCORE: 49324858", 36);
 		scoreText.setFormat("VCR OSD Mono", 32);
@@ -424,6 +434,19 @@ class StoryMenuState extends MusicBeatState
 			bgSprite.loadGraphic(Paths.image('menubackgrounds/menu_' + assetName));
 		}
 		PlayState.storyWeek = curWeek;
+
+		var assetName:String = leWeek.music;
+		if(assetName != null || assetName.length > 0){
+			drums.loadEmbedded(Paths.music('weeks/' + assetName),true);
+			drums.volume = 0;
+			drums.play();
+			drums.fadeIn(0.5, 1);
+			drums.time = synth.time;
+		}
+		else{
+			drums.volume = 0;
+			drums.fadeIn(0);
+		}
 
 		Difficulty.loadFromWeek();
 		difficultySelectors.visible = unlocked;

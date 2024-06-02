@@ -277,7 +277,6 @@ class FreeplayState extends MusicBeatState
 	}*/
 
 	var instPlaying:Int = -1;
-	public static var inst:FlxSound = null;
 	public static var vocals:FlxSound = null;
 	public static var opponentVocals:FlxSound = null;
 	
@@ -305,7 +304,7 @@ class FreeplayState extends MusicBeatState
 			}
 
 		if(musicPlay)
-			Conductor.songPosition = inst.time;
+			Conductor.songPosition = FlxG.sound.music.time;
 	
 		if(musicPlay)
 			AppUtil.setAppData(AppController.appName, AppController.altEngineVersion + AppController.stage, "In Freeplay. Listening: " + songs[curSelected].songName);
@@ -398,7 +397,6 @@ class FreeplayState extends MusicBeatState
 					FlxG.sound.music.stop();
 					destroyFreeplayVocals();
 					FlxG.sound.music.volume = 0;
-					inst.volume = 0;
 					instPlaying = -1;
 	
 					player.playingMusic = false;
@@ -734,20 +732,13 @@ class FreeplayState extends MusicBeatState
 		public function loadSong(curSelected:Int)
 			{
 				destroyFreeplayVocals();
+				//FlxTween.tween(FlxG.sound.music, {pitch: 0, volume: 0}, 1, {ease: FlxEase.sineInOut});
 				FlxG.sound.music.volume = 0;
-				
 				Mods.currentModDirectory = songs[curSelected].folder;
 				var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
 				PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
 		
-				var music;
-				music = Paths.inst(PlayState.SONG.song, (PlayState.SONG.songPostfix.length > 0) ? PlayState.SONG.songPostfix : null);
-
-				inst = new FlxSound();
-				inst.loadEmbedded(music);
-				inst.volume = 0.8;
-				inst.persist = true;
-				inst.looped = true;
+				
 				if (PlayState.SONG.needsVoices)
 				{
 					vocals = new FlxSound();
@@ -778,7 +769,6 @@ class FreeplayState extends MusicBeatState
 						opponentVocals.persist = true;
 						opponentVocals.looped = true;
 					}
-					FlxG.sound.list.add(inst);
 					FlxG.sound.list.add(vocals);
 					FlxG.sound.list.add(opponentVocals);
 				}
@@ -786,7 +776,12 @@ class FreeplayState extends MusicBeatState
 				musicPlay = true;
 		
 				Conductor.bpm = PlayState.SONG.bpm;
-				inst.play();
+				
+				var music;
+				music = Paths.inst(PlayState.SONG.song, (PlayState.SONG.songPostfix.length > 0) ? PlayState.SONG.songPostfix : null);
+				FlxG.sound.playMusic(music, 0.8);
+
+				//FlxG.sound.music.play();
 		
 				if(vocals != null) //Sync vocals to Inst
 				{

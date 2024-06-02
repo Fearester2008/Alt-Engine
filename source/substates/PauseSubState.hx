@@ -158,8 +158,8 @@ class PauseSubState extends MusicBeatSubstate
 		AppUtil.setAppData(AppController.appName, AppController.altEngineVersion + AppController.stage, "Paused - " + PlayState.SONG.song);
 
 		cantUnpause -= elapsed;
-		/*if (pauseMusic.volume < 0.5)
-			pauseMusic.volume += 0.01 * elapsed;*/
+		if (pauseMusic.volume < 0.8)
+			pauseMusic.volume += 0.095 * elapsed;
 
 		super.update(elapsed);
 		updateSkipTextStuff();

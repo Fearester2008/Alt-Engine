@@ -553,33 +553,20 @@ class TitleState extends MusicBeatState
 					//FlxG.sound.music.stop();
 					FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 					FlxG.sound.music.fadeIn(4, 0, 0.7);
-				case 2:
-					#if PSYCH_WATERMARKS
-					createCoolText(['Psych Engine by'], 40);
-					#else
-					createCoolText(['ninjamuffin99', 'phantomArcade', 'kawaisprite', 'evilsk8er']);
-					#end
-				// credTextShit.visible = true;
 				case 4:
-					#if PSYCH_WATERMARKS
-					addMoreText('Shadow Mario', 40);
-					addMoreText('Riveren', 40);
-					#else
-					addMoreText('present');
-					#end
+					createCoolText(['Fearester2008', 'Stefan2008', 'Rom4chek', 'Joalor64', 'Daniel', 'TheLeerName', 'Sussy Sam'], -40);
+				// credTextShit.visible = true;
+				case 5:
+					addMoreText('present', -40);
 				// credTextShit.text += '\npresent...';
 				// credTextShit.addText();
-				case 5:
+				case 6:
 					deleteCoolText();
 				// credTextShit.visible = false;
 				// credTextShit.text = 'In association \nwith';
 				// credTextShit.screenCenter();
-				case 6:
-					#if PSYCH_WATERMARKS
+				case 7:
 					createCoolText(['Not associated', 'with'], -40);
-					#else
-					createCoolText(['In association', 'with'], -40);
-					#end
 				case 8:
 					addMoreText('newgrounds', -40);
 					ngSpr.visible = true;
@@ -610,7 +597,7 @@ class TitleState extends MusicBeatState
 				// credTextShit.text += '\nNight';
 				case 16:
 					addMoreText('Funkin'); // credTextShit.text += '\nFunkin';
-
+					addMoreText('Alt Engine');
 				case 17:
 					skipIntro();
 			}

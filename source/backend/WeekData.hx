@@ -22,6 +22,7 @@ typedef WeekFile =
 	var hideStoryMode:Bool;
 	var hideFreeplay:Bool;
 	var difficulties:String;
+	var music:String;
 }
 
 class WeekData {
@@ -36,6 +37,7 @@ class WeekData {
 	public var weekBefore:String;
 	public var storyName:String;
 	public var weekName:String;
+	public var music:String;
 	public var freeplayColor:Array<Int>;
 	public var startUnlocked:Bool;
 	public var hiddenUntilUnlocked:Bool;
@@ -58,7 +60,8 @@ class WeekData {
 			hiddenUntilUnlocked: false,
 			hideStoryMode: false,
 			hideFreeplay: false,
-			difficulties: ''
+			difficulties: '',
+			music: 'stage'
 		};
 		return weekFile;
 	}
@@ -77,7 +80,7 @@ class WeekData {
 		hideStoryMode = weekFile.hideStoryMode;
 		hideFreeplay = weekFile.hideFreeplay;
 		difficulties = weekFile.difficulties;
-
+		music = weekFile.music;
 		this.fileName = fileName;
 	}
 

@@ -61,15 +61,15 @@ class JudgementCounter extends FlxState
             }
             trace(judgsVal);
             var value:String = '' + Std.string(0) + subVal; 
-            judgementCounter = new FlxText(-300, FlxG.height / 2, 1280, judgsVal, 25); 
+            judgementCounter = new FlxText(-300, FlxG.height / 2, 1280, judgsVal, 20); 
             judgementCounter.setFormat(Paths.font('vcr.ttf'), 25, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
             judgementCounter.borderSize = 1.1;
             //judgementCounter.borderQuality = 2;
-            judgementCounter.y += 25 * i;
+            judgementCounter.y += 20 * i;
             judgementCounter.scrollFactor.set();
             judgementCounter.visible = EnginePreferences.data.judgementCounter != 'Disabled' || !EnginePreferences.data.hideHud;
             judgsGroup.add(judgementCounter);
-            FlxTween.tween(judgementCounter, {x: 20}, 0.6, {ease:FlxEase.sineInOut, startDelay: (0.2 * i)});
+            FlxTween.tween(judgementCounter, {x: 20}, 0.6, {ease:FlxEase.sineInOut, startDelay: (0.1 * i)});
         }
     }
     public function setFormat(size:Int, font:String)
@@ -167,27 +167,27 @@ class JudgementCounter extends FlxState
         {
             case 'Counter':
             if(PlayState.instance.songHits > 0)
-            updateTextOnCounter(['Hits', 'Sicks', 'Goods', 'Bads', 'Shits'], [PlayState.instance.songHits, PlayState.instance.sicks, PlayState.instance.goods, PlayState.instance.bads, PlayState.instance.shits], [PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes]);
+            updateTextOnCounter(['Hits', 'Sicks', 'Goods', 'Bads', 'Shits'], [PlayState.instance.songHits, PlayState.instance.sicks, PlayState.instance.goods, PlayState.instance.bads, PlayState.instance.shits], [PlayState.instance.totalNotes, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits]);
             else
-            updateTextOnCounter(['Hits', 'Sicks', 'Goods', 'Bads', 'Shits'], [0, 0, 0, 0, 0], [PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes]);
+            updateTextOnCounter(['Hits', 'Sicks', 'Goods', 'Bads', 'Shits'], [0, 0, 0, 0, 0], [PlayState.instance.totalNotes,PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits]);
 
             case 'Percent':
             if(PlayState.instance.songHits > 0)
-            updateTextOnPercent(['Hit' ,'Sick', 'Good', 'Bad', 'Shit'], [PlayState.instance.hitPercent, PlayState.instance.sickPercent, PlayState.instance.goodPercent, PlayState.instance.badPercent, PlayState.instance.shitPercent], [PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes]);
+            updateTextOnPercent(['Hit' ,'Sick', 'Good', 'Bad', 'Shit'], [PlayState.instance.hitPercent, PlayState.instance.sickPercent, PlayState.instance.goodPercent, PlayState.instance.badPercent, PlayState.instance.shitPercent], [PlayState.instance.totalNotes, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits]);
             else
-            updateTextOnPercent(['Hit' ,'Sick', 'Good', 'Bad', 'Shit'], [0, 0, 0, 0, 0], [PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes]);
+            updateTextOnPercent(['Hit' ,'Sick', 'Good', 'Bad', 'Shit'], [0, 0, 0, 0, 0], [PlayState.instance.totalNotes, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits]);
 
             case 'Complex':
             if(PlayState.instance.songHits > 0)
-            updateTextOnComplex(['Hit', 'Sick', 'Good', 'Bad', 'Shit'], [PlayState.instance.songHits, PlayState.instance.sicks, PlayState.instance.goods, PlayState.instance.bads, PlayState.instance.shits], [PlayState.instance.hitPercent, PlayState.instance.sickPercent, PlayState.instance.goodPercent, PlayState.instance.badPercent, PlayState.instance.shitPercent], [PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes]);
+            updateTextOnComplex(['Hit', 'Sick', 'Good', 'Bad', 'Shit'], [PlayState.instance.songHits, PlayState.instance.sicks, PlayState.instance.goods, PlayState.instance.bads, PlayState.instance.shits], [PlayState.instance.hitPercent, PlayState.instance.sickPercent, PlayState.instance.goodPercent, PlayState.instance.badPercent, PlayState.instance.shitPercent], [PlayState.instance.totalNotes, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits]);
             else
-            updateTextOnComplex(['Hit', 'Sick', 'Good', 'Bad', 'Shit'], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes]);
+            updateTextOnComplex(['Hit', 'Sick', 'Good', 'Bad', 'Shit'], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [PlayState.instance.totalNotes, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits]);
             
             case 'Complex (Reversed)':
             if(PlayState.instance.songHits > 0)
-            updateTextOnReversedComplex(['Hits', 'Sicks', 'Goods', 'Bads', 'Shits'], [PlayState.instance.songHits, PlayState.instance.sicks, PlayState.instance.goods, PlayState.instance.bads, PlayState.instance.shits], [PlayState.instance.hitPercent, PlayState.instance.sickPercent, PlayState.instance.goodPercent, PlayState.instance.badPercent, PlayState.instance.shitPercent], [PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes]);
+            updateTextOnReversedComplex(['Hits', 'Sicks', 'Goods', 'Bads', 'Shits'], [PlayState.instance.songHits, PlayState.instance.sicks, PlayState.instance.goods, PlayState.instance.bads, PlayState.instance.shits], [PlayState.instance.hitPercent, PlayState.instance.sickPercent, PlayState.instance.goodPercent, PlayState.instance.badPercent, PlayState.instance.shitPercent], [PlayState.instance.totalNotes, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits]);
             else
-            updateTextOnReversedComplex(['Hits', 'Sicks', 'Goods', 'Bads', 'Shits'], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes, PlayState.instance.totalNotes]);
+            updateTextOnReversedComplex(['Hits', 'Sicks', 'Goods', 'Bads', 'Shits'], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [PlayState.instance.totalNotes, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits]);
             
         }
         super.update(elapsed);

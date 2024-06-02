@@ -129,12 +129,12 @@ class MusicPlayer extends MusicBeatState
 
 			pauseOrResume(true);
 
-			curTime = FreeplayState.inst.time - 2000;
+			curTime = FlxG.sound.music.time - 2000;
 
-			if (curTime > FreeplayState.inst.length)
-				curTime = FreeplayState.inst.length;
+			if (curTime > FlxG.sound.music.length)
+				curTime = FlxG.sound.music.length;
 
-			FreeplayState.inst.time = curTime;
+			FlxG.sound.music.time = curTime;
 			if (FreeplayState.vocals != null)
 				FreeplayState.vocals.time = curTime;
 
@@ -149,12 +149,12 @@ class MusicPlayer extends MusicBeatState
 
 		pauseOrResume(true);
 
-		curTime = FreeplayState.inst.time + 2000;
+		curTime = FlxG.sound.music.time + 2000;
 
-		if (curTime > FreeplayState.inst.length)
-			curTime = FreeplayState.inst.length;
+		if (curTime > FlxG.sound.music.length)
+			curTime = FlxG.sound.music.length;
 
-		FreeplayState.inst.time = curTime;
+		FlxG.sound.music.time = curTime;
 		if (FreeplayState.vocals != null)
 			FreeplayState.vocals.time = curTime;
 
@@ -176,20 +176,16 @@ class MusicPlayer extends MusicBeatState
 		buttonsGrp.add(button);
 
 		var button = new Button(345, timeBar.y + 35, 60, 60, "V-", function(){
-			FreeplayState.inst.volume -= 0.1;
-			FreeplayState.vocals.volume -= 0.1;
-			FreeplayState.opponentVocals.volume -= 0.1;
+			FlxG.sound.music.volume -= 0.1;
+			if(FreeplayState.vocals.exists) FreeplayState.vocals.volume -= 0.1;
+			if(FreeplayState.opponentVocals.exists)FreeplayState.opponentVocals.volume -= 0.1;
 		});
 		buttonsGrp.add(button);
 
 		var button = new Button(415, timeBar.y + 35, 60, 60, "V+", function(){
-			FreeplayState.inst.volume += 0.1;
-
-			if(FreeplayState.vocals.volume <= 0.8)
-			FreeplayState.vocals.volume += 0.1;
-
-			if(FreeplayState.opponentVocals.volume <= 0.8)
-			FreeplayState.opponentVocals.volume += 0.1;
+			FlxG.sound.music.volume += 0.1;
+			if(FreeplayState.vocals.exists) FreeplayState.vocals.volume += 0.1;
+			if(FreeplayState.opponentVocals.exists)FreeplayState.opponentVocals.volume += 0.1;
 		});
 		buttonsGrp.add(button);
 
@@ -197,8 +193,7 @@ class MusicPlayer extends MusicBeatState
 			FlxG.sound.music.stop();
 			FreeplayState.destroyFreeplayVocals();
 			FlxG.sound.music.volume = 0;
-			FreeplayState.inst.volume = 0;
-			instance.instPlaying = -1;
+ 			instance.instPlaying = -1;
 
 			playingMusic = false;
 			switchPlayMusic();
@@ -241,17 +236,17 @@ class MusicPlayer extends MusicBeatState
 		beatStuff(elapsed);
 
 		var time:Float = 0;
-		time = FreeplayState.inst.time / playbackRate;
+		time = FlxG.sound.music.time / playbackRate;
 		var songLength:Float = 0;
-		songLength = FreeplayState.inst.length / playbackRate;
+		songLength = FlxG.sound.music.length / playbackRate;
 
 		songPercent = time / songLength;
 
-		instAmplitudeBar.updateValue((FreeplayState.inst.exists) ? updateAmplitude(FreeplayState.inst) : 0);	
+		instAmplitudeBar.updateValue((FlxG.sound.music.exists) ? updateAmplitude(FlxG.sound.music) : 0);	
 		vocalsAmplitudeBar.updateValue((FreeplayState.vocals.exists) ? updateAmplitude(FreeplayState.vocals) : 0);
 		oppVocalsAmplitudeBar.updateValue((FreeplayState.opponentVocals.exists) ? updateAmplitude(FreeplayState.opponentVocals) : 0);
 
-		instAmplitudeBar.enabled = FreeplayState.inst.exists;
+		instAmplitudeBar.enabled = FlxG.sound.music.exists;
 		vocalsAmplitudeBar.enabled = FreeplayState.vocals.exists;
 		oppVocalsAmplitudeBar.enabled = FreeplayState.opponentVocals.exists;
 
@@ -279,13 +274,13 @@ class MusicPlayer extends MusicBeatState
 
 			pauseOrResume();
 
-			curTime = FreeplayState.inst.time - 1000;
+			curTime = FlxG.sound.music.time - 1000;
 			instance.holdTime = 0;
 
 			if (curTime < 0)
 				curTime = 0;
 
-			FreeplayState.inst.time = curTime;
+			FlxG.sound.music.time = curTime;
 			if (FreeplayState.vocals != null)
 				FreeplayState.vocals.time = curTime;
 
@@ -299,13 +294,13 @@ class MusicPlayer extends MusicBeatState
 
 			pauseOrResume();
 
-			curTime = FreeplayState.inst.time + 1000;
+			curTime = FlxG.sound.music.time + 1000;
 			instance.holdTime = 0;
 
-			if (curTime > FreeplayState.inst.length)
-				curTime = FreeplayState.inst.length;
+			if (curTime > FlxG.sound.music.length)
+				curTime = FlxG.sound.music.length;
 
-			FreeplayState.inst.time = curTime;
+			FlxG.sound.music.time = curTime;
 			if (FreeplayState.vocals != null)
 				FreeplayState.vocals.time = curTime;
 
@@ -323,11 +318,11 @@ class MusicPlayer extends MusicBeatState
 				curTime += 40000 * elapsed * (instance.controls.UI_LEFT ? -1 : 1);
 			}
 
-			var difference:Float = Math.abs(curTime - FreeplayState.inst.time);
-			if(curTime + difference > FreeplayState.inst.length) curTime = FreeplayState.inst.length;
+			var difference:Float = Math.abs(curTime - FlxG.sound.music.time);
+			if(curTime + difference > FlxG.sound.music.length) curTime = FlxG.sound.music.length;
 			else if(curTime - difference < 0) curTime = 0;
 
-			FreeplayState.inst.time = curTime;
+			FlxG.sound.music.time = curTime;
 			if (FreeplayState.vocals != null)
 				FreeplayState.vocals.time = curTime;
 
@@ -339,7 +334,7 @@ class MusicPlayer extends MusicBeatState
 
 		if(instance.controls.UI_LEFT_R || instance.controls.UI_RIGHT_R)
 		{
-			FreeplayState.inst.time = curTime;
+			FlxG.sound.music.time = curTime;
 			if (FreeplayState.vocals != null)
 				FreeplayState.vocals.time = curTime;
 
@@ -375,14 +370,14 @@ class MusicPlayer extends MusicBeatState
 				setPlaybackRate();
 			}
 		}
-		if ((FreeplayState.vocals != null || FreeplayState.opponentVocals != null) && FreeplayState.inst.time > 5)
+		if ((FreeplayState.vocals != null || FreeplayState.opponentVocals != null) && FlxG.sound.music.time > 5)
 		{
-			var difference:Float = Math.abs(FreeplayState.inst.time - FreeplayState.vocals.time);
+			var difference:Float = Math.abs(FlxG.sound.music.time - FreeplayState.vocals.time);
 			if (difference >= 5 && !paused)
 			{
 				pauseOrResume();
-				FreeplayState.vocals.time = FreeplayState.inst.time;
-				FreeplayState.opponentVocals.time = FreeplayState.inst.time;
+				FreeplayState.vocals.time = FlxG.sound.music.time;
+				FreeplayState.opponentVocals.time = FlxG.sound.music.time;
 				pauseOrResume(true);
 			}
 		}
@@ -393,7 +388,7 @@ class MusicPlayer extends MusicBeatState
 			playbackRate = 1;
 			setPlaybackRate();
 
-			FreeplayState.inst.time = 0;
+			FlxG.sound.music.time = 0;
 			if (FreeplayState.vocals != null)
 				FreeplayState.vocals.time = 0;
 
@@ -421,7 +416,7 @@ class MusicPlayer extends MusicBeatState
 	{
 		if (resume)
 		{
-			FreeplayState.inst.resume();
+			FlxG.sound.music.resume();
 
 			if (FreeplayState.vocals != null)
 				FreeplayState.vocals.resume();
@@ -432,7 +427,7 @@ class MusicPlayer extends MusicBeatState
 		}
 		else 
 		{
-			FreeplayState.inst.pause();
+			FlxG.sound.music.pause();
 
 			if (FreeplayState.vocals != null)
 				FreeplayState.vocals.pause();
@@ -499,8 +494,8 @@ class MusicPlayer extends MusicBeatState
 
 	function updateTimeTxt()
 	{
-		var posText = TimeUtil.formatTime(FreeplayState.inst.time / 1000 / playbackRate, false);
-		var lengthText = TimeUtil.formatTime(FreeplayState.inst.length / 1000 / playbackRate, false);
+		var posText = TimeUtil.formatTime(FlxG.sound.music.time / 1000 / playbackRate, false);
+		var lengthText = TimeUtil.formatTime(FlxG.sound.music.length / 1000 / playbackRate, false);
 
 		timePositionTxt.text = posText;
 		timeLengthTxt.text = lengthText;
@@ -508,7 +503,7 @@ class MusicPlayer extends MusicBeatState
 
 	function setPlaybackRate() 
 	{
-		FreeplayState.inst.pitch = playbackRate;
+		FlxG.sound.music.pitch = playbackRate;
 		if (FreeplayState.vocals != null)
 			FreeplayState.vocals.pitch = playbackRate;
 
@@ -518,12 +513,12 @@ class MusicPlayer extends MusicBeatState
 
 	function get_playing():Bool 
 	{
-		return FreeplayState.inst.playing;
+		return FlxG.sound.music.playing;
 	}
 
 	function get_paused():Bool 
 	{
-		@:privateAccess return FreeplayState.inst._paused;
+		@:privateAccess return FlxG.sound.music._paused;
 	}
 
 	function set_playbackRate(value:Float):Float 
@@ -622,33 +617,40 @@ override function stepHit()
 		var timeSub:Float = Conductor.songPosition - Conductor.offset;
 		var syncTime:Float = 20 * playbackRate;
 
-		if (Math.abs(FreeplayState.inst.time - timeSub) > syncTime ||
+		if(FreeplayState.vocals.exists || FreeplayState.opponentVocals.exists)
+		{
+		if (Math.abs(FlxG.sound.music.time - timeSub) > syncTime ||
 		(FreeplayState.vocals.length > 0 && Math.abs(FreeplayState.vocals.time - timeSub) > syncTime) ||
 		(FreeplayState.opponentVocals.length > 0 && Math.abs(FreeplayState.opponentVocals.time - timeSub) > syncTime))
 		{
 			resyncVocals();
 		}
+		}
 	}
 	function resyncVocals():Void
 		{	
+			if(FreeplayState.vocals != null)
 			FreeplayState.vocals.pause();
+
+			if(FreeplayState.opponentVocals != null)
 			FreeplayState.opponentVocals.pause();
 	
-			FreeplayState.inst.play();
-			FreeplayState.inst.pitch = playbackRate;
-			Conductor.songPosition = FreeplayState.inst.time;
-			if (Conductor.songPosition <= FreeplayState.vocals.length)
+			FlxG.sound.music.play();
+			FlxG.sound.music.pitch = playbackRate;
+			Conductor.songPosition = FlxG.sound.music.time;
+			if (Conductor.songPosition <= FreeplayState.vocals.length && FreeplayState.vocals.exists)
 			{
 				FreeplayState.vocals.time = Conductor.songPosition;
 				FreeplayState.vocals.pitch = playbackRate;
 			}
 	
-			if (Conductor.songPosition <= FreeplayState.opponentVocals.length)
+			if (Conductor.songPosition <= FreeplayState.opponentVocals.length && FreeplayState.opponentVocals.exists)
 			{
 				FreeplayState.opponentVocals.time = Conductor.songPosition;
 				FreeplayState.opponentVocals.pitch = playbackRate;
 			}
-			FreeplayState.vocals.play();
-			FreeplayState.opponentVocals.play();
+			
+			if(FreeplayState.vocals.exists) FreeplayState.vocals.play();
+			if(FreeplayState.opponentVocals.exists) FreeplayState.opponentVocals.play();
 		}
 }

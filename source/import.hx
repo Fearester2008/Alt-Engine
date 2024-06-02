@@ -5,6 +5,7 @@ import backend.Discord;
 #end
 
 import states.*;
+import haxe.Json;
 
 //Psych
 #if LUA_ALLOWED
