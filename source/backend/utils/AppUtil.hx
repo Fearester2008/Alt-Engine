@@ -7,12 +7,12 @@ import lime.graphics.Image;
 using StringTools;
 
 class AppUtil {
-    public static function getAppData():Void
+    public static function getAppData()
     {
         var appName:String = AppController.appName;
         var appVersion:String = AppController.altEngineVersion + AppController.stage;
         Application.current.window.title = appName + " v: " + appVersion;
-        return;
+        return appName + " v: " + appVersion;
     }
     public static function setAppData(name:String, ?version:String, ?action:String)
         {
@@ -22,7 +22,7 @@ class AppUtil {
         }
         else 
         {
-        Application.current.window.title = Application.current.meta.get('name');
+        Application.current.window.title = getAppData();
         }
         return;
         }
@@ -72,5 +72,13 @@ class AppUtil {
     
                 return Application.current.window.setIcon(Image.fromFile(path + icon + '.png'));
                 #end
+            }
+        
+            public static function init()
+            {
+                var appName:String = AppController.appName;
+                var appVersion:String = AppController.altEngineVersion + AppController.stage;
+                Application.current.window.title = appName + " v: " + appVersion;
+                return;
             }
 }

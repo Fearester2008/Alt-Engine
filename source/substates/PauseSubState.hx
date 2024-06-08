@@ -6,18 +6,19 @@ import backend.Song;
 
 import flixel.addons.transition.FlxTransitionableState;
 
-import flixel.util.FlxStringUtil;
-
 import states.StoryMenuState;
 import states.FreeplayState;
 import options.OptionsState;
+import openfl.filters.BlurFilter;
 
 class PauseSubState extends MusicBeatSubstate
 {
+	var blur:BlurFilter;
+
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [];
-	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty', 'Chart Editor', 'Options', 'Exit to menu'];
+	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty', #if mobile 'Chart Editor', #end 'Options', 'Exit to menu'];
 	var difficultyChoices = [];
 	var curSelected:Int = 0;
 
@@ -35,6 +36,7 @@ class PauseSubState extends MusicBeatSubstate
 	public function new(x:Float, y:Float)
 	{
 		super();
+
 		if(Difficulty.list.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
 
 		if(PlayState.chartingMode)
@@ -75,14 +77,13 @@ class PauseSubState extends MusicBeatSubstate
 		bg.scrollFactor.set();
 		add(bg);
 
-		var postfix = (PlayState.SONG.songPostfix != null) ? " - " + PlayState.SONG.songPostfix : "";
-		var levelInfo:FlxText = new FlxText(20, 15, 0, PlayState.SONG.song + postfix, 32);
+		var levelInfo:FlxText = new FlxText(20, 15, 0, PlayState.SONG.song, 32);
 		levelInfo.scrollFactor.set();
 		levelInfo.setFormat(Paths.font("vcr.ttf"), 32); 
 		levelInfo.updateHitbox();
 		add(levelInfo);
 
-		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, Difficulty.getString().toUpperCase(), 32);
+		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, StringUtil.toTitleCase(Difficulty.getString(), "-"), 32);
 		levelDifficulty.scrollFactor.set();
 		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 32);
 		levelDifficulty.updateHitbox();
@@ -110,7 +111,10 @@ class PauseSubState extends MusicBeatSubstate
 		chartingText.updateHitbox();
 		chartingText.visible = PlayState.chartingMode;
 		add(chartingText);
-
+		if(EnginePreferences.data.shaders)
+		{
+			blur = new BlurFilter(0, 0);
+		}
 		blueballedTxt.alpha = 0;
 		levelDifficulty.alpha = 0;
 		levelInfo.alpha = 0;
@@ -119,11 +123,22 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
 		blueballedTxt.x = FlxG.width - (blueballedTxt.width + 20);
 
+		@:privateAccess
+	    {
+		if(EnginePreferences.data.shaders)
+		{
+			PlayState.instance.camGame._filters = [blur];
+			PlayState.instance.camHUD._filters = [blur];
+		}
+		}
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
-
+		if(EnginePreferences.data.shaders)
+		{
+		FlxTween.tween(blur, {blurX: 7, blurY: 7}, 0.2, {ease: FlxEase.quartOut});
+		}
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
 
@@ -249,6 +264,15 @@ class PauseSubState extends MusicBeatSubstate
 			{
 				case "Resume":
 					close();
+					@:privateAccess
+					{
+					if(EnginePreferences.data.shaders)
+					{
+						FlxTween.tween(blur, {blurX: 0, blurY: 0}, 0.2, {ease: FlxEase.quartIn});
+						PlayState.instance.camGame._filters = [];
+						PlayState.instance.camHUD._filters = [];
+					}
+				}
 				case 'Change Difficulty':
 					menuItems = difficultyChoices;
 					deleteSkipTimeText();
@@ -432,6 +456,6 @@ class PauseSubState extends MusicBeatSubstate
 
 	function updateSkipTimeText()
 	{
-		skipTimeText.text = FlxStringUtil.formatTime(Math.max(0, Math.floor(curTime / 1000)), false) + ' / ' + FlxStringUtil.formatTime(Math.max(0, Math.floor(FlxG.sound.music.length / 1000)), false);
+		skipTimeText.text = TimeUtil.formatTime(Math.max(0, Math.floor(curTime / 1000)), false) + ' / ' + TimeUtil.formatTime(Math.max(0, Math.floor(FlxG.sound.music.length / 1000)), false);
 	}
 }

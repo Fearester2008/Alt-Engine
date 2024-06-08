@@ -58,16 +58,6 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 		option.onChange = onChangeFramerate;
 		#end
 
-		#if desktop
-		var option:Option = new Option('Screen Resolution',
-		 'Choose your preffered screen resolution.',
-		 'resolution',
-		 'string',
-		 ['640x360', '852x480','960x540','1280x720', '1960x1080', '2560x1440', '3840x2160', '7680x4320']);
-		addOption(option);
-		option.onChange = onChangeResolution;
-		#end
-
 		super();
 		insert(1, boyfriend);
 	}
@@ -96,15 +86,6 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 			FlxG.updateFramerate = EnginePreferences.data.framerate;
 		}
 	}
-
-	function onChangeResolution()
-	{
-		if(!FlxG.fullscreen)
-		{
-			var resolution = EnginePreferences.data.resolution.split('x');
-			FlxG.resizeWindow(Std.parseInt(resolution[0]), Std.parseInt(resolution[1]));
-		}
-	}	
 	override function changeSelection(change:Int = 0)
 	{
 		super.changeSelection(change);

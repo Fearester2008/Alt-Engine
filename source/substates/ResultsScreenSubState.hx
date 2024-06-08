@@ -72,7 +72,7 @@ class ResultsScreenSubState extends MusicBeatSubstate {
 
 		judgementCounterTxt = new FlxText(0, 450, FlxG.width, '', 86);
 		
-		if(hits == 0 && cpuControl) 
+		if(hits == 0 || cpuControl) 
 		{
 			judgementCounterTxt.text = 'Score: 0\nMisses: 0\nAccuracy: 0%';	
 		}
@@ -119,20 +119,31 @@ class ResultsScreenSubState extends MusicBeatSubstate {
 		iconPlayer1.setPosition(FlxG.width - iconPlayer1.width - 10, FlxG.height - iconPlayer1.height - 15);
 		iconPlayer2.setPosition(10, iconPlayer1.y);
 
-		FlxTween.tween(background, {alpha: 0.7}, 0.4, {ease: FlxEase.quartInOut});
-		FlxTween.tween(resultsText, {alpha: 1, y: 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.2});
-		FlxTween.tween(songNameText, {alpha: 1, y: songNameText.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.2});
-		FlxTween.tween(difficultyNameTxt, {alpha: 1, y: difficultyNameTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.4});
-		FlxTween.tween(results, {alpha: 1, y: results.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.6});
-		FlxTween.tween(judgementCounterTxt, {alpha: 1, y: judgementCounterTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.6});
-		FlxTween.tween(iconPlayer1, {alpha: 1, y: FlxG.height - iconPlayer1.height - 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.8});
-		FlxTween.tween(iconPlayer2, {alpha: 1, y: FlxG.height - iconPlayer2.height - 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.8});
-		FlxTween.tween(tipTxt, {alpha: 1}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.10});
+		//1st step
+		FlxTween.tween(background, {alpha: 1}, 0.8, {ease: FlxEase.backInOut});
+
+		//2nd step
+		FlxTween.tween(songNameText, {alpha: 1, y: songNameText.y + 5}, 0.6, {ease: FlxEase.backInOut, startDelay: 0.4});
+		FlxTween.tween(difficultyNameTxt, {alpha: 1, y: difficultyNameTxt.y + 5}, 0.6, {ease: FlxEase.backInOut, startDelay: 0.4});
+
+		//3th step
+		FlxTween.tween(resultsText, {alpha: 1, y: 5}, 0.6, {ease: FlxEase.backInOut, startDelay: 0.6});
+		FlxTween.tween(results, {alpha: 1, y: results.y + 5}, 0.8, {ease: FlxEase.backInOut, startDelay: 0.6});
+
+		//4th step
+		FlxTween.tween(judgementCounterTxt, {alpha: 1, y: judgementCounterTxt.y + 5}, 0.8, {ease: FlxEase.backInOut, startDelay: 0.8});
+
+		//5th step
+		FlxTween.tween(iconPlayer1, {alpha: 1, y: FlxG.height - iconPlayer1.height - 5}, 0.6, {ease: FlxEase.backInOut, startDelay: 1});
+		FlxTween.tween(iconPlayer2, {alpha: 1, y: FlxG.height - iconPlayer2.height - 5}, 0.6, {ease: FlxEase.backInOut, startDelay: 1});
+
+		//6th step
+		FlxTween.tween(tipTxt, {alpha: 1}, 0.4, {ease: FlxEase.backInOut, startDelay: 1.2});
 
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 
 		#if android
-		addVirtualPad(NONE, B);
+		addVirtualPad(NONE, A_B);
 		#end
 	}
 

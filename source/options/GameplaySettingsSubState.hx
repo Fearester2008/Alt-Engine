@@ -86,6 +86,18 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		'bool');
 	addOption(option);
 
+	var option:Option = new Option('Original Health Bar Colors',
+		"If checked, Health Bar Colors should be like original game.",
+		'originalHealthBarColors',
+		'bool');
+	addOption(option);
+
+	var option:Option = new Option('Smooth Health',
+	'If checked, health bar will be smoother.',
+	'smoothHealth',
+	'bool');
+	addOption(option);
+
 	var option:Option = new Option('Note Intro ',
 		"If checked, Notes will make animation.",
 		'noteIntro',

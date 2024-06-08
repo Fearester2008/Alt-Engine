@@ -45,13 +45,13 @@ class CreditsState extends MusicBeatState
 
 		var defaultList:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
 			['Alt Engine Devs'],
-            ['Fearester',           'fearester' ,                    'Main Coder of Alt Engine.',                  'https://youtube.com/@fearester1282',  '00BFFF'],
-            ['StefanBETA2008' , 'stefan' , 'Coder of Alt Engine\n and Cool Man', 'https://github.com/StefanBETA2008' , 'FFA500'],
+            ['Fearester',           'fearester' ,                    'Main Coder of Alt Engine.',                  'https://youtube.com/@fearester1282',  '004D66'],
+            ['StefanBETA2008' , 'stefan' , 'Coder of Alt Engine and Cool Man.\nThanks for Winning Icons from SB Engine.', 'https://github.com/StefanBETA2008' , 'A200D3'],
             ['Rom4chek' , 'rom4chek' , ' Coder and helper of Alt Engine', 'https://youtube.com/@Rom4chek', '00FF00'],
-            ['Joalor64' , 'joalor64' , 'Coder of Alt Engine', 'https://github.com/Joalor64GH' , '8EFF8E'],
-            ['Daniel', 'daniel' , 'Musican in Main Menu of Alt Engine', 'https://youtube.com/@0_Daniel_0' , 'FFFF00'],
+            ['Joalor64' , 'joalor64' , 'Coder of Alt Engine', 'https://github.com/Joalor64GH' , 'FFFFFF'],
+            ['Daniel', 'daniel' , 'Musican in Main Menu of Alt Engine', 'https://youtube.com/@0_Daniel_0' , '56D600'],
 			['Sussy Sam', 'sam', 'Musican in Main Menu of Alt Engine', 'https://youtube.com/@sussysam6789?si=gNcNiZo_TyDmo_cy', '5C0000'],
-			['TheLeerName', 'leer' , 'Helper and collaborator of Alt Engine' , 'https://github.com/TheLeerName' , '8EFF91'],
+			['TheLeerName', 'leer' , 'Helper and collaborator of Alt Engine' , 'https://github.com/TheLeerName' , '00FF55'],
 			[''],
 			['Android Port'],
 			['MaysLastPlay',		'MaysLastPlay',		'Main Porter',							'https://www.youtube.com/channel/UCx0LxtFR8ROd9sFAq-UxDfw',	'5DE7FF'],

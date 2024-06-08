@@ -34,7 +34,7 @@ class LoadingScreenState extends MusicBeatState
 	var logo:FlxSprite;
 	var loadBar:FlxBar;
     var loadTxt:FlxText;
-    var endBg:FlxSprite;
+    var loadTween:FlxTween;
 
     override function create()
     {
@@ -55,7 +55,7 @@ class LoadingScreenState extends MusicBeatState
 		funkay.updateHitbox();
 		funkay.color = 0xFF0084FF;
 		funkay.antialiasing = EnginePreferences.data.antialiasing;
-		add(funkay);
+		//add(funkay);
 		funkay.scrollFactor.set();
 		funkay.screenCenter();
 
@@ -67,17 +67,17 @@ class LoadingScreenState extends MusicBeatState
 		logo.scrollFactor.set();
 		logo.screenCenter(X);
 
-		loadBar = new FlxBar(0, FlxG.height - 10, LEFT_TO_RIGHT, FlxG.width, 10, this, 'progress', 0, 1);
+		loadBar = new FlxBar(0, FlxG.height - 100, LEFT_TO_RIGHT, FlxG.width - 400, 10, this, 'progress', 0, 1);
         loadBar.filledCallback = goToState;
         loadBar.screenCenter(X);
         loadBar.numDivisions = 3000;
 		loadBar.antialiasing = EnginePreferences.data.antialiasing;
-		loadBar.createFilledBar(FlxColor.TRANSPARENT, 0xFF00529E);
+		loadBar.createFilledBar(FlxColor.TRANSPARENT, 0xFFFF002B);
 		add(loadBar);
 
-        loadTxt = new FlxText(0, FlxG.height - 60, 0, "", 24);
+        loadTxt = new FlxText(loadBar.x, FlxG.height - 80, 0, "", 24);
 		loadTxt.scrollFactor.set();
-		loadTxt.setFormat(Paths.font("vcr-rus.ttf"), 24, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		loadTxt.setFormat(Paths.font("digit.ttf"), 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(loadTxt);
         trace('Loading... ' + percent + "%");
 
@@ -92,19 +92,20 @@ class LoadingScreenState extends MusicBeatState
        
         percent = MathUtil.truncateFloat(progress * 100, 0);
 
-        logo.alpha = progress;
+        progressLerp = FlxMath.lerp(0, progress, 1 / progress);
+        //logo.y = 0 + progress * 100;
         
         if(progress >= 1)
         {
         progress = 1;
         startLoading = false;
-        loadTxt.text = "Loading... 100%";
+        //loadTxt.text = "Loading... 100%";
         }
         else
         {   
             if(!inPlayState)
             {
-            loadTxt.text = "Loading Game... " + percent + "% ";
+            loadTxt.text = "Loading... " + percent + "% ";
             progress += elapsed / 4.5;
             }
             else

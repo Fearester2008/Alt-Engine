@@ -18,6 +18,7 @@ class JudgementCounter extends FlxState
     public var percents:Array<Float> = [];
     public var lerpPercents:Array<Float> = [];
     public var val:Int = 0;
+    var judgeX:Float;
     var judgementTextTween:FlxTween;
     var judgementTextHitTween:FlxTween;
 
@@ -59,17 +60,17 @@ class JudgementCounter extends FlxState
                 judgsVal = defaultJudgs[i] + ": " + counters[i] + " / " + maxCounters[i] + " ( " + percents[i] + subVal + " )";
                 subVal = "%";
             }
-            trace(judgsVal);
+            //trace(judgsVal);
             var value:String = '' + Std.string(0) + subVal; 
             judgementCounter = new FlxText(-300, FlxG.height / 2, 1280, judgsVal, 20); 
-            judgementCounter.setFormat(Paths.font('vcr.ttf'), 25, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+            judgementCounter.setFormat(Paths.font('vcr.ttf'), 20, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
             judgementCounter.borderSize = 1.1;
             //judgementCounter.borderQuality = 2;
-            judgementCounter.y += 20 * i;
+            judgementCounter.alpha = 0;
             judgementCounter.scrollFactor.set();
             judgementCounter.visible = EnginePreferences.data.judgementCounter != 'Disabled' || !EnginePreferences.data.hideHud;
             judgsGroup.add(judgementCounter);
-            FlxTween.tween(judgementCounter, {x: 20}, 0.6, {ease:FlxEase.sineInOut, startDelay: (0.1 * i)});
+            FlxTween.tween(judgementCounter, {x: judgeX, y: judgementCounter.y + (20 * i), alpha: 1}, 0.6, {ease:FlxEase.sineInOut, startDelay: (0.2 * i)});
         }
     }
     public function setFormat(size:Int, font:String)
@@ -84,7 +85,7 @@ class JudgementCounter extends FlxState
             for (i in 0...judgs.length)
             {
                 var value:String = '' + Std.string(counters[i]);
-                judgsGroup.members[i].text = judgs[i] + ': ' + Std.string(value) + " / " + Std.string(maxCounters[i]);
+                judgsGroup.members[i].text = judgs[i] + ': ' + Std.string(value) + "/" + Std.string(maxCounters[i]);
             }
         }
     public function updateTextOnPercent(judgs:Array<String>, percents:Array<Float>, maxCounters:Array<Int>)
@@ -95,7 +96,7 @@ class JudgementCounter extends FlxState
             
             for (i in 0...judgs.length)
             {
-                lerpPercents[i] = FlxMath.lerp(lerpPercents[i], percents[i], 0.085);
+                lerpPercents[i] = FlxMath.lerp(lerpPercents[i], percents[i], 0.065);
                 var value:String = '' + Std.string(MathUtil.truncatePercent(lerpPercents[i], 2));
                 judgsGroup.members[i].text = judgs[i] + ': ' + Std.string(value) + '%';
             }
@@ -112,7 +113,7 @@ class JudgementCounter extends FlxState
                 {
                     lerpPercents[i] = FlxMath.lerp(lerpPercents[i], percents[i], 0.085);
                     var value:String = '' + Std.string(MathUtil.truncatePercent(lerpPercents[i], 2)) + '%';
-                    var countValue:String = ' ( ' + Std.string(counters[i]) + " / " + Std.string(maxCounters[i]) + ' )';
+                    var countValue:String = ' (' + Std.string(counters[i]) + "/" + Std.string(maxCounters[i]) + ')';
                     judgsGroup.members[i].text = judgs[i] + ': ' + Std.string(value + countValue);
                 }
             }
@@ -127,8 +128,8 @@ class JudgementCounter extends FlxState
                 for (i in 0...judgs.length)
                 {
                     lerpPercents[i] = FlxMath.lerp(lerpPercents[i], percents[i], 0.085);
-                    var value:String = ' ( ' + Std.string(MathUtil.truncatePercent(lerpPercents[i], 2)) + '% )';
-                    var countValue:String = Std.string(counters[i]) + " / " + Std.string(maxCounters[i]);
+                    var value:String = ' (' + Std.string(MathUtil.truncatePercent(lerpPercents[i], 2)) + '%)';
+                    var countValue:String = Std.string(counters[i]) + "/" + Std.string(maxCounters[i]);
                     judgsGroup.members[i].text = judgs[i] + ': ' + Std.string(countValue + value);
                  }
                 }
@@ -137,11 +138,11 @@ class JudgementCounter extends FlxState
     
             this.val = val;
 
-            judgsGroup.members[0].scale.x += 0.045;
-            judgsGroup.members[0].scale.y += 0.045; 
+            judgsGroup.members[0].scale.x += 0.085;
+            judgsGroup.members[0].scale.y += 0.085; 
 
-            judgsGroup.members[val].scale.x += 0.045;
-            judgsGroup.members[val].scale.y += 0.045;
+            judgsGroup.members[val].scale.x += 0.085;
+            judgsGroup.members[val].scale.y += 0.085;
     }
     
     override function update(elapsed:Float)
@@ -149,7 +150,7 @@ class JudgementCounter extends FlxState
 
         for(i in 0...judgs.length)
         {
-
+            judgsGroup.members[i].x = judgeX; 
             if(i != val)
             {
                 judgsGroup.members[i].scale.x = FlxMath.lerp(judgsGroup.members[i].scale.x, 1, 0.2); 
@@ -166,24 +167,28 @@ class JudgementCounter extends FlxState
         switch(EnginePreferences.data.judgementCounter)
         {
             case 'Counter':
+            judgeX = -550;
             if(PlayState.instance.songHits > 0)
             updateTextOnCounter(['Hits', 'Sicks', 'Goods', 'Bads', 'Shits'], [PlayState.instance.songHits, PlayState.instance.sicks, PlayState.instance.goods, PlayState.instance.bads, PlayState.instance.shits], [PlayState.instance.totalNotes, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits]);
             else
             updateTextOnCounter(['Hits', 'Sicks', 'Goods', 'Bads', 'Shits'], [0, 0, 0, 0, 0], [PlayState.instance.totalNotes,PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits]);
 
             case 'Percent':
+            judgeX = -550;
             if(PlayState.instance.songHits > 0)
             updateTextOnPercent(['Hit' ,'Sick', 'Good', 'Bad', 'Shit'], [PlayState.instance.hitPercent, PlayState.instance.sickPercent, PlayState.instance.goodPercent, PlayState.instance.badPercent, PlayState.instance.shitPercent], [PlayState.instance.totalNotes, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits]);
             else
             updateTextOnPercent(['Hit' ,'Sick', 'Good', 'Bad', 'Shit'], [0, 0, 0, 0, 0], [PlayState.instance.totalNotes, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits]);
 
             case 'Complex':
+            judgeX = -500;
             if(PlayState.instance.songHits > 0)
             updateTextOnComplex(['Hit', 'Sick', 'Good', 'Bad', 'Shit'], [PlayState.instance.songHits, PlayState.instance.sicks, PlayState.instance.goods, PlayState.instance.bads, PlayState.instance.shits], [PlayState.instance.hitPercent, PlayState.instance.sickPercent, PlayState.instance.goodPercent, PlayState.instance.badPercent, PlayState.instance.shitPercent], [PlayState.instance.totalNotes, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits]);
             else
             updateTextOnComplex(['Hit', 'Sick', 'Good', 'Bad', 'Shit'], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [PlayState.instance.totalNotes, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits]);
             
             case 'Complex (Reversed)':
+            judgeX = -500;
             if(PlayState.instance.songHits > 0)
             updateTextOnReversedComplex(['Hits', 'Sicks', 'Goods', 'Bads', 'Shits'], [PlayState.instance.songHits, PlayState.instance.sicks, PlayState.instance.goods, PlayState.instance.bads, PlayState.instance.shits], [PlayState.instance.hitPercent, PlayState.instance.sickPercent, PlayState.instance.goodPercent, PlayState.instance.badPercent, PlayState.instance.shitPercent], [PlayState.instance.totalNotes, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits, PlayState.instance.songHits]);
             else

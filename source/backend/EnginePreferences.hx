@@ -101,7 +101,7 @@ class SaveVariables {
 	public var smoothHealth:Bool = true;
 	public var npsEnabled:Bool = false;
 	public var originalHealthBarColors:Bool = true;
-	public var popUpRating:Bool = true;
+	public var popUpRating:Bool = true; 
 
 	public function new()
 	{

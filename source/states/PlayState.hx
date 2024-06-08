@@ -82,7 +82,6 @@ import tea.SScript;
 
 class PlayState extends MusicBeatState
 {
-	public var missed:Bool = false;
 	public var tweening:Bool = false;
 
 	public static var STRUM_X = 42;
@@ -256,6 +255,9 @@ class PlayState extends MusicBeatState
 	var scoreTxtTween:FlxTween;
 	var iconZoomTween:FlxTween;
 	var iconDadZoomTween:FlxTween;
+
+	var gameZoomTween:FlxTween;
+	var hudZoomTween:FlxTween;
 
 	public static var campaignScore:Int = 0;
 	public static var campaignMisses:Int = 0;
@@ -715,7 +717,8 @@ class PlayState extends MusicBeatState
 
 		iconP1 = new HealthIcon(boyfriend.healthIcon, true);
 		iconP1.y = healthBar.y - 75;
-
+		iconP1.hasWinningIcon = EnginePreferences.data.winIcon;
+		
 		if(EnginePreferences.data.hud == 'Kade Engine')
 			iconP1.visible = !EnginePreferences.data.hideHud && !cpuControlled;
 		else
@@ -725,6 +728,7 @@ class PlayState extends MusicBeatState
 
 		iconP2 = new HealthIcon(dad.healthIcon, false);
 		iconP2.y = healthBar.y - 75;
+		iconP2.hasWinningIcon = EnginePreferences.data.winIcon;
 
 		if(EnginePreferences.data.hud == 'Kade Engine')
 			iconP2.visible = !EnginePreferences.data.hideHud && !cpuControlled;
@@ -745,7 +749,7 @@ class PlayState extends MusicBeatState
 			case 'Alt Engine' | 'Alt Engine V2':
 				var composerY:Float = (composer == null) ? FlxG.height - 32 : FlxG.height - 48;
 				var songY:Float = (!EnginePreferences.data.downScroll) ? composerY : 0;
-				songWatermark = new FlxText(0, songY, FlxG.width, StringUtil.toTitleCase(PlayState.SONG.song, "-") + ' - ' + StringUtil.toTitleCase(Difficulty.getString()) + mStr + "\nAlt Engine v: " + AppController.altEngineVersion, 28);
+				songWatermark = new FlxText(0, songY, FlxG.width, StringUtil.toTitleCase(PlayState.SONG.song, "-") + ' - ' + StringUtil.toTitleCase(Difficulty.getString()) + mStr + "\nAlt Engine v: " + AppController.altEngineVersion + AppController.stage, 28);
 				songWatermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 				songWatermark.scrollFactor.set();
 				songWatermark.visible = !EnginePreferences.data.hideHud && (EnginePreferences.data.timeBarType != "Song Name");
@@ -817,7 +821,7 @@ class PlayState extends MusicBeatState
 		amplitudeBar.angle = -90;
 		}
 
-		//updateScore(false);
+		updateScore(false);
 
 		switch(EnginePreferences.data.hud)
 		{
@@ -1456,9 +1460,8 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public dynamic function updateSText(?missed:Bool = false)
+	public dynamic function updateSText()
 		{
-				this.missed = missed;
 				var str:String = '';
 				//AE Stuff
 				var formattedPercent:String = Std.string(MathUtil.truncatePercent(lerpRating, 2) + '%');
@@ -1471,13 +1474,13 @@ class PlayState extends MusicBeatState
 				switch(EnginePreferences.data.hud)
 				{
 					case 'Alt Engine':
-					ratingStatus = (songHitsStatus) ? "NONE" : formattedPercent + ' // ${ratingFC} // ${MathUtil.getRank(lerpRating)}' + ' // ' + ratingName;
+					ratingStatus = (songHitsStatus) ? "[N/A]" : formattedPercent + ' // ${ratingFC} // ${MathUtil.getRank(ratingPercent)}' + ' // ' + ratingName + " //";
 					str += ratingStatus;
 					case 'Psych Engine':
 					ratingStatus = (songHitsStatus) ? '?' : ratingName + ' (${ratePercent}%) - ${ratingFC}';
 					str += ratingStatus;
 					case 'Alt Engine V2':
-					ratingStatus = (songHitsStatus) ? 'NOT PLAYED' : '${formattedPercent}\n${ratingFC} - ${ratingName}\n${MathUtil.getRank(lerpRating)}';
+					ratingStatus = (songHitsStatus) ? '[N/A]' : '${formattedPercent}\n${ratingFC} - ${ratingName}\n${MathUtil.getRank(ratingPercent)}';
 					str += ratingStatus;
 					case 'Kade Engine':
 					ratingStatus = (songHitsStatus) ? "N/A" : ratePercent + '% | ' + MathUtil.getRankFromNew(ratingPercent * 100);
@@ -1513,9 +1516,9 @@ class PlayState extends MusicBeatState
 					scoreTxt.size = 20;
 					scoreTxt.alignment = FlxTextAlign.RIGHT;
 	
-					var subScoreY:Float = (ratingFC != "") ? 625 : 660;
+					var subScoreY:Float = (ratingFC != "" && songHits > 0) ? 625 : 660;
 					var scoreY:Float = (EnginePreferences.data.downScroll) ? 0 : subScoreY;
-					if(!cpuControlled && !missed)
+					if(!cpuControlled)
 					FlxTween.tween(scoreTxt, {y: scoreY}, 0.5, {ease: FlxEase.backInOut});
 					else
 					{
@@ -1536,8 +1539,7 @@ class PlayState extends MusicBeatState
 
 	public function updateScore(miss:Bool = false)
 	{
-
-		this.missed = miss;
+		updateSText();
 
 		if(EnginePreferences.data.hud != 'Vanila' || EnginePreferences.data.hud != 'Psych Engine')
 		{
@@ -1554,11 +1556,37 @@ class PlayState extends MusicBeatState
 				doScoreBop();
 			}
 		}
-		updateSText(miss);
 
 		callOnScripts('onUpdateScore', [miss]);
 	}
 
+	function doCameraBop(gameMult:Float = 0.015, hudMult:Float = 0.03)
+	{
+		if(!tweening)
+		{
+
+		if(gameZoomTween != null)
+			gameZoomTween.cancel();
+
+		FlxG.camera.zoom += gameMult;
+		gameZoomTween = FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 0.2, {
+			ease: FlxEase.sineInOut, 
+			onComplete: function(twn:FlxTween) {
+				gameZoomTween = null;
+			}
+		});
+		}
+		if(hudZoomTween != null)
+			hudZoomTween.cancel();
+
+		camHUD.zoom += hudMult;
+		hudZoomTween = FlxTween.tween(camHUD, {zoom: 1}, 0.2, {
+			ease: FlxEase.sineInOut, 
+			onComplete: function(twn:FlxTween) {
+				hudZoomTween = null;
+			}
+		});
+	}
 	public function doScoreBop():Void {
 		if(!EnginePreferences.data.scoreZoom)
 			return;
@@ -2142,7 +2170,7 @@ class PlayState extends MusicBeatState
 		vocalOpponentAmplitude = (opponentVocals.exists) ? updateAmplitude(opponentVocals) : 0;
 		curAmplitude = (instAmplitude + vocalAmplitude + vocalOpponentAmplitude) / 3;
 
-		updateSText(missed);
+		updateSText();
 
 		lerpScore = FlxMath.lerp(lerpScore, songScore, 0.085);
 		lerpRating = FlxMath.lerp(lerpRating, ratingPercent, 0.085);
@@ -2254,12 +2282,6 @@ class PlayState extends MusicBeatState
 
 			AppUtil.setAppData(AppController.appName, AppController.altEngineVersion + AppController.stage, timeStr);
 
-		}
-
-		if (camZooming && !tweening)
-		{
-			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, FlxMath.bound(1 - (elapsed * 3.125 * camZoomingDecay * playbackRate), 0, 1));
-			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, FlxMath.bound(1 - (elapsed * 3.125 * camZoomingDecay * playbackRate), 0, 1));
 		}
 
 		FlxG.watch.addQuick("secShit", curSection);
@@ -2538,13 +2560,31 @@ class PlayState extends MusicBeatState
 				gfSpeed = Math.round(flValue1);
 
 			case 'Add Camera Zoom':
-				if(EnginePreferences.data.camZooms && FlxG.camera.zoom < 1.35) {
+
+				if (FlxG.camera.zoom < 1.35 && EnginePreferences.data.camZooms && EnginePreferences.data.beatMode == "Both camera")
+				{
 					if(flValue1 == null) flValue1 = 0.015;
 					if(flValue2 == null) flValue2 = 0.03;
 
-					FlxG.camera.zoom += flValue1;
-					camHUD.zoom += flValue2;
+					doCameraBop(flValue1, flValue2);
 				}
+		
+				if (FlxG.camera.zoom < 1.35 && EnginePreferences.data.camZooms && EnginePreferences.data.beatMode == "Game camera")
+				{
+					if(flValue1 == null) flValue1 = 0.015;
+					if(flValue2 == null) flValue2 = 0;
+
+					//camGame.zoom, camHUD.zoom
+					doCameraBop(flValue1, 0);
+				}
+		
+				if (FlxG.camera.zoom < 1.35 && EnginePreferences.data.camZooms && EnginePreferences.data.beatMode == "HUD camera")
+				{
+					if(flValue1 == null) flValue1 = 0;
+					if(flValue2 == null) flValue2 = 0.03;
+
+					doCameraBop(0, flValue2);
+				}		
 
 			case 'Play Animation':
 				//trace('Anim to play: ' + value1);
@@ -2991,8 +3031,7 @@ class PlayState extends MusicBeatState
 					if(EnginePreferences.data.results)
 					{
 						canPause = false;
-						openSubState(new substates.ResultsScreenSubState([sicks, goods, bads, shits], campaignScore, songMisses,
-						MathUtil.truncateFloat(ratingPercent * 100, 2)));
+						openSubState(new substates.ResultsScreenSubState([sicks, goods, bads, shits], campaignScore, campaignMisses, MathUtil.truncateFloat(ratingPercent * 100, 2)));
 					}
 					else
 					{
@@ -3024,7 +3063,8 @@ class PlayState extends MusicBeatState
 					FlxG.sound.music.stop();
 
 					cancelMusicFadeTween();
-					LoadingState.loadAndSwitchState(new PlayState());
+					MusicBeatState.switchState(new LoadingScreenState());
+					LoadingScreenState.inPlayState = true;
 				}
 			}
 			else
@@ -3038,7 +3078,7 @@ class PlayState extends MusicBeatState
 				if(EnginePreferences.data.results)
 				{
 					canPause = false;
-					openSubState(new substates.ResultsScreenSubState([sicks, goods, bads, shits], campaignScore, songMisses, MathUtil.truncateFloat(ratingPercent * 100, 2)));
+					openSubState(new substates.ResultsScreenSubState([sicks, goods, bads, shits], songScore, songMisses, MathUtil.truncateFloat(ratingPercent * 100, 2)));
 				}
 				else
 				{
@@ -3878,20 +3918,20 @@ class PlayState extends MusicBeatState
 		{
 			if (generatedMusic && !endingSong && !isCameraOnForcedPos)
 				moveCameraSection();
-
-			if (camZooming && FlxG.camera.zoom < 1.35 && EnginePreferences.data.camZooms)
+			
+			if (camZooming && FlxG.camera.zoom < 1.35 && EnginePreferences.data.camZooms && EnginePreferences.data.beatMode == "Both camera")
 			{
-				switch(EnginePreferences.data.beatMode)
-				{
-					case "Both Camera":
-						FlxG.camera.zoom += 0.015 * camZoomingMult;
-						camHUD.zoom += 0.03 * camZoomingMult;
-					case "HUD Camera":
-						camHUD.zoom += 0.03 * camZoomingMult;
-					case "Game Camera":
-						FlxG.camera.zoom += 0.015 * camZoomingMult;	
-				}
-				
+				doCameraBop(0.015 * camZoomingMult, 0.03 * camZoomingMult);
+			}
+
+			if (camZooming && FlxG.camera.zoom < 1.35 && EnginePreferences.data.camZooms && EnginePreferences.data.beatMode == "Game camera")
+			{
+				doCameraBop(0.015 * camZoomingMult, 0 * camZoomingMult);
+			}
+
+			if (camZooming && FlxG.camera.zoom < 1.35 && EnginePreferences.data.camZooms && EnginePreferences.data.beatMode == "HUD camera")
+			{
+				doCameraBop(0 * camZoomingMult, 0.03 * camZoomingMult);
 			}
 
 			if (SONG.notes[curSection].changeBPM)
@@ -4205,23 +4245,6 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-	function fullComboUpdate()
-	{
-		var sicks:Int = ratingsData[0].hits;
-		var goods:Int = ratingsData[1].hits;
-		var bads:Int = ratingsData[2].hits;
-		var shits:Int = ratingsData[3].hits;
-
-		ratingFC = 'Clear';
-		if(songMisses < 1)
-		{
-			if (bads > 0 || shits > 0) ratingFC = 'FC';
-			else if (goods > 0) ratingFC = 'GFC';
-			else if (sicks > 0) ratingFC = 'SFC';
-		}
-		else if (songMisses < 10)
-			ratingFC = 'SDCB';
-	}
 
 	#if ACHIEVEMENTS_ALLOWED
 	private function checkForAchievement(achievesToCheck:Array<String> = null):String

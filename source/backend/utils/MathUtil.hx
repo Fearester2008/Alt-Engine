@@ -43,7 +43,7 @@ class MathUtil
 				rank = 'S';
 			else if (acc >= 0.95 && acc < 0.9999)
 				rank = 'S+';
-			else if (acc == 1)
+			else if (acc >= 1)
 				rank = 'S++';
 	
 			return rank;
