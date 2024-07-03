@@ -101,8 +101,9 @@ class Main extends Sprite
 		Controls.instance = new Controls();
 		EnginePreferences.loadDefaultKeys();
 
-		CompileTime.endTime = Date.now();
-	
+		CompileTime.endTime = Date.now().getTime() / 1000;
+	        CompileTime.endTimeString = Date.now().toString();
+		
 		#if mobile
 		addChild(new FlxGame(1280, 720, TitleState, 60, 60, true, false));
 		#else
