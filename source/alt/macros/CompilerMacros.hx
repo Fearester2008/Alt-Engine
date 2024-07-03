@@ -23,26 +23,20 @@ class CompilerMacros
 
         Sys.println('\n\n---- \033[96mAlt Engine\033[0m version: \x1b[38;5;236m[\033[0m\033[96m${ENGINE_VERSION}\033[0m\x1b[38;5;236m]\033[0m ----');
         Sys.println('Trying to initialize the compilation...');
-        Sys.println('Date on start compilation: \033[32m${Date.now().toString()}\033[0m s');
+        Sys.println('Date on start compilation: \033[32m${compileTime}\033[0m s');
 
-        afterInit();
+        //afterInit();
     }
-    public static function afterInit()
+    /*public static function afterInit()
     {
         Sys.println('Compile initialized in: \033[32m${compileTime()}\033[0m');
-    }
+    }*/
 
     public static function compileTime() 
     {
     var buildTime = Math.floor(Date.now().getTime() / 1000);
 
-    var e = {
-      var runTime = Math.floor(Date.now().getTime() / 1000);
-      var age = runTime - ${ buildTime };
-      return age;
-    };
-
-    return e;
+    return $v{buildTime};
     }
 }
 #end
