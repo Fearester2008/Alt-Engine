@@ -35,8 +35,8 @@ class CompilerMacros
 
     public static function startCompile() 
     {
-    CompileTime.get('start') = Date.now();
-    return " // " + CompileTime.startTime + " // ";
+    CompileTime.getToString('start') = Date.now().toString();
+    return " // " + CompileTime.getToString('start') + " // ";
     }
 }
 #end
