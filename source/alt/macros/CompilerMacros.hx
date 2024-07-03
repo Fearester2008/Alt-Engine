@@ -4,6 +4,7 @@ package alt.macros;
 import backend.utils.AppController;
 import haxe.Timer;
 import haxe.macro.Context;
+import backend.utils.TimeUtil;
 using StringTools;
 
 class CompilerMacros
@@ -36,8 +37,8 @@ class CompilerMacros
     public static function compileTime() 
     {
     buildTime = Math.floor(Date.now().getTime() / 1000);
-
-    return buildTime;
+    var formatTime:String = TimeUtil.formatTime(buildTime);
+    return haxe.Timer.stamp() + " // " + formatTime;
     }
 }
 #end
