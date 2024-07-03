@@ -16,5 +16,6 @@ class CompileTime
                 endTime = Date.now();
                 return endTime;
         }
+      return;
     }
 }
