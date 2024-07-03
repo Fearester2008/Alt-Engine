@@ -36,7 +36,7 @@ class CompilerMacros
     {
     var buildTime = Math.floor(Date.now().getTime() / 1000);
 
-    return $v{buildTime};
+    return buildTime;
     }
 }
 #end
