@@ -32,16 +32,17 @@ class CompilerMacros
         Sys.println('Compile initialized in: \033[32m${compileTime()}\033[0m');
     }
 
-    public static function compileTime() {
+    public static function compileTime() 
+    {
     var buildTime = Math.floor(Date.now().getTime() / 1000);
 
-    var code = '{
+    var e = {
       var runTime = Math.floor(Date.now().getTime() / 1000);
-      var age = runTime - $buildTime;
+      var age = runTime - ${ buildTime };
       return age;
-    }';
+    };
 
-    return Context.parse(code);
-  }
+    return e;
+    }
 }
 #end
