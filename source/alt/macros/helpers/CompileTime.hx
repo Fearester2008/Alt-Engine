@@ -5,8 +5,8 @@ class CompileTime
   public static var startTimeString:String;
   public static var endTimeString:String;
 
-  public static var startTime:Float;
-  public static var endTime:Float;
+  public static var startTime:Float = 0;
+  public static var endTime:Float = 0;
 
   public static function getToString(time:String = null)
     {
@@ -34,7 +34,7 @@ class CompileTime
                 endTime = Date.now().getTime() / 1000;
                 return endTime;
             default:
-                return null;
+                return 0;
         }
     }
   
