@@ -1,15 +1,16 @@
 package alt.macros;
 import backend.utils.AppController;
-
+import haxe.Timer;
 using StringTools;
 
 class CompilerMacros
 {
-    static var compileTime:Float = 0;
+    var startTime = haxe.Timer.stamp();
+    var endTime = haxe.Timer.stamp();
+    var elapsedTime = endTime - startTime;
     #if macro
     static var ENGINE_VERSION = AppController.altEngineVersion + AppController.stage;
     public static function init() {
-        compileTime += 1;
         if(AppController.stage == 'b' || AppController.stage == 'beta')
             Sys.println('This is Beta build. This version can contains bugs, unfinished stuffs...');
         else if(AppController.stage == 'a' || AppController.stage == 'alpha')
@@ -23,11 +24,11 @@ class CompilerMacros
         Sys.println('Trying to initialize the compilation...');
         Sys.println('Date on start compilation: \033[32m${Date.now().toString()}\033[0m s');
 
-        initAfterCompile();
+        afterInit();
     }
     #end
-    public static function initAfterCompile()
+    public static function afterInit()
     {
-        Sys.println('Compiled Successfully in: \033[32m${compileTime}\033[0m');
+        Sys.println('Compile initialized in: \033[32m${elapsedTime}\033[0m');
     }
 }
