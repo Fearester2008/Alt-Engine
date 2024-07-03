@@ -27,10 +27,11 @@ class CompilerMacros
         Sys.println('Trying to initialize the compilation...');
         Sys.println('Date on start compilation: \033[32m${compileTime()}\033[0m');
 
-        new flixel.util.FlxTimer(5, function(tmr:flixel.util.FlxTimer) 
+        var timer = new haxe.Timer(5000);
+        timer.run = function()
         {
         Sys.println('\n\nInitialized! Starting Compilation!');
-        });
+        };
         //afterInit();
     }
     /*public static function afterInit()
