@@ -40,7 +40,7 @@ jobs:
           haxelib run lime setup -alias -y
           haxelib set hxcpp 4.2.1
       - name: Compile
-        run: haxelib run lime build windows -final
+        run: haxelib run lime build windows -final --times
         
       - name: Clear Previous Cache
         uses: actions/github-script@main
