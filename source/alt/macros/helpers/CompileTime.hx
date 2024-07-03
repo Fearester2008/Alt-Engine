@@ -2,11 +2,11 @@ package alt.macros.helpers;
 
 class CompileTime
 {
-  public static var startTimeString;
-  public static var endTimeString;
+  public static var startTimeString:String;
+  public static var endTimeString:String;
 
-  public static var startTime;
-  public static var endTime;
+  public static var startTime:Float;
+  public static var endTime:Float;
 
   public static function getToString(time:String = null)
     {
