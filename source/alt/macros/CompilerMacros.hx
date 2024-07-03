@@ -1,3 +1,4 @@
+#if macro
 package alt.macros;
 import backend.utils.AppController;
 import haxe.Timer;
@@ -8,7 +9,6 @@ class CompilerMacros
     var startTime = haxe.Timer.stamp();
     var endTime = haxe.Timer.stamp();
     var elapsedTime = endTime - startTime;
-    #if macro
     static var ENGINE_VERSION = AppController.altEngineVersion + AppController.stage;
     public static function init() {
         if(AppController.stage == 'b' || AppController.stage == 'beta')
@@ -26,9 +26,9 @@ class CompilerMacros
 
         afterInit();
     }
-    #end
     public static function afterInit()
     {
         Sys.println('Compile initialized in: \033[32m${elapsedTime}\033[0m');
     }
 }
+#end
