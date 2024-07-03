@@ -19,8 +19,7 @@ class CompileTime
                 endTimeString = Date.now().toString();
                 return endTimeString;
             default:
-                startTimeString = null;
-                endTimeString = null;
+                return null;
         }
     }
   
@@ -35,8 +34,7 @@ class CompileTime
                 endTime = Date.now().getTime() / 1000;
                 return endTime;
             default:
-                startTime = null;
-                endTime = null;
+                return null;
         }
     }
   
