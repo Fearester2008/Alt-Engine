@@ -30,7 +30,7 @@ class CompilerMacros
         new flixel.util.FlxTimer(5, function(tmr:flixel.util.FlxTimer) 
         {
         Sys.println('\n\nInitialized! Starting Compilation!');
-        }
+        });
         //afterInit();
     }
     /*public static function afterInit()
