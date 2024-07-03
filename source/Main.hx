@@ -1,7 +1,7 @@
 package;
 
 import flixel.graphics.FlxGraphic;
-
+import alt.macros.helpers.CompileTime;
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Assets;
@@ -94,12 +94,14 @@ class Main extends Sprite
 			game.width = Math.ceil(stageWidth / game.zoom);
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
-	    SUtil.doTheCheck();
+	        SUtil.doTheCheck();
 		AppUtil.init();
 
 		#if LUA_ALLOWED Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
 		EnginePreferences.loadDefaultKeys();
+
+		CompileTime.endTime = Date.now();
 	
 		#if mobile
 		addChild(new FlxGame(1280, 720, TitleState, 60, 60, true, false));
