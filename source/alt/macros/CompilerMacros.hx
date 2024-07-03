@@ -1,3 +1,4 @@
+//thanks for Slushi_ds
 #if macro
 package alt.macros;
 import backend.utils.AppController;
@@ -8,7 +9,7 @@ using StringTools;
 class CompilerMacros
 {
     static var subElapsedTime = 0;
-    static var elapsedTime = 0;
+    static var buildTime = 0;
     static var ENGINE_VERSION = AppController.altEngineVersion + AppController.stage;
     
     public static function init() {
@@ -34,7 +35,7 @@ class CompilerMacros
 
     public static function compileTime() 
     {
-    var buildTime = Math.floor(Date.now().getTime() / 1000);
+    buildTime = Math.floor(Date.now().getTime() / 1000);
 
     return buildTime;
     }
