@@ -2,6 +2,7 @@
 package alt.macros;
 import backend.utils.AppController;
 import haxe.Timer;
+import haxe.macro.Context;
 using StringTools;
 
 class CompilerMacros
@@ -28,19 +29,19 @@ class CompilerMacros
     }
     public static function afterInit()
     {
-        Sys.println('Compile initialized in: \033[32m${checkCompileTime()}\033[0m');
+        Sys.println('Compile initialized in: \033[32m${compileTime()}\033[0m');
     }
-    
-    public static function checkCompileTime() {
+
+    public static function compileTime() {
     var buildTime = Math.floor(Date.now().getTime() / 1000);
 
-    var e = {
+    var code = '{
       var runTime = Math.floor(Date.now().getTime() / 1000);
-      var age = runTime - $v{ buildTime };
+      var age = runTime - $buildTime;
       return age;
-    };
+    }';
 
-    return e;
+    return Context.parse(code, Context.currentPos());
   }
 }
 #end
