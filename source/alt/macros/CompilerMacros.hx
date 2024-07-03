@@ -31,10 +31,10 @@ class CompilerMacros
         Sys.println('Compile initialized in: \033[32m${checkCompileTime()}\033[0m');
     }
     
-    public static macro function checkCompileTime() {
+    public static function checkCompileTime() {
     var buildTime = Math.floor(Date.now().getTime() / 1000);
 
-    var e = macro {
+    var e = {
       var runTime = Math.floor(Date.now().getTime() / 1000);
       var age = runTime - $v{ buildTime };
       return age;
