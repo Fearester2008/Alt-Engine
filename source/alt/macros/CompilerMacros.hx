@@ -37,7 +37,7 @@ class CompilerMacros
     public static function compileTime() 
     {
     buildTime = Math.floor(Date.now().getTime() / 1000);
-    var formatTime:String = TimeUtil.formatTime(buildTime);
+    var formatTime:String = flixel.util.FlxStringUtil.formatTime(buildTime, false);
     return haxe.Timer.stamp() + " // " + formatTime;
     }
 }
