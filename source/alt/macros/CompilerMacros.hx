@@ -4,13 +4,12 @@ package alt.macros;
 import backend.utils.AppController;
 import haxe.Timer;
 import haxe.macro.Context;
+import alt.macros.helpers.CompileTime;
 
 using StringTools;
 
 class CompilerMacros
 {
-    static var subElapsedTime = 0;
-    static var buildTime = 0;
     static var ENGINE_VERSION = AppController.altEngineVersion + AppController.stage;
     
     public static function init() {
@@ -23,15 +22,10 @@ class CompilerMacros
         else
             Sys.println('You use stable build. Enjoy:)');
 
-        Sys.println('\n\n---- \033[96mAlt Engine\033[0m version: \x1b[38;5;236m[\033[0m\033[96m${ENGINE_VERSION}\033[0m\x1b[38;5;236m]\033[0m ----');
+        Sys.println('\n---- \033[96mAlt Engine\033[0m version: \x1b[38;5;236m[\033[0m\033[96m${ENGINE_VERSION}\033[0m\x1b[38;5;236m]\033[0m ----');
         Sys.println('Trying to initialize the compilation...');
-        Sys.println('Date on start compilation: \033[32m${compileTime()}\033[0m');
-
-        var timer = new haxe.Timer(5000);
-        timer.run = function()
-        {
-        Sys.println('\n\nInitialized! Starting Compilation!');
-        };
+        Sys.println('Date on start compilation: \033[32m${startCompile()}\033[0m');
+        Sys.println('\n\n');
         //afterInit();
     }
     /*public static function afterInit()
@@ -39,32 +33,10 @@ class CompilerMacros
         Sys.println('Compile initialized in: \033[32m${compileTime()}\033[0m');
     }*/
 
-    public static function compileTime() 
+    public static function startCompile() 
     {
-    buildTime = Math.floor(Date.now().getTime() / 1000);
-    var formatTime:String = formatTime(buildTime, false);
-    return haxe.Timer.stamp() + " // " + formatTime;
+    CompileTime.startTime = Date.now().toString();
+    return " // " + CompileTime.startTime + " // ";
     }
-
-    public static function formatTime(Seconds:Float, ?ShowMS:Bool = false):String
-    {
-        var time:Int = Std.int(Seconds);
-        var hours:Int = Std.int(time / 3600);
-        var minutes:Int = Std.int((time % 3600) / 60);
-        var seconds:Int = Std.int(time % 60);
-
-        var hhString:String = (hours < 10 ? "0" : "") + hours + ":";
-        var mmString:String = (minutes < 10 ? "0" : "") + minutes + ":";
-        var ssString:String = (seconds < 10 ? "0" : "") + seconds;
-        var timeString:String = if(minutes >= 60) hhString + mmString + ssString else mmString + ssString;
-
-        if (ShowMS)
-        {
-            var ms:Int = Std.int((Seconds - Std.int(Seconds)) * 100);
-            timeString += "." + (ms < 10 ? "0" : "") + ms;
-        }
-
-        return timeString;
-    }     
 }
 #end
