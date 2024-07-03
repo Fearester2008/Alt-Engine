@@ -41,7 +41,7 @@ class CompilerMacros
       return age;
     }';
 
-    return Context.parse(code, Context.currentPos());
+    return Context.parse(code);
   }
 }
 #end
