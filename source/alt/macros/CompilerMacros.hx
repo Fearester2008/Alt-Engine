@@ -4,12 +4,12 @@ import backend.utils.AppController;
 import haxe.Timer;
 using StringTools;
 
-class CompilerMacros
+class CompilerMacros extends flixel.FlxState
 {
-    static var startTime = haxe.Timer.stamp();
-    static var endTime = haxe.Timer.stamp();
-    static var elapsedTime = endTime - startTime;
+    static var subElapsedTime = 0;
+    static var elapsedTime = 0;
     static var ENGINE_VERSION = AppController.altEngineVersion + AppController.stage;
+    
     public static function init() {
         if(AppController.stage == 'b' || AppController.stage == 'beta')
             Sys.println('This is Beta build. This version can contains bugs, unfinished stuffs...');
@@ -29,6 +29,16 @@ class CompilerMacros
     public static function afterInit()
     {
         Sys.println('Compile initialized in: \033[32m${elapsedTime}\033[0m');
+    }
+    macro override public function update(elapsed:Float) 
+    {
+        subElapsedTime++;
+
+
+        if(subElapsedTime % 60 == 0)
+        elapsedTime += 1;
+
+        super.update(elapsed);
     }
 }
 #end
