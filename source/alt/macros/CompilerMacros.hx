@@ -4,7 +4,7 @@ import backend.utils.AppController;
 import haxe.Timer;
 using StringTools;
 
-class CompilerMacros extends flixel.FlxState
+class CompilerMacros
 {
     static var subElapsedTime = 0;
     static var elapsedTime = 0;
@@ -28,17 +28,19 @@ class CompilerMacros extends flixel.FlxState
     }
     public static function afterInit()
     {
-        Sys.println('Compile initialized in: \033[32m${elapsedTime}\033[0m');
+        Sys.println('Compile initialized in: \033[32m${checkCompileTime()}\033[0m');
     }
-    macro override public function update(elapsed:Float) 
-    {
-        subElapsedTime++;
+    
+    public static macro function checkCompileTime() {
+    var buildTime = Math.floor(Date.now().getTime() / 1000);
 
+    var e = macro {
+      var runTime = Math.floor(Date.now().getTime() / 1000);
+      var age = runTime - $v{ buildTime };
+      return age;
+    };
 
-        if(subElapsedTime % 60 == 0)
-        elapsedTime += 1;
-
-        super.update(elapsed);
-    }
+    return e;
+  }
 }
 #end
