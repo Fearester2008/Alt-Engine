@@ -4,7 +4,7 @@ package alt.macros;
 import backend.utils.AppController;
 import haxe.Timer;
 import haxe.macro.Context;
-import backend.utils.TimeUtil;
+
 using StringTools;
 
 class CompilerMacros
@@ -25,8 +25,12 @@ class CompilerMacros
 
         Sys.println('\n\n---- \033[96mAlt Engine\033[0m version: \x1b[38;5;236m[\033[0m\033[96m${ENGINE_VERSION}\033[0m\x1b[38;5;236m]\033[0m ----');
         Sys.println('Trying to initialize the compilation...');
-        Sys.println('Date on start compilation: \033[32m${compileTime()}\033[0m s');
+        Sys.println('Date on start compilation: \033[32m${compileTime()}\033[0m');
 
+        new flixel.util.FlxTimer(5, function(tmr:flixel.util.FlxTimer) 
+        {
+        Sys.println('\n\nInitialized! Starting Compilation!');
+        }
         //afterInit();
     }
     /*public static function afterInit()
