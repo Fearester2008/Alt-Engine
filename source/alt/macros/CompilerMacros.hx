@@ -6,9 +6,9 @@ using StringTools;
 
 class CompilerMacros
 {
-    var startTime = haxe.Timer.stamp();
-    var endTime = haxe.Timer.stamp();
-    var elapsedTime = endTime - startTime;
+    static var startTime = haxe.Timer.stamp();
+    static var endTime = haxe.Timer.stamp();
+    static var elapsedTime = endTime - startTime;
     static var ENGINE_VERSION = AppController.altEngineVersion + AppController.stage;
     public static function init() {
         if(AppController.stage == 'b' || AppController.stage == 'beta')
