@@ -22,20 +22,25 @@ class CompilerMacros
         else
             Sys.println('You use stable build. Enjoy:)');
 
-        Sys.println('---- \033[96mAlt Engine\033[0m version: \x1b[38;5;236m[\033[0m\033[96m${ENGINE_VERSION}\033[0m\x1b[38;5;236m]\033[0m ----');
+        Sys.println('====== \033[96mAlt Engine\033[0m version: \x1b[38;5;236m[\033[0m\033[96m${ENGINE_VERSION}\033[0m\x1b[38;5;236m]\033[0m ======');
         Sys.println('Trying to initialize the compilation...');
         Sys.println('Date on start compilation: \033[32m${startCompile()}\033[0m');
-        Sys.println('\n');
+        Sys.println('');
         //afterInit();
     }
-    /*public static function afterInit()
+    public static function afterCompile()
     {
-        Sys.println('Compile initialized in: \033[32m${compileTime()}\033[0m');
-    }*/
+        Sys.println('Compile finished in: \033[32m${endCompile()}\033[0m');
+    }
 
     public static function startCompile() 
     {
     return " // " + CompileTime.getToString('start') + " // ";
+    }
+
+    public static function endCompile() 
+    {
+    return " // " + CompileTime.getToString('end') + " // ";
     }
 }
 #end
