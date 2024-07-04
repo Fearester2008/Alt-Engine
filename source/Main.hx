@@ -1,7 +1,9 @@
 package;
 
 import flixel.graphics.FlxGraphic;
+#if macro
 import alt.macros.helpers.CompileTime;
+#end
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Assets;
@@ -101,9 +103,12 @@ class Main extends Sprite
 		Controls.instance = new Controls();
 		EnginePreferences.loadDefaultKeys();
 
+		#if macro
 		CompileTime.endTime = Date.now().getTime() / 1000;
 	        CompileTime.endTimeString = Date.now().toString();
-		
+		CompileMacros.afterCompile();
+		#end 
+
 		#if mobile
 		addChild(new FlxGame(1280, 720, TitleState, 60, 60, true, false));
 		#else
