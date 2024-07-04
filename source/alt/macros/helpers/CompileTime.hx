@@ -1,3 +1,4 @@
+#if macro
 package alt.macros.helpers;
 
 class CompileTime
@@ -33,9 +34,14 @@ class CompileTime
             case 'end':
                 endTime = Date.now().getTime() / 1000;
                 return endTime;
+            case 'elapsed':
+                startTime = Date.now().getTime() / 1000;
+                endTime = Date.now().getTime() / 1000;
+                return endTime - startTime;
             default:
                 return 0;
         }
     }
   
 }
+#end
