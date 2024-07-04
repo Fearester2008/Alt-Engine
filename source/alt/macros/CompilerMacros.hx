@@ -40,7 +40,7 @@ class CompilerMacros
 
     public static function endCompile() 
     {
-    return " // " + CompileTime.getToString('end') + " // ";
+    return " // " + CompileTime.getToString('end') + " // " + CompileTime.getFromString('elapsed');
     }
 }
 #end
